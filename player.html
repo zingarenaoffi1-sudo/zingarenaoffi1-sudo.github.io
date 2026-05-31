@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zing Video Player</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; padding: 15px; }
+        .container { max-width: 500px; margin: auto; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: #334155; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
+        iframe { width: 100%; height: 250px; border-radius: 10px; border: none; margin-bottom: 20px; }
+        .video-item { background: #1e293b; padding: 12px; margin: 8px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { background: #ef4444; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .hidden { display: none !important; }
+        #loginGate { text-align: center; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="loginGate">
+    <h2>Player Access</h2>
+    <p>Please login to manage your private playlist.</p>
+    <button onclick="googleLogin()">Login with Google</button>
+</div>
+
+<div class="container hidden" id="playerSection">
+    <div id="playerContainer" style="display:none;">
+        <iframe id="mainPlayer" src="" allowfullscreen></iframe>
+    </div>
+    <input type="text" id="title" placeholder="Video Title">
+    <input type="text" id="url" placeholder="YouTube URL">
+    <button onclick="pushLink()">Add Video</button>
+    <div id="videoList" style="margin-top: 20px;"></div>
+    <br>
+    <button onclick="auth.signOut().then(() => location.reload())" style="background:#ef4444;">Logout</button>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDg-_--DQoINvqsMOAYfbwEnDyvMgH88-w",
+        authDomain: "zing-arena.firebaseapp.com",
+        databaseURL: "https://zing-arena-default-rtdb.firebaseio.com",
+        projectId: "zing-arena",
+        storageBucket: "zing-arena.firebasestorage.app",
+        messagingSenderId: "749170646467",
+        appId: "1:749170646467:web:1d279de6a84a0340bcf176"
+    };
+    
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const auth = firebase.auth();
+
+    // Google Login Function
+    function googleLogin() { 
+        auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); 
+    }
+
+    // Auth state check
+    auth.onAuthStateChanged(user => {
+        const loginGate = document.getElementById('loginGate');
+        const playerSection = document.getElementById('playerSection');
+        
+        if(user) {
+            loginGate.classList.add('hidden');
+            playerSection.classList.remove('hidden');
+            loadData(user.uid);
+        } else {
+            loginGate.classList.remove('hidden');
+            playerSection.classList.add('hidden');
+        }
+    });
+
+    function pushLink() {
+        const title = document.getElementById('title').value;
+        const url = document.getElementById('url').value;
+        let videoId = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/|\/shorts\/)/);
+        videoId = (videoId[2] !== undefined) ? videoId[2].split(/[^0-9a-z_-]/i)[0] : url; 
+
+        if (videoId.length === 11) {
+            db.ref('users/' + auth.currentUser.uid + '/playlist/').push({ title, url: "https://www.youtube.com/embed/" + videoId });
+            document.getElementById('title').value = "";
+            document.getElementById('url').value = "";
+        } else { alert("Link sahi nahi hai!"); }
+    }
+
+    function playVideo(url) {
+        document.getElementById('playerContainer').style.display = "block";
+        document.getElementById('mainPlayer').src = url;
+    }
+
+    function deleteVideo(key) { db.ref('users/' + auth.currentUser.uid + '/playlist/' + key).remove(); }
+
+    function loadData(uid) {
+        db.ref('users/' + uid + '/playlist/').on('value', snapshot => {
+            const list = document.getElementById('videoList');
+            list.innerHTML = "";
+            snapshot.forEach(child => {
+                const data = child.val();
+                list.innerHTML += `<div class="video-item"><span>${data.title}</span> <div><button onclick="playVideo('${data.url}')" style="width:auto; margin:0 5px;">Play</button><span class="delete-btn" onclick="deleteVideo('${child.key}')">X</span></div></div>`;
+            });
+        });
+    }
+</script>
+</body>
+</html>
