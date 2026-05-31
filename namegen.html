@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zing Pro Name Gen</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
+        input { width: 90%; max-width: 400px; padding: 15px; border-radius: 12px; border: 2px solid #3b82f6; background: #1e293b; color: white; font-size: 18px; margin-bottom: 20px; outline: none; }
+        .grid { display: grid; gap: 8px; }
+        .name-card { background: #1e293b; padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
+        button { padding: 8px 15px; border-radius: 6px; border: none; background: #3b82f6; color: white; cursor: pointer; font-weight: bold; }
+        button:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <h2>🔥 Ultimate Pro Name Generator</h2>
+    <input type="text" id="userInput" placeholder="Type here for 500+ designs..." oninput="generateAll()">
+    <div id="resultArea" class="grid"></div>
+    <br>
+    <button onclick="window.location.href='index.html'" style="background:#ef4444; width:150px;">Back to Hub</button>
+
+    <script>
+        // 2x Tags aur symbols ki badi list
+        const symbols = ["亗", "꧁", "★", "⚡", "ॐ", "KING", "MR", "VIP", "卍", "ツ", "〆", "×", "Dragon", "Devil", "God", "Pro", "Killer", "Agent", "⚔️", "💎", "🔥", "☄️", "💀", "👾", "❄️"];
+        const frames = ["『 »n« 』", "【 »n« 】", "« »n« »", "亗 »n« 亗", "꧁ »n« ꧂", "★ »n« ★", "⚡ »n« ⚡", "『 ⚔️ »n« ⚔️ 』", "💎 »n« 💎", "💀 »n« 💀"];
+
+        function generateAll() {
+            let name = document.getElementById('userInput').value;
+            let area = document.getElementById('resultArea');
+            if(!name) { area.innerHTML = ""; return; }
+
+            let html = "";
+            // Double loop aur combinations ka jadoo
+            frames.forEach(frame => {
+                symbols.forEach(s1 => {
+                    symbols.forEach(s2 => {
+                        let style = frame.replace("»n«", s1 + name + s2);
+                        html += `<div class="name-card">
+                                    <span style="font-size:16px;">${style}</span>
+                                    <button onclick="copy('${style}')">Copy</button>
+                                </div>`;
+                    });
+                });
+            });
+            area.innerHTML = html;
+        }
+
+        function copy(text) {
+            navigator.clipboard.writeText(text);
+            alert("Copied: " + text);
+        }
+    </script>
+</body>
+</html>
