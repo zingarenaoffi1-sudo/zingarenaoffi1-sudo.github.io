@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; padding: 10px; }
+        input { width: 70%; padding: 10px; border-radius: 8px; border: none; }
+        button { padding: 10px; width: 20%; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom:10px;">
+        <input type="text" id="q" placeholder="Search anything...">
+        <button onclick="go()">Go</button>
+    </div>
+    <iframe id="browserFrame" src="https://www.bing.com" style="width:100%; height:80vh; border-radius:15px; border:none; background:white;"></iframe>
+
+    <script>
+        function go() {
+            let q = document.getElementById('q').value;
+            if(q) document.getElementById('browserFrame').src = "https://www.bing.com/search?q=" + encodeURIComponent(q);
+        }
+    </script>
+</body>
+</html>
