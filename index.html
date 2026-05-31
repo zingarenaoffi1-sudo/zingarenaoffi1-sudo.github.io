@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://quge5.com/88/tag.min.js" data-zone="244740" async data-cfasync="false"></script>
+
+    <meta charset="UTF-8">
+    <title>Zing.Arena Dashboard</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; min-height: 100vh; }
+        .app-container { width: 90%; max-width: 400px; }
+        #searchInput { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #334155; background: #1e293b; color: white; margin-top: 20px; box-sizing: border-box; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2 style="text-align:center">Zing.Arena Hub</h2>
+    <input type="text" id="searchInput" onkeyup="filterMenu()" placeholder="🔍 Search tools...">
+    
+    <div class="menu-grid" id="mainMenu">
+        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
+        <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
+        <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
+        <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
+    </div>
+</div>
+
+<script>
+    function filterMenu() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let menuItems = document.getElementsByClassName('menu-item');
+        for (let i = 0; i < menuItems.length; i++) {
+            let text = menuItems[i].textContent.toLowerCase();
+            menuItems[i].style.display = text.includes(input) ? "" : "none";
+        }
+    }
+</script>
+</body>
+</html>
