@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Tools - Zing Arena</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
+        .box { background: #1e293b; padding: 20px; border-radius: 15px; margin: 10px auto; max-width: 400px; }
+        input { padding: 10px; width: 80%; border-radius: 5px; border: none; }
+        button { padding: 10px 20px; background: #3b82f6; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        #reader { width: 100%; max-width: 350px; margin: auto; }
+        #qrcode { margin: 20px auto; display: flex; justify-content: center; background: white; padding: 10px; width: fit-content; border-radius: 5px; }
+        #downloadBtn { background: #22c55e; display: none; }
+    </style>
+</head>
+<body>
+    <h2>⚡ QR Code Tool</h2>
+    
+    <div class="box">
+        <h3>Generate QR</h3>
+        <input type="text" id="text" placeholder="Enter link or text">
+        <br>
+        <button onclick="generate()">Create QR</button>
+        <div id="qrcode"></div>
+        <button id="downloadBtn" onclick="downloadQR()">Download PNG</button>
+    </div>
+
+    <div class="box">
+        <h3>Scan QR</h3>
+        <div id="reader"></div>
+    </div>
+
+    <button onclick="window.history.back()">Back</button>
+
+    <script>
+        function generate() {
+            const container = document.getElementById("qrcode");
+            container.innerHTML = "";
+            const text = document.getElementById("text").value;
+            if(!text) { alert("Kuch likho bhai!"); return; }
+            
+            // Size badha di hai taaki scanner easily read kare
+            new QRCode(container, {
+                text: text,
+                width: 256,
+                height: 256,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            document.getElementById("downloadBtn").style.display = "inline-block";
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector("#qrcode canvas");
+            // Quality ke liye yahan image/png use kar rahe hain
+            const image = canvas.toDataURL("image/png", 1.0);
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = 'ZingArena_QR.png';
+            link.click();
+        }
+
+        // Scanner Logic
+        const html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, 
+            (decodedText) => { alert("Result: " + decodedText); },
+            (errorMessage) => {}
+        ).catch(err => { console.log("Camera access denied"); });
+    </script>
+</body>
+</html>

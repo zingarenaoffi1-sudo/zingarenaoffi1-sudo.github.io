@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Gen</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; display: inline-block; width: 85%; max-width: 300px; }
+        #res { font-size: 20px; font-weight: bold; color: #3b82f6; margin: 15px 0; word-break: break-all; }
+        button { padding: 12px 20px; border-radius: 8px; border: none; background: #3b82f6; color: white; cursor: pointer; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>🔐 Pass Generator</h2>
+    <div class="box">
+        <div id="res">Generate Karo</div>
+        <button onclick="generate()">Generate Password</button>
+        <button onclick="window.location.href='../index.html'" style="background:#64748b; margin-top:10px;">Back</button>
+    </div>
+
+    <script>
+        function generate() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            let pass = "";
+            for(let i = 0; i < 12; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('res').innerText = pass;
+        }
+    </script>
+</body>
+</html>

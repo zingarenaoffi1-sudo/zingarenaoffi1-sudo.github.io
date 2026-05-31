@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi JPG to PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 400px; margin: auto; }
+        input { margin: 20px 0; }
+        button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🖼️ Multi JPG to PDF</h2>
+    <div class="box">
+        <input type="file" id="upload" accept="image/jpeg" multiple>
+        <br>
+        <button onclick="convertToPDF()">Convert All to PDF</button>
+    </div>
+    <br>
+    <button onclick="window.history.back()">Back</button>
+
+    <script>
+        async function convertToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const fileInput = document.getElementById('upload');
+            const files = fileInput.files;
+
+            if (files.length === 0) { alert("Kam se kam ek photo toh select kar bhai!"); return; }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const base64 = await toBase64(file);
+                
+                if (i > 0) doc.addPage(); // Nayi photo ke liye naya page
+                doc.addImage(base64, 'JPEG', 10, 10, 180, 250);
+            }
+            doc.save("ZingArena_Combined.pdf");
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+</html>

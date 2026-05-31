@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Compressor - Zing Arena</title>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 400px; margin: auto; }
+        input { margin: 20px 0; color: white; }
+        button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #preview { max-width: 100%; margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <h2>🖼️ Image Compressor</h2>
+    <div class="box">
+        <input type="file" id="upload" accept="image/*">
+        <br>
+        <label>Quality (0.1 to 1.0):</label>
+        <input type="number" id="quality" value="0.7" step="0.1" min="0.1" max="1" style="width: 50px;">
+        <br>
+        <button onclick="compressImage()">Compress & Download</button>
+        <br>
+        <img id="preview">
+    </div>
+    <br>
+    <button onclick="window.history.back()">Back</button>
+
+    <script>
+        function compressImage() {
+            const fileInput = document.getElementById('upload');
+            const quality = parseFloat(document.getElementById('quality').value);
+            if (!fileInput.files[0]) return alert("Image select karo!");
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    // Compress
+                    canvas.toBlob((blob) => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = "Compressed_ZingArena.jpg";
+                        a.click();
+                        
+                        document.getElementById('preview').src = url;
+                        document.getElementById('preview').style.display = 'block';
+                    }, 'image/jpeg', quality);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    </script>
+</body>
+</html>

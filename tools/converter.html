@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Universal Converter</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .box { background: #1e293b; padding: 20px; border-radius: 15px; display: inline-block; width: 350px; }
+        input, select { width: 95%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; }
+        button { padding: 12px; width: 100%; border-radius: 8px; border: none; background: #3b82f6; color: white; cursor: pointer; font-weight: bold; }
+        #res { margin-top: 15px; font-size: 20px; color: #fbbf24; font-weight: bold; padding: 10px; border: 1px dashed #fbbf24; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h2>🌍 Universal Converter</h2>
+    <div class="box">
+        <input type="number" id="val" placeholder="Value enter karein...">
+        <select id="type">
+            <optgroup label="Length">
+                <option value="m_km">Meter to KM</option>
+                <option value="km_m">KM to Meter</option>
+                <option value="cm_m">CM to Meter</option>
+                <option value="mm_cm">MM to CM</option>
+            </optgroup>
+            <optgroup label="Weight">
+                <option value="g_kg">Gram to KG</option>
+                <option value="kg_g">KG to Gram</option>
+                <option value="kg_lbs">KG to LBS</option>
+                <option value="mg_g">MG to Gram</option>
+            </optgroup>
+            <optgroup label="Data">
+                <option value="kb_mb">KB to MB</option>
+                <option value="mb_gb">MB to GB</option>
+                <option value="gb_tb">GB to TB</option>
+                <option value="mb_kb">MB to KB</option>
+            </optgroup>
+            <optgroup label="Time">
+                <option value="min_sec">Minute to Sec</option>
+                <option value="hr_min">Hour to Min</option>
+                <option value="day_hr">Day to Hour</option>
+            </optgroup>
+            <optgroup label="Temperature">
+                <option value="c_f">Celsius to F</option>
+                <option value="f_c">Fahrenheit to C</option>
+            </optgroup>
+        </select>
+        <button onclick="convert()">Convert Now</button>
+        <div id="res">Result</div>
+        <button onclick="window.location.href='../index.html'" style="background:#64748b; margin-top:10px;">Back</button>
+    </div>
+
+    <script>
+        function convert() {
+            let v = parseFloat(document.getElementById('val').value);
+            let t = document.getElementById('type').value;
+            let r = 0;
+            if (isNaN(v)) { document.getElementById('res').innerText = "Valid Number Daalo!"; return; }
+            
+            switch(t) {
+                case 'm_km': r = (v / 1000) + " KM"; break;
+                case 'km_m': r = (v * 1000) + " Meter"; break;
+                case 'cm_m': r = (v / 100) + " Meter"; break;
+                case 'mm_cm': r = (v / 10) + " CM"; break;
+                case 'g_kg': r = (v / 1000) + " KG"; break;
+                case 'kg_g': r = (v * 1000) + " Gram"; break;
+                case 'kg_lbs': r = (v * 2.20462).toFixed(2) + " LBS"; break;
+                case 'mg_g': r = (v / 1000) + " Gram"; break;
+                case 'kb_mb': r = (v / 1024).toFixed(4) + " MB"; break;
+                case 'mb_gb': r = (v / 1024).toFixed(4) + " GB"; break;
+                case 'gb_tb': r = (v / 1024).toFixed(4) + " TB"; break;
+                case 'mb_kb': r = (v * 1024) + " KB"; break;
+                case 'min_sec': r = (v * 60) + " Seconds"; break;
+                case 'hr_min': r = (v * 60) + " Minutes"; break;
+                case 'day_hr': r = (v * 24) + " Hours"; break;
+                case 'c_f': r = (v * 9/5 + 32).toFixed(2) + " °F"; break;
+                case 'f_c': r = ((v - 32) * 5/9).toFixed(2) + " °C"; break;
+            }
+            document.getElementById('res').innerText = r;
+        }
+    </script>
+</body>
+</html>

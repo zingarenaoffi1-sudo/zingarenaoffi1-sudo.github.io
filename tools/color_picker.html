@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color Picker - Zing Arena</title>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
+        .box { background: #1e293b; padding: 30px; border-radius: 20px; max-width: 300px; margin: auto; }
+        input[type="color"] { width: 100px; height: 100px; border: none; cursor: pointer; background: none; }
+        #hexCode { font-size: 24px; margin: 20px 0; color: #3b82f6; font-weight: bold; }
+        button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🎨 Color Picker</h2>
+    <div class="box">
+        <input type="color" id="colorPicker" value="#3b82f6" oninput="updateColor(this.value)">
+        <div id="hexCode">#3B82F6</div>
+        <button onclick="copyToClipboard()">Copy Hex Code</button>
+    </div>
+    <br>
+    <button onclick="window.history.back()">Back</button>
+
+    <script>
+        function updateColor(color) {
+            document.getElementById('hexCode').innerText = color.toUpperCase();
+        }
+        function copyToClipboard() {
+            const hex = document.getElementById('hexCode').innerText;
+            navigator.clipboard.writeText(hex);
+            alert("Code copy ho gaya: " + hex);
+        }
+    </script>
+</body>
+</html>

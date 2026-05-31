@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF to JPG - Zing Arena</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; }
+        button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        #output { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    </style>
+</head>
+<body>
+    <h2>📄 PDF to JPG Converter</h2>
+    <div class="box">
+        <input type="file" id="pdfInput" accept="application/pdf">
+        <br>
+        <button onclick="convertToImages()">Convert & Download</button>
+    </div>
+    <div id="output"></div>
+    <br>
+    <button onclick="window.history.back()">Back</button>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        async function convertToImages() {
+            const fileInput = document.getElementById('pdfInput');
+            if (!fileInput.files.length) return alert("PDF select karo!");
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
+                const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: 2.0 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                    
+                    const imgData = canvas.toDataURL("image/jpeg");
+                    const link = document.createElement('a');
+                    link.href = imgData;
+                    link.download = `page_${i}.jpg`;
+                    link.click(); // Automatic download
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>
