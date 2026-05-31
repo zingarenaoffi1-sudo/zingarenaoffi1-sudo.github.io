@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zing Tools</title>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: auto; margin-top: 30px; }
+        .item { background: #1e293b; padding: 25px; border-radius: 20px; cursor: pointer; border: 1px solid #334155; transition: 0.3s; }
+        .item:hover { background: #3b82f6; transform: translateY(-5px); }
+        button { margin-top: 30px; padding: 12px 25px; border-radius: 8px; border: none; background: #64748b; color: white; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🛠️ Zing Arena Tools</h2>
+    <div class="grid">
+        <div class="item" onclick="window.location.href='tools/passgen.html'">🔑 Password Gen</div>
+        <div class="item" onclick="window.location.href='tools/converter.html'">🌍 Converter</div>
+    </div>
+    <br>
+    <button onclick="window.location.href='index.html'">Back to Dashboard</button>
+</body>
+</html>
