@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   
     <meta charset="UTF-8">
     <title>Zing.Arena Dashboard</title>
     <style>
-        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 80px; padding-bottom: 80px; margin: 0; min-height: 100vh; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; min-height: 100vh; }
         .app-container { width: 90%; max-width: 400px; }
         #searchInput { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #334155; background: #1e293b; color: white; margin-top: 20px; box-sizing: border-box; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
         .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
-        
-        /* Ad Styles */
-        .sticky-top { position: fixed; top: 0; width: 100%; z-index: 9999; text-align: center; background: #0f172a; padding: 5px 0; }
-        .sticky-bottom { position: fixed; bottom: 0; width: 100%; z-index: 9999; text-align: center; background: #0f172a; padding: 5px 0; }
     </style>
 </head>
 <body>
-
-<div class="sticky-top">
-    <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</div>
-
 <div class="app-container">
     <h2 style="text-align:center">Zing.Arena Hub</h2>
     <input type="text" id="searchInput" onkeyup="filterMenu()" placeholder="🔍 Search tools...">
-    
     <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
         <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
@@ -33,11 +24,6 @@
         <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
     </div>
 </div>
-
-<div class="sticky-bottom">
-    <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</div>
-
 <script>
     function filterMenu() {
         let input = document.getElementById('searchInput').value.toLowerCase();
