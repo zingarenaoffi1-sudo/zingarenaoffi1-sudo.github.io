@@ -1,27 +1,38 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
- <script>(function(s){s.dataset.zone='11090074',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <meta charset="UTF-8">
     <title>Zing Pro Name Gen</title>
     <style>
-        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 80px; padding-bottom: 80px; margin: 0; }
         input { width: 90%; max-width: 400px; padding: 15px; border-radius: 12px; border: 2px solid #3b82f6; background: #1e293b; color: white; font-size: 18px; margin-bottom: 20px; outline: none; }
-        .grid { display: grid; gap: 8px; }
+        .grid { display: grid; gap: 8px; width: 90%; max-width: 400px; margin: 0 auto; }
         .name-card { background: #1e293b; padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
         button { padding: 8px 15px; border-radius: 6px; border: none; background: #3b82f6; color: white; cursor: pointer; font-weight: bold; }
         button:active { transform: scale(0.95); }
+
+        /* Ad Styles */
+        .sticky-top { position: fixed; top: 0; width: 100%; z-index: 9999; text-align: center; background: #0f172a; padding: 5px 0; }
+        .sticky-bottom { position: fixed; bottom: 0; width: 100%; z-index: 9999; text-align: center; background: #0f172a; padding: 5px 0; }
     </style>
 </head>
 <body>
+
+<div class="sticky-top">
+    <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+</div>
+
     <h2>🔥 Ultimate Pro Name Generator</h2>
     <input type="text" id="userInput" placeholder="Type here for 500+ designs..." oninput="generateAll()">
     <div id="resultArea" class="grid"></div>
     <br>
-    <button onclick="window.location.href='index.html'" style="background:#ef4444; width:150px;">Back to Hub</button>
+    <button onclick="window.location.href='index.html'" style="background:#ef4444; width:150px; margin-bottom: 20px;">Back to Hub</button>
+
+<div class="sticky-bottom">
+    <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+</div>
 
     <script>
-        // 2x Tags aur symbols ki badi list
         const symbols = ["亗", "꧁", "★", "⚡", "ॐ", "KING", "MR", "VIP", "卍", "ツ", "〆", "×", "Dragon", "Devil", "God", "Pro", "Killer", "Agent", "⚔️", "💎", "🔥", "☄️", "💀", "👾", "❄️"];
         const frames = ["『 »n« 』", "【 »n« 】", "« »n« »", "亗 »n« 亗", "꧁ »n« ꧂", "★ »n« ★", "⚡ »n« ⚡", "『 ⚔️ »n« ⚔️ 』", "💎 »n« 💎", "💀 »n« 💀"];
 
@@ -31,7 +42,6 @@
             if(!name) { area.innerHTML = ""; return; }
 
             let html = "";
-            // Double loop aur combinations ka jadoo
             frames.forEach(frame => {
                 symbols.forEach(s1 => {
                     symbols.forEach(s2 => {
