@@ -23,7 +23,8 @@
     <h2>Zing.Arena Hub</h2>
 
     <div class="terms-box">
-        <input type="checkbox" id="termsCheck" onchange="toggleAccess()"> 
+        <!-- 'checked' attribute default mein tick dikhane ke liye -->
+        <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()"> 
         <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
     </div>
 
@@ -37,6 +38,11 @@
 </div>
 
 <script>
+    // Page load hote hi turant active status set karne ke liye
+    window.onload = function() {
+        toggleAccess();
+    };
+
     function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
         let items = document.getElementsByClassName('menu-item');
