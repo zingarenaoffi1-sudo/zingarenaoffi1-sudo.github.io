@@ -13,20 +13,23 @@
         .menu-item.active { opacity: 1; pointer-events: auto; background: #1e293b; }
         .menu-item.active:hover { background: #3b82f6; transform: translateY(-5px); }
 
-        /* Terms Box */
-        .terms-box { margin-top: 30px; padding: 15px; background: #1e293b; border-radius: 10px; border: 1px solid #334155; }
+        /* Terms Box - Cornered */
+        .terms-box { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            padding: 15px; 
+            background: #1e293b; 
+            border-radius: 10px; 
+            border: 1px solid #334155; 
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <h2>Zing.Arena Hub</h2>
-
-    <div class="terms-box">
-        <!-- 'checked' attribute default mein tick dikhane ke liye -->
-        <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()"> 
-        <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
-    </div>
 
     <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
@@ -37,8 +40,13 @@
     </div>
 </div>
 
+<div class="terms-box">
+    <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()"> 
+    <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
+</div>
+
 <script>
-    // Page load hote hi turant active status set karne ke liye
+    // Page load hote hi turant activate karne ke liye
     window.onload = function() {
         toggleAccess();
     };
@@ -49,9 +57,9 @@
         
         for (let i = 0; i < items.length; i++) {
             if (isChecked) {
-                items[i].classList.add('active'); // Tools unlock
+                items[i].classList.add('active'); 
             } else {
-                items[i].classList.remove('active'); // Tools lock
+                items[i].classList.remove('active'); 
             }
         }
     }
