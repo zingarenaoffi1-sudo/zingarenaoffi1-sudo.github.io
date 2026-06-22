@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://quge5.com/88/tag.min.js" data-zone="244759" async data-cfasync="false"></script> 
     <meta charset="UTF-8">
     <title>Zing.Arena Dashboard</title>
     <style>
-        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-        .app-container { width: 90%; max-width: 400px; }
-        #searchInput { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #334155; background: #1e293b; color: white; margin-top: 20px; box-sizing: border-box; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
+        .app-container { width: 90%; max-width: 400px; text-align: center; }
+        
+        /* Tools Grid */
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
-        .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
+        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid #334155; opacity: 0.4; pointer-events: none; }
+        .menu-item.active { opacity: 1; pointer-events: auto; background: #1e293b; }
+        .menu-item.active:hover { background: #3b82f6; transform: translateY(-5px); }
+
+        /* Terms Box */
+        .terms-box { margin-top: 30px; padding: 15px; background: #1e293b; border-radius: 10px; border: 1px solid #334155; }
     </style>
 </head>
 <body>
+
 <div class="app-container">
-    <h2 style="text-align:center">Zing.Arena Hub</h2>
-    <input type="text" id="searchInput" onkeyup="filterMenu()" placeholder="🔍 Search tools...">
+    <h2>Zing.Arena Hub</h2>
+
+    <div class="terms-box">
+        <input type="checkbox" id="termsCheck" onchange="toggleAccess()"> 
+        <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
+    </div>
+
     <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
         <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
@@ -25,15 +35,21 @@
         <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
     </div>
 </div>
+
 <script>
-    function filterMenu() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let menuItems = document.getElementsByClassName('menu-item');
-        for (let i = 0; i < menuItems.length; i++) {
-            let text = menuItems[i].textContent.toLowerCase();
-            menuItems[i].style.display = text.includes(input) ? "" : "none";
+    function toggleAccess() {
+        let isChecked = document.getElementById('termsCheck').checked;
+        let items = document.getElementsByClassName('menu-item');
+        
+        for (let i = 0; i < items.length; i++) {
+            if (isChecked) {
+                items[i].classList.add('active'); // Tools unlock
+            } else {
+                items[i].classList.remove('active'); // Tools lock
+            }
         }
     }
 </script>
+
 </body>
 </html>
