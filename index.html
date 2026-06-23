@@ -7,29 +7,26 @@
         body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
         .app-container { width: 90%; max-width: 400px; text-align: center; }
         
+        /* Search Bar Style */
+        #searchInput { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
+        
         /* Tools Grid */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
         .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid #334155; opacity: 0.4; pointer-events: none; }
         .menu-item.active { opacity: 1; pointer-events: auto; background: #1e293b; }
         .menu-item.active:hover { background: #3b82f6; transform: translateY(-5px); }
 
-        /* Terms Box - Bottom-Left Corner */
-        .terms-box { 
-            position: fixed; 
-            bottom: 20px; 
-            left: 20px; 
-            padding: 15px; 
-            background: #1e293b; 
-            border-radius: 10px; 
-            border: 1px solid #334155; 
-            font-size: 13px;
-        }
+        /* Terms Box */
+        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 10px; border: 1px solid #334155; font-size: 13px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <h2>Zing.Arena Hub</h2>
+
+    <!-- Search Bar Add Kiya -->
+    <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
     <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
@@ -46,7 +43,6 @@
 </div>
 
 <script>
-    // Page load hote hi turant activate karne ke liye
     window.onload = function() {
         toggleAccess();
     };
@@ -54,12 +50,25 @@
     function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
         let items = document.getElementsByClassName('menu-item');
-        
         for (let i = 0; i < items.length; i++) {
             if (isChecked) {
                 items[i].classList.add('active'); 
             } else {
                 items[i].classList.remove('active'); 
+            }
+        }
+    }
+
+    // Search Logic
+    function filterTools() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let items = document.getElementsByClassName('menu-item');
+        for (let i = 0; i < items.length; i++) {
+            let text = items[i].innerText.toLowerCase();
+            if (text.includes(input)) {
+                items[i].style.display = "";
+            } else {
+                items[i].style.display = "none";
             }
         }
     }
