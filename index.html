@@ -25,7 +25,6 @@
 <div class="app-container">
     <h2>Zing.Arena Hub</h2>
 
-    <!-- Search Bar Add Kiya -->
     <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
     <div class="menu-grid" id="mainMenu">
@@ -34,6 +33,7 @@
         <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
         <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
         <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
+        <div class="menu-item" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
     </div>
 </div>
 
@@ -59,7 +59,6 @@
         }
     }
 
-    // Search Logic
     function filterTools() {
         let input = document.getElementById('searchInput').value.toLowerCase();
         let items = document.getElementsByClassName('menu-item');
