@@ -4,82 +4,35 @@
     <meta charset="UTF-8">
     <title>Logic Engine | Zing Arena</title>
     <style>
-        body { background: #0f172a; color: #cbd5e1; font-family: 'Segoe UI', sans-serif; height: 95vh; margin: 0; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        h3 { color: #3b82f6; margin: 0; }
-        select { background: #1e293b; color: white; padding: 10px; border-radius: 8px; border: 1px solid #334155; }
-        textarea { flex: 1; background: #1e293b; color: #f8fafc; border: 1px solid #334155; padding: 15px; border-radius: 12px; resize: none; outline: none; font-family: monospace; font-size: 14px; margin-bottom: 15px; min-height: 150px; }
-        #output { flex: 1; background: #050a14; color: #22c55e; padding: 15px; border-radius: 12px; border: 1px solid #334155; overflow-y: auto; font-family: monospace; white-space: pre-wrap; min-height: 150px; }
-        button { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #2563eb; }
-        .back-btn { background: #1e293b; border: 1px solid #334155; }
+        body { 
+            background: #0f172a; 
+            color: #cbd5e1; 
+            font-family: 'Segoe UI', sans-serif; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0;
+        }
+        h1 { color: #3b82f6; font-size: 3rem; margin-bottom: 10px; }
+        p { font-size: 1.2rem; margin-bottom: 25px; }
+        .back-btn { 
+            padding: 12px 30px; 
+            cursor: pointer; 
+            background: #1e293b; 
+            color: white; 
+            border: 1px solid #3b82f6; 
+            border-radius: 8px; 
+            font-weight: bold;
+        }
+        .back-btn:hover { background: #3b82f6; }
     </style>
 </head>
 <body>
-    <div class="controls">
-        <h3>Logic Engine</h3>
-        <div>
-            <select id="lang">
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-                <option value="cpp">C++</option>
-                <option value="javascript">JavaScript</option>
-            </select>
-            <button onclick="runCode()">Run Code ⚡</button>
-            <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
-        </div>
-    </div>
-    
-    <textarea id="code" placeholder="Write your code here..."></textarea>
-    <div id="output">Output will appear here...</div>
-
-    <script>
-        async function runCode() {
-            let code = document.getElementById('code').value;
-            let lang = document.getElementById('lang').value;
-            let output = document.getElementById('output');
-            
-            if(!code.trim()) {
-                output.innerText = "Error: Please enter some code first!";
-                return;
-            }
-
-            output.innerText = "Running...";
-
-            try {
-                // Piston API request
-                let response = await fetch("https://emkc.org/api/v2/piston/execute", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        language: lang,
-                        version: "*",
-                        files: [{ content: code }]
-                    })
-                });
-                
-                let result = await response.json();
-                
-                if (result.run) {
-                    let out = result.run.stdout || "";
-                    let err = result.run.stderr || "";
-                    
-                    if (out === "" && err === "") {
-                        output.innerText = "Code executed successfully (No output).";
-                    } else {
-                        output.innerText = (err ? "--- ERROR ---\n" + err + "\n\n" : "") + 
-                                           (out ? "--- OUTPUT ---\n" + out : "");
-                    }
-                } else {
-                    // Agar API se response galat aaye
-                    output.innerText = "Server Error: Unexpected format. Result: " + JSON.stringify(result);
-                }
-            } catch (err) {
-                // Yeh error tab aata hai jab browser CORS ya Network block kare
-                output.innerText = "Connection Error! \n\nTip: Please run this file using a local server (like Live Server in VS Code) instead of opening it directly as a file.";
-                console.error("Fetch Error:", err);
-            }
-        }
-    </script>
+    <h1>⚙️ Logic Engine</h1>
+    <!-- Yaha text change kar diya hai -->
+    <p>This feature is currently in development. An update is coming soon! ⚡</p>
+    <button class="back-btn" onclick="window.location.href='coderunner.html'">Back to Suite</button>
 </body>
 </html>
