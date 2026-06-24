@@ -1,27 +1,34 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Zing Code Runner</title>
     <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 50px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 600px; margin: 40px auto; }
         .card { background: #1e293b; padding: 30px; border-radius: 20px; cursor: pointer; border: 1px solid #334155; transition: 0.3s; }
-        .card:hover { background: #3b82f6; }
+        .card:hover { border-color: #3b82f6; background: #253348; }
+        /* CSS Logo for Web Runner */
+        .icon { font-size: 40px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>💻 Code Runner</h1>
+    <h1>💻 Code Runner Suite</h1>
+    
     <div class="grid">
         <div class="card" onclick="window.location.href='web_runner.html'">
+            <div class="icon">&lt;/&gt;</div>
             <h3>Web Dev</h3>
             <p>HTML / CSS / JS</p>
         </div>
+
         <div class="card" onclick="window.location.href='logic_runner.html'">
+            <div class="icon">⚙️</div>
             <h3>Logic Engine</h3>
             <p>Java / Python / C++</p>
         </div>
     </div>
-    <button onclick="window.location.href='index.html'" style="padding:10px 20px; cursor:pointer;">Back</button>
+
+    <button onclick="window.location.href='../index.html'" style="padding:10px 25px; cursor:pointer; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:bold;">Back to Dashboard</button>
 </body>
 </html>
