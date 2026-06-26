@@ -9,7 +9,11 @@
         
         #searchInput { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
         
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; transition: 0.5s; }
+        
+        /* Blur aur Inactive state */
+        .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
+
         .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid #334155; }
         .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
 
@@ -20,33 +24,33 @@
 
 <div class="app-container">
     <h2>Zing.Arena Hub</h2>
-
     <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
     <div class="menu-grid" id="mainMenu">
-        <div class="menu-item" onclick="openTool('player.html')"><span>🎬</span> Player</div>
-        <div class="menu-item" onclick="openTool('namegen.html')"><span>🔤</span> Name Gen</div>
-        <div class="menu-item" onclick="openTool('tools.html')"><span>🛠️</span> Tools</div>
-        <div class="menu-item" onclick="openTool('browser.html')"><span>🌐</span> Browser</div>
-        <div class="menu-item" onclick="openTool('translator.html')"><span>🌍</span> Translator</div>
-        <div class="menu-item" onclick="openTool('speedtest.html')"><span>⚡</span> Speed Test</div>
-        <div class="menu-item" onclick="openTool('coderunner.html')"><span>💻</span> Code Runner</div>
+        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
+        <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
+        <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
+        <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
+        <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
+        <div class="menu-item" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
+        <div class="menu-item" onclick="window.location.href='coderunner.html'"><span>💻</span> Code Runner</div>
     </div>
 </div>
 
 <div class="terms-box">
-    <input type="checkbox" id="termsCheck" checked> 
+    <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()"> 
     <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
 </div>
 
 <script>
-    // Terms check logic
-    function openTool(url) {
+    function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
+        let menu = document.getElementById('mainMenu');
+        
         if (isChecked) {
-            window.location.href = url;
+            menu.classList.remove('blurred');
         } else {
-            alert("Please accept the Terms & Conditions to access the tools.");
+            menu.classList.add('blurred');
         }
     }
 
