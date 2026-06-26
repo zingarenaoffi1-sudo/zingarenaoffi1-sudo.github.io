@@ -12,21 +12,21 @@
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: #334155; color: white; box-sizing: border-box; }
         button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
         
-        #playerContainer { position: relative; width: 100%; padding-bottom: 150%; height: 0; margin-bottom: 20px; overflow: hidden; display: none; }
-        #mainPlayer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px; border: none; }
+        #playerContainer { position: relative; width: 100%; padding-bottom: 150%; height: 0; margin-bottom: 20px; overflow: hidden; display: none; background: #000; }
+        #mainPlayer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
+        #errorOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; background: #1e293b; z-index: 10; }
         
         .video-item { background: #1e293b; padding: 12px; margin: 8px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
         .delete-btn { background: #ef4444; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
         .hidden { display: none !important; }
-        #loginGate { text-align: center; margin-top: 50px; }
-        #counter { text-align: center; font-size: 1.2em; margin-bottom: 10px; color: #60a5fa; }
+        #counter { text-align: center; font-size: 1.2em; margin-bottom: 10px; color: #60a5fa; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container" id="loginGate">
     <h2>Player Access</h2>
-    <p>Please login to manage your private playlist.</p>
     <button onclick="googleLogin()">Login with Google</button>
 </div>
 
@@ -34,6 +34,10 @@
     <div id="counter">Videos: 0 / 50</div>
     <div id="playerContainer">
         <iframe id="mainPlayer" src="" allowfullscreen></iframe>
+        <div id="errorOverlay">
+            <p>Video embed blocked by site.</p>
+            <a id="instaLink" href="#" target="_blank" style="text-decoration:none; color:white; background:#e1306c; padding:10px; border-radius:5px;">View in Instagram</a>
+        </div>
     </div>
     <input type="text" id="title" placeholder="Video Title">
     <input type="text" id="url" placeholder="YouTube or Instagram URL">
@@ -59,76 +63,78 @@
     const auth = firebase.auth();
     let currentCount = 0;
 
-    function googleLogin() { 
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider);
-    }
+    function googleLogin() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
 
     auth.onAuthStateChanged(user => {
-        const loginGate = document.getElementById('loginGate');
-        const playerSection = document.getElementById('playerSection');
         if(user) {
-            loginGate.classList.add('hidden');
-            playerSection.classList.remove('hidden');
+            document.getElementById('loginGate').classList.add('hidden');
+            document.getElementById('playerSection').classList.remove('hidden');
             loadData(user.uid);
-        } else {
-            loginGate.classList.remove('hidden');
-            playerSection.classList.add('hidden');
         }
     });
 
     function pushLink() {
+        // 50 Video Limit Logic
         if(currentCount >= 50) {
-            alert("Maximum limit (50) for this account reached!");
+            alert("Maximum limit (50) for this account reached! Delete some videos first.");
             return;
         }
 
         const title = document.getElementById('title').value;
         const url = document.getElementById('url').value;
-        let embedUrl = "";
+        
+        if(!title || !url) { alert("Please fill both fields"); return; }
 
+        let embedUrl = "";
         if (url.includes("youtube.com") || url.includes("youtu.be")) {
             let videoId = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/|\/shorts\/)/);
-            videoId = (videoId[2] !== undefined) ? videoId[2].split(/[^0-9a-z_-]/i)[0] : url; 
-            if (videoId.length >= 11) embedUrl = "https://www.youtube.com/embed/" + videoId;
-        } 
-        else if (url.includes("instagram.com")) {
-            // Instagram ke liye simple format use kiya hai
-            let cleanUrl = url.split("?")[0];
-            if(!cleanUrl.endsWith("/")) cleanUrl += "/";
-            embedUrl = cleanUrl + "embed/";
+            videoId = (videoId[2] !== undefined) ? videoId[2].split(/[^0-9a-z_-]/i)[0] : url;
+            embedUrl = "https://www.youtube.com/embed/" + videoId;
+        } else if (url.includes("instagram.com")) {
+            embedUrl = url.split("?")[0] + "embed/";
         }
 
         if (embedUrl !== "") {
-            db.ref('users/' + auth.currentUser.uid + '/playlist/').push({ title, url: embedUrl });
+            db.ref('users/' + auth.currentUser.uid + '/playlist/').push({ title, url: embedUrl, rawUrl: url });
             document.getElementById('title').value = "";
             document.getElementById('url').value = "";
         } else {
-            alert("Sirf YouTube ya Instagram ke link daalein!");
+            alert("Invalid URL! Sirf YouTube ya Instagram link daalein.");
         }
     }
 
-    function playVideo(url) {
+    function playVideo(url, rawUrl) {
         document.getElementById('playerContainer').style.display = "block";
+        document.getElementById('errorOverlay').style.display = "none";
         document.getElementById('mainPlayer').src = url;
+        
+        // Error handling ke liye manual timeout (browser limit ke wajah se)
+        setTimeout(() => {
+            const player = document.getElementById('mainPlayer');
+            // Agar player empty hai toh error dikhao
+            if(player.src === "") {
+                document.getElementById('errorOverlay').style.display = "flex";
+                document.getElementById('instaLink').href = rawUrl;
+            }
+        }, 3000);
     }
-
-    function deleteVideo(key) { db.ref('users/' + auth.currentUser.uid + '/playlist/' + key).remove(); }
 
     function loadData(uid) {
         db.ref('users/' + uid + '/playlist/').on('value', snapshot => {
             const list = document.getElementById('videoList');
-            const counterDiv = document.getElementById('counter');
             list.innerHTML = "";
             currentCount = snapshot.numChildren();
-            counterDiv.innerText = `Videos: ${currentCount} / 50`;
+            document.getElementById('counter').innerText = `Videos: ${currentCount} / 50`;
             
             snapshot.forEach(child => {
                 const data = child.val();
-                list.innerHTML += `<div class="video-item"><span>${data.title}</span> <div><button onclick="playVideo('${data.url}')" style="width:auto; margin:0 5px;">Play</button><span class="delete-btn" onclick="deleteVideo('${child.key}')">X</span></div></div>`;
+                list.innerHTML += `<div class="video-item"><span>${data.title}</span> 
+                <div><button onclick="playVideo('${data.url}', '${data.rawUrl}')" style="width:auto;">Play</button>
+                <span class="delete-btn" onclick="deleteVideo('${child.key}')">X</span></div></div>`;
             });
         });
     }
+    function deleteVideo(key) { db.ref('users/' + auth.currentUser.uid + '/playlist/' + key).remove(); }
 </script>
 </body>
 </html>
