@@ -7,6 +7,9 @@
         body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
         .app-container { width: 90%; max-width: 400px; text-align: center; }
         
+        /* Greeting Style */
+        #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; }
+        
         #searchInput { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
         
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; transition: 0.5s; }
@@ -23,6 +26,7 @@
 <body>
 
 <div class="app-container">
+    <h3 id="greetingMessage"></h3>
     <h2>Zing.Arena Hub</h2>
     <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
@@ -43,10 +47,21 @@
 </div>
 
 <script>
+    // Greeting Logic
+    function setGreeting() {
+        let hour = new Date().getHours();
+        let greeting = "";
+        if (hour < 12) greeting = "Good Morning! ☀️";
+        else if (hour < 18) greeting = "Good Afternoon! 🌤️";
+        else greeting = "Good Evening! 🌙";
+        document.getElementById('greetingMessage').innerText = greeting;
+    }
+    setGreeting();
+
+    // Access Control Logic
     function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
         let menu = document.getElementById('mainMenu');
-        
         if (isChecked) {
             menu.classList.remove('blurred');
         } else {
@@ -54,6 +69,7 @@
         }
     }
 
+    // Filter Logic
     function filterTools() {
         let input = document.getElementById('searchInput').value.toLowerCase();
         let items = document.getElementsByClassName('menu-item');
