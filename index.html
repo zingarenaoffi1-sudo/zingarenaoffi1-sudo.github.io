@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Zing.Arena Dashboard</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="icon.png">
+
     <style>
         body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
         .app-container { width: 90%; max-width: 400px; text-align: center; }
-        
-        /* Greeting Style */
         #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; }
-        
         #searchInput { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
-        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; transition: 0.5s; }
-        
-        /* Blur aur Inactive state */
         .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-
         .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid #334155; }
         .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
-
         .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 10px; border: 1px solid #334155; font-size: 13px; }
     </style>
 </head>
@@ -47,35 +44,32 @@
 </div>
 
 <script>
-    // Greeting Logic
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch(err => console.log('SW Failed', err));
+        });
+    }
+
     function setGreeting() {
         let hour = new Date().getHours();
-        let greeting = "";
-        if (hour < 12) greeting = "Good Morning! ☀️";
-        else if (hour < 18) greeting = "Good Afternoon! 🌤️";
-        else greeting = "Good Evening! 🌙";
+        let greeting = (hour < 12) ? "Good Morning! ☀️" : (hour < 18) ? "Good Afternoon! 🌤️" : "Good Evening! 🌙";
         document.getElementById('greetingMessage').innerText = greeting;
     }
     setGreeting();
 
-    // Access Control Logic
     function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
         let menu = document.getElementById('mainMenu');
-        if (isChecked) {
-            menu.classList.remove('blurred');
-        } else {
-            menu.classList.add('blurred');
-        }
+        menu.classList.toggle('blurred', !isChecked);
     }
 
-    // Filter Logic
     function filterTools() {
         let input = document.getElementById('searchInput').value.toLowerCase();
         let items = document.getElementsByClassName('menu-item');
         for (let i = 0; i < items.length; i++) {
-            let text = items[i].innerText.toLowerCase();
-            items[i].style.display = text.includes(input) ? "" : "none";
+            items[i].style.display = items[i].innerText.toLowerCase().includes(input) ? "" : "none";
         }
     }
 </script>
