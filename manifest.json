@@ -1,7 +1,7 @@
 {
   "id": "/?standalone=true",
   "name": "Zing Arena",
-  "short_name": "ZingArena",
+  "short_name": "Zing Arena",
   "description": "Zing Arena Hub for all your daily tools and productivity needs.",
   "start_url": "index.html",
   "display": "standalone",
