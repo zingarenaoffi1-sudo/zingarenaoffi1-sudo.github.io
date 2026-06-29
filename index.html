@@ -10,14 +10,18 @@
 
     <style>
         body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-        .app-container { width: 90%; max-width: 400px; text-align: center; }
-        #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; }
-        #searchInput { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; transition: 0.5s; }
+        .app-container { width: 90%; max-width: 600px; text-align: center; } /* Max-width badha diya */
+        #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
+        #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
+        
+        /* Size bada karne ke liye changes */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
         .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid #334155; }
-        .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
-        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 10px; border: 1px solid #334155; font-size: 13px; }
+        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
+        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; } /* Icon ka size bada kiya */
+        .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
+        
+        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 20px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; }
     </style>
 </head>
 <body>
