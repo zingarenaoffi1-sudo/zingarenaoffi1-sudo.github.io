@@ -1,1 +1,8 @@
-
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.zingarenaoffi1_sudo.twa",
+        "sha256_cert_fingerprints": ["3C:CB:FC:AB:FA:3E:63:7C:77:07:6D:4B:C5:A8:9B:0E:74:17:79:30:B7:87:04:77:08:28:C4:24:97:E7:5E:36"]
+      }
+    }]
