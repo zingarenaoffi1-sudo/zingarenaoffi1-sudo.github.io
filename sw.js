@@ -47,3 +47,24 @@ self.addEventListener('activate', (e) => {
     })
   );
 });
+
+// sw.js file ke andar
+const CACHE_NAME = 'zingarena-v1.1'; // Jab update karo, toh v1.2 kar do
+
+self.addEventListener('install', (event) => {
+    self.skipWaiting(); // Ye purane service worker ko turant hata kar naya laata hai
+});
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cache) => {
+                    if (cache !== CACHE_NAME) {
+                        return caches.delete(cache); // Purana cache delete kar deta hai
+                    }
+                })
+            );
+        })
+    );
+});
