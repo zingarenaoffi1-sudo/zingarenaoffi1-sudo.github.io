@@ -79,7 +79,11 @@
             items[i].style.display = items[i].innerText.toLowerCase().includes(input) ? "" : "none";
         }
     }
+    <script>
+    // Agar standalone nahi hai, toh redirect karo
+    if (!window.matchMedia('(display-mode: standalone)').matches) {
+        window.location.href = "redirect.html"; 
+    }
 </script>
-
 </body>
 </html>
