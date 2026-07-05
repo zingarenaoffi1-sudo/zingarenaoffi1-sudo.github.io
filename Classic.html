@@ -1,53 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>(function(s){s.dataset.zone='11090074',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <meta charset="UTF-8">
     <title>Zing Arena Games</title>
     <style>
-          body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-        .app-container { width: 90%; max-width: 600px; text-align: center; }
-        #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
-        #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
+        h2 { margin-bottom: 20px; }
         
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
-        .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
-        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
-        .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
+        #searchInput { width: 90%; max-width: 400px; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; font-size: 1.1rem; }
         
-        /* Search Bar Style */
-        #searchInput { width: 100%; max-width: 400px; padding: 12px; margin-top: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 90%; max-width: 400px; }
+        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; display: flex; align-items: center; font-size: 1.2rem; font-weight: bold; }
+        .menu-item span { font-size: 2rem; margin-right: 15px; }
+        .menu-item:hover { background: #3b82f6; transform: translateY(-5px); border-color: #60a5fa; }
         
+        button { margin-top: 30px; padding: 10px 20px; border-radius: 10px; border: none; background: #334155; color: white; cursor: pointer; }
+        button:hover { background: #475569; }
     </style>
 </head>
 <body>
     <h2>🛠️ Zing Arena Games</h2>
     
-    <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
+    <input type="text" id="searchInput" placeholder="Search games..." onkeyup="filterGames()">
 
     <div class="grid" id="Gamesgrid">
-    <div class="menu-item" onclick="window.location.href='Classic/Tic-Tac-Toe/Index.html'"><span>❌⭕ </span> Tic-Tac-Toe</div>
-    <div class="menu-item" onclick="window.location.href='Classic/Snake/index.html'"><span>🐍 </span> Snake</div>
-    <div class="menu-item" onclick="window.location.href='Classic/Brick Breaker/index.html'"><span>🧱 </span> Brick Breaker</div> 
-
+        <div class="menu-item" onclick="window.location.href='Classic/Tic-Tac-Toe/index.html'"><span>❌⭕</span> Tic-Tac-Toe</div>
+        <div class="menu-item" onclick="window.location.href='Classic/Snake/index.html'"><span>🐍</span> Snake</div>
+        <div class="menu-item" onclick="window.location.href='Classic/Brick Breaker/index.html'"><span>🧱</span> Brick Breaker</div> 
     </div>
     
-    <br>
-    <button onclick="window.location.href='index.html'">Back to Dashboard</button>
+    <button onclick="window.location.href='../index.html'">Back to Dashboard</button>
 
     <script>
-        // Filter Logic
-        function filterTools() {
+        function filterGames() {
             let input = document.getElementById('searchInput').value.toLowerCase();
-            let items = document.getElementsByClassName('item');
+            let items = document.getElementsByClassName('menu-item');
             for (let i = 0; i < items.length; i++) {
                 let text = items[i].innerText.toLowerCase();
-                if (text.includes(input)) {
-                    items[i].style.display = "";
-                } else {
-                    items[i].style.display = "none";
-                }
+                items[i].style.display = text.includes(input) ? "flex" : "none";
             }
         }
     </script>
