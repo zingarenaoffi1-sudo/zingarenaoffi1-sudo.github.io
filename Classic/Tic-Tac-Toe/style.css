@@ -1,0 +1,107 @@
+﻿/* ===========================
+   Zing Arena - Tic Tac Toe
+   =========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#07141f;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:95%;
+    max-width:420px;
+    text-align:center;
+}
+
+h1{
+    color:#00e5ff;
+    margin-bottom:15px;
+    font-size:35px;
+    text-shadow:0 0 12px #00e5ff;
+}
+
+#status{
+    color:white;
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.board{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.cell{
+    width:100%;
+    aspect-ratio:1/1;
+
+    border:none;
+    border-radius:15px;
+
+    background:#12314f;
+
+    color:#00e5ff;
+
+    font-size:45px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.cell:hover{
+    background:#1a446a;
+    transform:scale(1.03);
+}
+
+#restart{
+    margin-top:25px;
+
+    padding:12px 30px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#00bcd4;
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+#restart:hover{
+    background:#0097a7;
+}
+
+@media(max-width:480px){
+
+h1{
+font-size:28px;
+}
+
+#status{
+font-size:18px;
+}
+
+.cell{
+font-size:38px;
+}
+
+}
