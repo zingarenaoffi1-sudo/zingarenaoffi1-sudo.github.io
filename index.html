@@ -12,18 +12,32 @@
     <link rel="apple-touch-icon" href="icon.png">
 
     <style>
-        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-        .app-container { width: 90%; max-width: 600px; text-align: center; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; padding-bottom: 60px; /* banner ke liye jagah */ }
+       .app-container { width: 90%; max-width: 600px; text-align: center; }
         #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
         #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
-        
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
-        .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
-        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
-        .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
-        
-        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 20px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; }
+
+       .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
+       .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
+       .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
+       .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
+       .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
+
+       .terms-box { position: fixed; bottom: 70px; left: 20px; padding: 20px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; } /* 70px kiya taki banner ke upar aa jaye */
+
+        /* Banner ke liye naya CSS */
+       .monetag-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px; /* banner ki height */
+            z-index: 9999;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -46,8 +60,13 @@
 </div>
 
 <div class="terms-box">
-    <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()"> 
+    <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()">
     <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
+</div>
+
+<!-- Yaha Banner Chipak gaya neeche -->
+<div class="monetag-banner">
+<script>(function(s){s.dataset.zone='11273874',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <script>
@@ -55,15 +74,15 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('Service Worker Registered'))
-                .catch(err => console.log('SW Failed', err));
+               .then(() => console.log('Service Worker Registered'))
+               .catch(err => console.log('SW Failed', err));
         });
     }
 
     // 2. Greeting Message
     function setGreeting() {
         let hour = new Date().getHours();
-        let greeting = (hour < 12) ? "Good Morning! ☀️" : (hour < 18) ? "Good Afternoon! 🌤️" : "Good Evening! 🌙";
+        let greeting = (hour < 12)? "Good Morning! ☀️" : (hour < 18)? "Good Afternoon! 🌤️" : "Good Evening! 🌙";
         document.getElementById('greetingMessage').innerText = greeting;
     }
     setGreeting();
@@ -72,7 +91,7 @@
     function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
         let menu = document.getElementById('mainMenu');
-        menu.classList.toggle('blurred', !isChecked);
+        menu.classList.toggle('blurred',!isChecked);
     }
 
     // 4. Search Filter
@@ -80,14 +99,18 @@
         let input = document.getElementById('searchInput').value.toLowerCase();
         let items = document.getElementsByClassName('menu-item');
         for (let i = 0; i < items.length; i++) {
-            items[i].style.display = items[i].innerText.toLowerCase().includes(input) ? "" : "none";
+            items[i].style.display = items[i].innerText.toLowerCase().includes(input)? "" : "none";
         }
     }
 
     // 5. Redirect Logic (Browser se App par bhejne ke liye)
     if (!window.matchMedia('(display-mode: standalone)').matches) {
-        window.location.href = "download.html"; 
+        window.location.href = "download.html";
     }
 </script>
+
+<!-- Yaha Popunder ka code paste karna jab mile -->
+<!-- <script src='//code.monetag.com/popunder.js'></script> -->
+
 </body>
 </html>
