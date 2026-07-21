@@ -1,132 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
+    <script>
 (function(hlhl){
 var d = document,
     s = d.createElement('script'),
     l = d.scripts[d.scripts.length - 1];
 s.settings = hlhl || {};
-s.src = "\/\/shameful-farm.com\/bAXaV.ssdgGVlZ0DYiWxcN\/RenmU9PuAZVUglVkBPNT-cey\/NUDGQjyBO_TwMvt\/NozPIK0\/NRDqIh5bN\/wd";
+s.src = "https://shameful-farm.com/bAXaV.ssdgGVlZ0DYiWxcN/RenmU9PuAZVUglVkBPNT-cey/NUDGQjyBO_TwMvt/NozPIK0/NRDqIh5bN/wd";
 s.async = true;
 s.referrerPolicy = 'no-referrer-when-downgrade';
 l.parentNode.insertBefore(s, l);
 })({})
 </script>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta charset="UTF-8">
-    <title>Zing.Arena Dashboard</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <title>Zing.Arena Dashboard</title>
 
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="icon.png">
 
-    <style>
-        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-        .app-container { width: 90%; max-width: 600px; text-align: center; }
-        #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
-        #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
+        .app-container { width: 90%; max-width: 600px; text-align: center; }
+        #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
+        #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
 
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
-        .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
-        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
-        .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
+        .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
+        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
+        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
+        .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
 
-        /* TERMS BOX - BOTTOM LEFT CHHOD DIYA HAI */
-        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
+        /* TERMS BOX - BOTTOM LEFT CHHOD DIYA HAI */
+        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
 
-        /* CORNER ADS - FIXED POSITIONING (Baki ke 3 corners) */
-        .corner-ad {
-            position: fixed;
-            z-index: 9999;
-        }
-        .top-left { top: 15px; left: 15px; }
-        .top-right { top: 15px; right: 15px; }
-        .bottom-right { bottom: 15px; right: 15px; } /* Bottom-Left wali jagah Terms box hai, isliye ye Bottom-Right hai */
+        /* CORNER ADS - FIXED POSITIONING & STRICT BOUNDS */
+        .corner-ad {
+            position: fixed;
+            z-index: 9999;
+            max-width: 150px;
+            max-height: 150px;
+            overflow: hidden;
+        }
+        .top-left { top: 15px; left: 15px; }
+        .top-right { top: 15px; right: 15px; }
+        .bottom-right { bottom: 15px; right: 15px; } 
 
-        .ad-block { width: 100%; margin: 20px 0; display: flex; justify-content: center; }
+        .ad-block { width: 100%; margin: 20px 0; display: flex; justify-content: center; }
 
-        /* Mobile ke liye scaling taaki layout na phate */
-        @media (max-width: 768px) {
-            .corner-ad { transform: scale(0.75); }
-            .top-left { transform-origin: top left; }
-            .top-right { transform-origin: top right; }
-            .bottom-right { transform-origin: bottom right; }
-        }
-    </style>
+        /* Mobile ke liye scaling taaki layout na phate */
+        @media (max-width: 768px) {
+            .corner-ad { 
+                transform: scale(0.6); 
+                max-width: 120px;
+                max-height: 120px;
+            }
+            .top-left { transform-origin: top left; }
+            .top-right { transform-origin: top right; }
+            .bottom-right { transform-origin: bottom right; }
+        }
+    </style>
 </head>
 <body>
 
 <!-- CORNER AD 1: TOP LEFT -->
 <div class="corner-ad top-left">
-    <script>(function(s){s.dataset.zone='11363030',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script>(function(s){s.dataset.zone='11363030',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <!-- CORNER AD 2: TOP RIGHT -->
 <div class="corner-ad top-right">
-    
+    <script>(function(s){s.dataset.zone='11362719',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
-<script>(function(s){s.dataset.zone='11362719',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
 <!-- CORNER AD 3: BOTTOM RIGHT -->
 <div class="corner-ad bottom-right">
-    <script>(function(s){s.dataset.zone='1100187',s.src='ttps://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script>(function(s){s.dataset.zone='1100187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <div class="app-container">
-    <h3 id="greetingMessage"></h3>
-    <h2>Zing.Arena Hub</h2>
-    <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
+    <h3 id="greetingMessage"></h3>
+    <h2>Zing.Arena Hub</h2>
+    <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
-    <div class="menu-grid" id="mainMenu">
-        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
-        <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
-        <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
-        <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
-        <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
-        <div class="menu-item" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
-        <div class="menu-item" onclick="window.location.href='coderunner.html'"><span>💻</span> Code Runner</div>
-        <div class="menu-item" onclick="window.location.href='Games.html'"><span>🎮</span> Games</div>
-    </div>
+    <div class="menu-grid" id="mainMenu">
+        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
+        <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
+        <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
+        <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
+        <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
+        <div class="menu-item" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
+        <div class="menu-item" onclick="window.location.href='coderunner.html'"><span>💻</span> Code Runner</div>
+        <div class="menu-item" onclick="window.location.href='Games.html'"><span>🎮</span> Games</div>
+    </div>
 </div>
 
 <!-- TERMS BOX: BOTTOM LEFT (Reserved) -->
 <div class="terms-box">
-    <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()">
-    <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
+    <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()">
+    <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
 </div>
 
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registered'))
-            .catch(err => console.log('SW Failed', err));
-        });
-    }
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log('Service Worker Registered'))
+            .catch(err => console.log('SW Failed', err));
+        });
+    }
 
-    function setGreeting() {
-        let hour = new Date().getHours();
-        let greeting = (hour < 12)? "Good Morning! ☀️" : (hour < 18)? "Good Afternoon! 🌤️" : "Good Evening! 🌙";
-        document.getElementById('greetingMessage').innerText = greeting;
-    }
-    setGreeting();
+    function setGreeting() {
+        let hour = new Date().getHours();
+        let greeting = (hour < 12)? "Good Morning! ☀️" : (hour < 18)? "Good Afternoon! 🌤️" : "Good Evening! 🌙";
+        document.getElementById('greetingMessage').innerText = greeting;
+    }
+    setGreeting();
 
-    function toggleAccess() {
-        let isChecked = document.getElementById('termsCheck').checked;
-        let menu = document.getElementById('mainMenu');
-        menu.classList.toggle('blurred',!isChecked);
-    }
+    function toggleAccess() {
+        let isChecked = document.getElementById('termsCheck'].checked;
+        let menu = document.getElementById('mainMenu');
+        menu.classList.toggle('blurred',!isChecked);
+    }
 
-    function filterTools() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let items = document.getElementsByClassName('menu-item');
-        for (let i = 0; i < items.length; i++) {
-            items[i].style.display = items[i].innerText.toLowerCase().includes(input)? "" : "none";
-        }
-    }
+    function filterTools() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let items = document.getElementsByClassName('menu-item');
+        for (let i = 0; i < items.length; i++) {
+            items[i].style.display = items[i].innerText.toLowerCase().includes(input)? "" : "none";
+        }
+    }
 </script>
 
 </body>
