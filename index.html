@@ -13,50 +13,60 @@
 
     <style>
         body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-     .app-container { width: 90%; max-width: 600px; text-align: center; }
+        .app-container { width: 90%; max-width: 600px; text-align: center; }
         #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
         #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
 
-     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
-     .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-     .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
-     .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
-     .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
+        .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
+        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
+        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
+        .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
 
-       /* TERMS WAHI RAHEGI JAISI THI */
-     .terms-box { position: fixed; bottom: 70px; left: 20px; padding: 20px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
+        /* TERMS BOX - BOTTOM LEFT CHHOD DIYA HAI */
+        .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
 
-        /* 3 Corner Ad ke liye - WAHI HAI */
-    .corner-ad {
-          position: fixed;
-          z-index: 9999;
+        /* CORNER ADS - FIXED POSITIONING (Baki ke 3 corners) */
+        .corner-ad {
+            position: fixed;
+            z-index: 9999;
         }
-     .top-left { top: 15px; left: 15px; }
-     .top-right { top: 15px; right: 15px; }
-     .bottom-left { bottom: 15px; left: 15px; }
+        .top-left { top: 15px; left: 15px; }
+        .top-right { top: 15px; right: 15px; }
+        .bottom-right { bottom: 15px; right: 15px; } /* Bottom-Left wali jagah Terms box hai, isliye ye Bottom-Right hai */
 
-        /* NAYA: AD KE BEECH ME GAP */
-     .ad-block { width: 100%; margin: 20px 0; display: flex; justify-content: center; }
+        .ad-block { width: 100%; margin: 20px 0; display: flex; justify-content: center; }
 
-        /* Mobile ke liye: Banner 20% chota */
+        /* Mobile ke liye scaling taaki layout na phate */
         @media (max-width: 768px) {
-       .corner-ad { transform: scale(0.8); transform-origin: top left; }
-       .top-right { transform-origin: top right; }
-       .bottom-left { transform-origin: bottom left; }
+            .corner-ad { transform: scale(0.75); }
+            .top-left { transform-origin: top left; }
+            .top-right { transform-origin: top right; }
+            .bottom-right { transform-origin: bottom right; }
         }
     </style>
 </head>
 <body>
 
+<!-- CORNER AD 1: TOP LEFT -->
+<div class="corner-ad top-left">
+    <script>(function(s){s.dataset.zone='11363030',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+</div>
+
+<!-- CORNER AD 2: TOP RIGHT -->
+<div class="corner-ad top-right">
+    <script>(function(s){s.dataset.zone='11273874',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+</div>
+
+<!-- CORNER AD 3: BOTTOM RIGHT -->
+<div class="corner-ad bottom-right">
+    <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+</div>
+
 <div class="app-container">
     <h3 id="greetingMessage"></h3>
     <h2>Zing.Arena Hub</h2>
     <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
-
-    <!-- AD 1 LAGA DIYA: HEADER KE NEECHE -->
-    <div class="ad-block">
-     <script>(function(s){s.dataset.zone='11363030',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    </div>
 
     <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
@@ -68,30 +78,15 @@
         <div class="menu-item" onclick="window.location.href='coderunner.html'"><span>💻</span> Code Runner</div>
         <div class="menu-item" onclick="window.location.href='Games.html'"><span>🎮</span> Games</div>
     </div>
-
-    <!-- AD 2 LAGA DIYA: MENU KE BAAD -->
-    <div class="ad-block">
-    <script>(function(s){s.dataset.zone='11273874',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    </div>
-
 </div>
 
-<!-- TERMS WAHI HAI -->
+<!-- TERMS BOX: BOTTOM LEFT (Reserved) -->
 <div class="terms-box">
     <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()">
     <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
 </div>
 
-<!-- AD 3 LAGA DIYA: FOOTER/TERMS KE NEECHE -->
-<div class="ad-block">
-<script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</div>
-
-<!-- PURANE 3 CORNER AD HATA DIYE KYUKI WO STACK HO RAHE THE -->
-<!-- AGAR CHAHIYE TO BATANA WAPAS LAGA DUNGA -->
-
 <script>
-    // 1. Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
@@ -100,7 +95,6 @@
         });
     }
 
-    // 2. Greeting Message
     function setGreeting() {
         let hour = new Date().getHours();
         let greeting = (hour < 12)? "Good Morning! ☀️" : (hour < 18)? "Good Afternoon! 🌤️" : "Good Evening! 🌙";
@@ -108,14 +102,12 @@
     }
     setGreeting();
 
-    // 3. Access Toggle
     function toggleAccess() {
         let isChecked = document.getElementById('termsCheck').checked;
         let menu = document.getElementById('mainMenu');
         menu.classList.toggle('blurred',!isChecked);
     }
 
-    // 4. Search Filter
     function filterTools() {
         let input = document.getElementById('searchInput').value.toLowerCase();
         let items = document.getElementsByClassName('menu-item');
@@ -123,7 +115,6 @@
             items[i].style.display = items[i].innerText.toLowerCase().includes(input)? "" : "none";
         }
     }
-
 </script>
 
 </body>
