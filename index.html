@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <script>
+    <script>
 (function(twtl){
 var d = document,
     s = d.createElement('script'),
@@ -38,20 +38,27 @@ l.parentNode.insertBefore(s, l);
         /* TERMS BOX - BOTTOM LEFT CHHOD DIYA HAI */
         .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
 
-        /* CORNER ADS - FIXED POSITIONING (Baki ke 3 corners) */
+        /* CORNER ADS - FIXED POSITIONING & STRICT MAX SIZE TO PREVENT OVERFLOW */
         .corner-ad {
             position: fixed;
             z-index: 9999;
+            max-width: 150px;
+            max-height: 150px;
+            overflow: hidden;
         }
         .top-left { top: 15px; left: 15px; }
         .top-right { top: 15px; right: 15px; }
-        .bottom-right { bottom: 15px; right: 15px; } /* Bottom-Left wali jagah Terms box hai, isliye ye Bottom-Right hai */
+        .bottom-right { bottom: 15px; right: 15px; } 
 
         .ad-block { width: 100%; margin: 20px 0; display: flex; justify-content: center; }
 
-        /* Mobile ke liye scaling taaki layout na phate */
+        /* Mobile ke liye scaling taaki layout na phate aur bade ads chote dikhein */
         @media (max-width: 768px) {
-            .corner-ad { transform: scale(0.75); }
+            .corner-ad { 
+                transform: scale(0.6); 
+                max-width: 120px;
+                max-height: 120px;
+            }
             .top-left { transform-origin: top left; }
             .top-right { transform-origin: top right; }
             .bottom-right { transform-origin: bottom right; }
@@ -67,12 +74,12 @@ l.parentNode.insertBefore(s, l);
 
 <!-- CORNER AD 2: TOP RIGHT -->
 <div class="corner-ad top-right">
-    
+    <script>(function(s){s.dataset.zone='11362719',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
-<script>(function(s){s.dataset.zone='11362719',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
 <!-- CORNER AD 3: BOTTOM RIGHT -->
 <div class="corner-ad bottom-right">
-    <script>(function(s){s.dataset.zone='11090187',s.src='ttps://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <div class="app-container">
@@ -86,7 +93,7 @@ l.parentNode.insertBefore(s, l);
         <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
         <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
         <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
-        <div class="menu-item" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
+        <div class="menu-item" onclick="window.system.href='speedtest.html'" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
         <div class="menu-item" onclick="window.location.href='coderunner.html'"><span>💻</span> Code Runner</div>
         <div class="menu-item" onclick="window.location.href='Games.html'"><span>🎮</span> Games</div>
     </div>
