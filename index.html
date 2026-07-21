@@ -13,7 +13,6 @@
 
     <style>
         body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
-
       .app-container { width: 90%; max-width: 600px; text-align: center; }
         #greetingMessage { margin-bottom: 10px; color: #60a5fa; font-weight: 300; font-size: 1.2rem; }
         #searchInput { width: 100%; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; font-size: 1.1rem; }
@@ -24,22 +23,23 @@
       .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
       .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
 
-      .terms-box { position: fixed; bottom: 20px; right: 20px; padding: 15px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
+       /* TERMS WAHI RAHEGI JAISI THI */
+      .terms-box { position: fixed; bottom: 70px; left: 20px; padding: 20px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
 
-        /* NAYA CODE: 3 Corner Ad ke liye */
-      .corner-ad {
+        /* 3 Corner Ad ke liye */
+     .corner-ad {
           position: fixed;
           z-index: 9999;
         }
-       .top-left { top: 15px; left: 15px; }
-       .top-right { top: 15px; right: 15px; }
-       .bottom-left { bottom: 15px; left: 15px; }
+      .top-left { top: 15px; left: 15px; }
+      .top-right { top: 15px; right: 15px; }
+      .bottom-left { bottom: 15px; left: 15px; }
 
         /* Mobile ke liye: Banner 20% chota */
         @media (max-width: 768px) {
-         .corner-ad { transform: scale(0.8); transform-origin: top left; }
-         .top-right { transform-origin: top right; }
-         .bottom-left { transform-origin: bottom left; }
+        .corner-ad { transform: scale(0.8); transform-origin: top left; }
+        .top-right { transform-origin: top right; }
+        .bottom-left { transform-origin: bottom left; }
         }
     </style>
 </head>
@@ -62,25 +62,26 @@
     </div>
 </div>
 
+<!-- TERMS WAHI HAI -->
 <div class="terms-box">
     <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()">
     <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
 </div>
 
-<!-- NAYA CODE: 3 AD LAG GAYE -->
+<!-- 3 AD LAG GAYE -->
 <!-- Ad 1: Top Left -->
 <div class="corner-ad top-left">
-<script>(function(s){s.dataset.zone='ZONE_ID_1',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <!-- Ad 2: Top Right -->
 <div class="corner-ad top-right">
-<script>(function(s){s.dataset.zone='ZONE_ID_2',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='11273874',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <!-- Ad 3: Bottom Left -->
 <div class="corner-ad bottom-left">
-<script>(function(s){s.dataset.zone='ZONE_ID_3',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='11363030',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
 <script>
@@ -88,8 +89,8 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
-              .then(() => console.log('Service Worker Registered'))
-              .catch(err => console.log('SW Failed', err));
+             .then(() => console.log('Service Worker Registered'))
+             .catch(err => console.log('SW Failed', err));
         });
     }
 
