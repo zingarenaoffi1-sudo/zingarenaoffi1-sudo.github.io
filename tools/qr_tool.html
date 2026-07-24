@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,16 +8,21 @@
     <style>
         body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
         .box { background: #1e293b; padding: 20px; border-radius: 15px; margin: 10px auto; max-width: 400px; }
-        input { padding: 10px; width: 80%; border-radius: 5px; border: none; }
-        button { padding: 10px 20px; background: #3b82f6; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        #reader { width: 100%; max-width: 350px; margin: auto; }
+        input[type="text"] { padding: 10px; width: 80%; border-radius: 5px; border: none; margin-bottom: 10px; }
+        
+        /* File upload button styling */
+        input[type="file"] { background: #334155; padding: 10px; width: 80%; border-radius: 5px; color: white; cursor: pointer; margin-bottom: 15px; font-size: 14px; }
+        
+        button { padding: 10px 20px; background: #3b82f6; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 5px; font-weight: bold; }
+        #reader { width: 100%; max-width: 350px; margin: auto; border-radius: 8px; overflow: hidden; }
         #qrcode { margin: 20px auto; display: flex; justify-content: center; background: white; padding: 10px; width: fit-content; border-radius: 5px; }
-        #downloadBtn { background: #22c55e; display: none; }
+        #downloadBtn { background: #22c55e; display: none; margin-top: 15px; }
     </style>
 </head>
 <body>
     <h2>⚡ QR Code Tool</h2>
     
+    <!-- Generate QR Section -->
     <div class="box">
         <h3>Generate QR</h3>
         <input type="text" id="text" placeholder="Enter link or text">
@@ -27,21 +32,26 @@
         <button id="downloadBtn" onclick="downloadQR()">Download PNG</button>
     </div>
 
+    <!-- Scan QR Section -->
     <div class="box">
         <h3>Scan QR</h3>
+        
+        <!-- Naya Option: Gallery se photo upload karke scan karne ke liye -->
+        <input type="file" id="qr-input-file" accept="image/*" title="Upload QR Image">
+        
         <div id="reader"></div>
     </div>
 
-    <button onclick="window.history.back()">Back</button>
+    <button onclick="window.history.back()" style="background: #ef4444;">Back to Dashboard</button>
 
     <script>
+        // --- GENERATE LOGIC ---
         function generate() {
             const container = document.getElementById("qrcode");
             container.innerHTML = "";
-            const text = document.getElementById("text").value;
-            if(!text) { alert("Kuch likho bhai!"); return; }
+            const text = document.getElementById("text").value.trim();
+            if(!text) { alert("Bhai, pehle koi link ya text toh likho!"); return; }
             
-            // Size badha di hai taaki scanner easily read kare
             new QRCode(container, {
                 text: text,
                 width: 256,
@@ -55,7 +65,6 @@
 
         function downloadQR() {
             const canvas = document.querySelector("#qrcode canvas");
-            // Quality ke liye yahan image/png use kar rahe hain
             const image = canvas.toDataURL("image/png", 1.0);
             const link = document.createElement('a');
             link.href = image;
@@ -63,12 +72,46 @@
             link.click();
         }
 
-        // Scanner Logic
+        // --- SCANNER LOGIC ---
         const html5QrCode = new Html5Qrcode("reader");
+
+        // Scan hone ke baad kya karna hai uska function
+        function handleSuccessfulScan(decodedText) {
+            let result = decodedText.trim();
+            
+            // Camera stop kar dena taaki multiple times redirect na ho
+            html5QrCode.stop().then(() => {
+                // Check if result is a URL
+                if (result.startsWith("http://") || result.startsWith("https://")) {
+                    window.location.href = result; // Auto-redirect
+                } else if (result.toLowerCase().startsWith("www.")) {
+                    window.location.href = "https://" + result; // Auto-redirect for www. links
+                } else {
+                    alert("Scanned Text: " + result); // Agar link nahi hai, toh normal text show karega
+                }
+            }).catch(err => console.error("Scanner stop error", err));
+        }
+
+        // 1. Camera se scan karne ka setup
         html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, 
-            (decodedText) => { alert("Result: " + decodedText); },
-            (errorMessage) => {}
-        ).catch(err => { console.log("Camera access denied"); });
+            (decodedText) => { handleSuccessfulScan(decodedText); },
+            (errorMessage) => { /* Ignore background errors */ }
+        ).catch(err => { console.log("Camera access denied ya camera nahi hai."); });
+
+        // 2. Photo upload karke scan karne ka setup
+        const fileInput = document.getElementById('qr-input-file');
+        fileInput.addEventListener('change', e => {
+            if (e.target.files.length == 0) return;
+            
+            const imageFile = e.target.files[0];
+            html5QrCode.scanFile(imageFile, true)
+                .then(decodedText => {
+                    handleSuccessfulScan(decodedText);
+                })
+                .catch(err => {
+                    alert("Is photo mein koi valid QR code nahi mila!");
+                });
+        });
     </script>
 </body>
 </html>
