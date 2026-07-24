@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,8 +7,9 @@
     <style>
         body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
         .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; }
-        button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-        #output { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; margin-top: 10px; font-weight: bold;}
+        #output { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .output-img { max-width: 150px; border: 2px solid #3b82f6; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -18,27 +19,36 @@
         <br>
         <button onclick="convertToImages()">Convert & Download</button>
     </div>
+    
+    <!-- Yahan images screen par dikhengi -->
     <div id="output"></div>
     <br>
-    <button onclick="window.history.back()">Back</button>
+    <button onclick="window.history.back()" style="background: #ef4444;">Back to Dashboard</button>
 
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
+        // Yeh function download ke beech mein gap (delay) banayega
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
         async function convertToImages() {
             const fileInput = document.getElementById('pdfInput');
-            if (!fileInput.files.length) return alert("PDF select karo!");
+            if (!fileInput.files.length) return alert("Bhai, pehle koi PDF select karo!");
 
             const file = fileInput.files[0];
             const reader = new FileReader();
-            
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "<p>Processing... Please wait!</p>"; // Loading text
+
             reader.onload = async function() {
                 const typedarray = new Uint8Array(this.result);
                 const pdf = await pdfjsLib.getDocument(typedarray).promise;
                 
+                outputDiv.innerHTML = ""; // Clear loading text
+                
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i);
-                    const viewport = page.getViewport({ scale: 2.0 });
+                    const viewport = page.getViewport({ scale: 2.0 }); // High quality
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.height = viewport.height;
@@ -47,10 +57,22 @@
                     await page.render({ canvasContext: context, viewport: viewport }).promise;
                     
                     const imgData = canvas.toDataURL("image/jpeg");
+                    
+                    // 1. Photo ko screen par dikhane ke liye
+                    const img = document.createElement('img');
+                    img.src = imgData;
+                    img.className = "output-img";
+                    outputDiv.appendChild(img);
+
+                    // 2. Photo ko download karne ke liye
                     const link = document.createElement('a');
                     link.href = imgData;
-                    link.download = `page_${i}.jpg`;
-                    link.click(); // Automatic download
+                    link.download = `ZingArena_Page_${i}.jpg`;
+                    link.click(); 
+
+                    // 3. JADOO YAHAN HAI: 800 miliseconds ka wait karega next photo se pehle
+                    // Isse Chrome download block nahi karega!
+                    await delay(800); 
                 }
             };
             reader.readAsArrayBuffer(file);
