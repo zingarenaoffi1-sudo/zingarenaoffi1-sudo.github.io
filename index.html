@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -52,6 +51,22 @@
             .top-right { transform-origin: top right; }
             .bottom-right { transform-origin: bottom right; }
         }
+
+        /* --- NAYA ADSTERRA CSS YAHAN HAI --- */
+        .adsterra-wrapper {
+            position: fixed;
+            z-index: 10000;
+        }
+        .adsterra-tl { top: 10px; left: 10px; }
+        .adsterra-tr { top: 10px; right: 10px; }
+        .adsterra-bl { bottom: 10px; left: 10px; }
+
+        @media (max-width: 768px) {
+            .adsterra-wrapper { transform: scale(0.5); }
+            .adsterra-tl { transform-origin: top left; }
+            .adsterra-tr { transform-origin: top right; }
+            .adsterra-bl { transform-origin: bottom left; }
+        }
     </style>
 </head>
 <body>
@@ -67,20 +82,59 @@
 </script>
 <script src="https://falconhoe.com/df176ca27ccf8de677e3458336f4e5ec/invoke.js"></script>
 
+<!-- NAYA ADSTERRA AD: TOP LEFT -->
+<div class="adsterra-wrapper adsterra-tl">
+    <script>
+      atOptions = {
+        'key' : 'df176ca27ccf8de677e3458336f4e5ec',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script src="https://falconhoe.com/df176ca27ccf8de677e3458336f4e5ec/invoke.js"></script>
+</div>
 
+<!-- NAYA ADSTERRA AD: TOP RIGHT -->
+<div class="adsterra-wrapper adsterra-tr">
+    <script>
+      atOptions = {
+        'key' : 'df176ca27ccf8de677e3458336f4e5ec',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script src="https://falconhoe.com/df176ca27ccf8de677e3458336f4e5ec/invoke.js"></script>
+</div>
 
+<!-- NAYA ADSTERRA AD: BOTTOM LEFT -->
+<div class="adsterra-wrapper adsterra-bl">
+    <script>
+      atOptions = {
+        'key' : 'df176ca27ccf8de677e3458336f4e5ec',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script src="https://falconhoe.com/df176ca27ccf8de677e3458336f4e5ec/invoke.js"></script>
+</div>
 
-    <!-- CORNER AD 1: TOP LEFT -->
+<!-- CORNER AD 1: TOP LEFT (Purana Code) -->
 <div class="corner-ad top-left">
     <script>(function(s){s.dataset.zone='11363030',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
-<!-- CORNER AD 2: TOP RIGHT -->
+<!-- CORNER AD 2: TOP RIGHT (Purana Code) -->
 <div class="corner-ad top-right">
    <script>(function(s){s.dataset.zone='11273874',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
 
-<!-- CORNER AD 3: BOTTOM RIGHT -->
+<!-- CORNER AD 3: BOTTOM RIGHT (Purana Code) -->
 <div class="corner-ad bottom-right">
     <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </div>
@@ -102,7 +156,7 @@
     </div>
 </div>
 
-<!-- TERMS BOX: BOTTOM LEFT (Reserved) -->
+<!-- TERMS BOX: BOTTOM LEFT (Reserved - Purana Code) -->
 <div class="terms-box">
     <input type="checkbox" id="termsCheck" checked onchange="toggleAccess()">
     <label for="termsCheck"> I agree to the <a href="terms.html" style="color: #3b82f6;">Terms & Conditions</a></label>
@@ -125,7 +179,7 @@
     setGreeting();
 
     function toggleAccess() {
-        let isChecked = document.getElementById('termsCheck'].checked;
+        let isChecked = document.getElementById('termsCheck').checked; 
         let menu = document.getElementById('mainMenu');
         menu.classList.toggle('blurred',!isChecked);
     }
