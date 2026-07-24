@@ -1,46 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
- <!DOCTYPE html>
-<html>
-<head>
+    <meta charset="UTF-8">
+    <title>Browser - Zing Arena</title>
+    
+    <!-- Tera Monetag Ad Script (Isko mat chhedna) -->
     <script>(function(s){s.dataset.zone='11090187',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    
     <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; padding: 10px; }
-        input { width: 70%; padding: 10px; border-radius: 8px; border: none; }
-        button { padding: 10px; width: 20%; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        /* UI ko thoda aur premium aur responsive banaya hai */
+        body { background: #0f172a; color: white; font-family: sans-serif; padding: 15px; margin: 0; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
+        .search-container { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; }
+        input { flex: 1; padding: 12px; border-radius: 8px; border: none; outline: none; font-size: 16px; }
+        button { padding: 12px 25px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        button:hover { background: #2563eb; }
+        iframe { flex: 1; width: 100%; border-radius: 15px; border: none; background: white; }
+        .back-btn { margin-top: 10px; padding: 10px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; width: fit-content; margin-left: auto; margin-right: auto;}
     </style>
 </head>
 <body>
-    <div style="margin-bottom:10px;">
-        <input type="text" id="q" placeholder="Search anything...">
+    
+    <!-- Search Bar -->
+    <div class="search-container">
+        <!-- onkeypress daala hai taaki Enter dabane se search ho -->
+        <input type="text" id="q" placeholder="Search anything on Bing..." onkeypress="handleEnter(event)">
         <button onclick="go()">Go</button>
     </div>
-    <iframe id="browserFrame" src="https://www.bing.com" style="width:100%; height:80vh; border-radius:15px; border:none; background:white;"></iframe>
+
+    <!-- Default iframe ab empty rahega -->
+    <iframe id="browserFrame"></iframe>
+    
+    <button class="back-btn" onclick="window.history.back()">Back to Dashboard</button>
+
     <script>
+        // Page load hote hi ek sundar sa welcome message dikhega
+        window.onload = function() {
+            const iframe = document.getElementById('browserFrame');
+            iframe.srcdoc = `
+                <div style='display:flex; justify-content:center; align-items:center; height:100%; font-family:sans-serif; color:#475569; background-color:#f1f5f9; text-align:center;'>
+                    <div>
+                        <h2 style='color:#1e293b;'>🌐 Welcome to Zing Browser</h2>
+                        <p>Upar search bar mein kuch bhi type karo aur 'Go' dabao!</p>
+                    </div>
+                </div>
+            `;
+        };
+
         function go() {
-            let q = document.getElementById('q').value;
-            if(q) document.getElementById('browserFrame').src = "https://www.bing.com/search?q=" + encodeURIComponent(q);
+            let q = document.getElementById('q').value.trim();
+            if(q) {
+                // Search hone par welcome message hata kar Bing khol dega
+                const iframe = document.getElementById('browserFrame');
+                iframe.removeAttribute('srcdoc'); 
+                iframe.src = "https://www.bing.com/search?q=" + encodeURIComponent(q);
+            } else {
+                alert("Bhai, pehle kuch search toh karo!");
+            }
         }
-    </script>
-</body>
-</html>
-    <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; padding: 10px; }
-        input { width: 70%; padding: 10px; border-radius: 8px; border: none; }
-        button { padding: 10px; width: 20%; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <div style="margin-bottom:10px;">
-        <input type="text" id="q" placeholder="Search anything...">
-        <button onclick="go()">Go</button>
-    </div>
-    <iframe id="browserFrame" src="https://www.bing.com" style="width:100%; height:80vh; border-radius:15px; border:none; background:white;"></iframe>
-    <script>
-        function go() {
-            let q = document.getElementById('q').value;
-            if(q) document.getElementById('browserFrame').src = "https://www.bing.com/search?q=" + encodeURIComponent(q);
+
+        // Keyboard ke "Enter" button se search karne ka logic
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                go();
+            }
         }
     </script>
 </body>
