@@ -96,21 +96,23 @@ Example: print('Hello from Zing Arena!')"></textarea>
         <button onclick="window.location.href='coderunner.html'" class="back-btn">Back to Suite</button>
     </div>
 
-    <script>
-        // API ke liye languages ke basic versions
-        const versions = {
-            "python": "3.10.0",
-            "java": "15.0.2",
-            "cpp": "10.2.0"
+   
+       <script>
+        // Piston ki jagah ab hum Paiza API use karenge
+        const langMap = {
+            "python": "python3",
+            "java": "java",
+            "cpp": "cpp"
         };
 
         async function runCode() {
             const lang = document.getElementById("language").value;
+            const paizaLang = langMap[lang];
             const code = document.getElementById("sourceCode").value;
             const outArea = document.getElementById("outputArea");
             const btn = document.getElementById("runBtn");
 
-            // Agar code khali hai toh kuch mat karo
+            // Agar code khali hai toh return kardo
             if(!code.trim()) {
                 outArea.innerText = "Please write some code first!";
                 return;
@@ -118,39 +120,63 @@ Example: print('Hello from Zing Arena!')"></textarea>
 
             btn.innerText = "Running...";
             outArea.style.color = "#fbbf24"; // Yellow loading color
-            outArea.innerText = "Compiling on Cloud Server...";
+            outArea.innerText = "Sending code to Cloud Server... 🚀";
 
             try {
-                // Free Piston API ko request bhejna
-                const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+                // Step 1: Code server par bhejna
+                const createRes = await fetch("https://api.paiza.io/runners/create", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        language: lang,
-                        version: versions[lang],
-                        files: [{ content: code }]
+                        source_code: code,
+                        language: paizaLang,
+                        api_key: "guest"
                     })
                 });
                 
-                const result = await response.json();
+                const createData = await createRes.json();
                 
-                // Result handle karna
-                outArea.style.color = "#e2e8f0"; // Wapas normal color
-                if(result.run && result.run.stdout) {
-                    outArea.innerText = result.run.stdout;
-                } else if (result.run && result.run.stderr) {
-                    outArea.style.color = "#ef4444"; // Error ke liye red color
-                    outArea.innerText = "ERROR:\n" + result.run.stderr;
-                } else {
-                    outArea.innerText = result.message || "Compilation failed. Check your syntax.";
+                if(createData.error) {
+                    throw new Error(createData.error);
                 }
+
+                const runId = createData.id;
+                outArea.innerText = "Executing Code... ⏳";
+                
+                // Step 2: Result ka wait karna (API ko check karna)
+                let checkData;
+                for(let i = 0; i < 10; i++) { // Max 10 second wait karega
+                    // 1 second ka gap taaki system/internet par load na pade
+                    await new Promise(resolve => setTimeout(resolve, 1000)); 
+                    
+                    const checkRes = await fetch(`https://api.paiza.io/runners/get_details?id=${runId}&api_key=guest`);
+                    checkData = await checkRes.json();
+                    
+                    if(checkData.status === "completed") {
+                        break; // Code run ho gaya!
+                    }
+                }
+
+                // Step 3: Screen par Output dikhana
+                outArea.style.color = "#e2e8f0"; // Normal color
+                
+                if (checkData.build_result === "failure") {
+                    outArea.style.color = "#ef4444"; // Red for error
+                    outArea.innerText = "Build Error:\n" + checkData.build_stderr;
+                } else if (checkData.stderr) {
+                    outArea.style.color = "#ef4444"; 
+                    outArea.innerText = "Error:\n" + checkData.stderr;
+                } else {
+                    outArea.innerText = checkData.stdout || "Code Executed Successfully! (No output)";
+                }
+
             } catch(e) {
                 outArea.style.color = "#ef4444";
-                outArea.innerText = "Network Error! Server offline hai ya internet slow hai.";
+                outArea.innerText = "Network Error! Cloud API server busy hai ya internet issue hai.";
             }
             
             btn.innerText = "Run Code ⚡";
         }
     </script>
-</body>
+  </body>
 </html>
