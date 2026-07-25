@@ -148,11 +148,11 @@ Example: print('Hello from Zing Arena!')"></textarea>
                     // Agar code successfully chal gaya
                     outArea.style.color = "#e2e8f0"; // White for Success Output
                     outArea.innerText = result.output;
-                } else {
-                    outArea.style.color = "#e2e8f0";
-                    outArea.innerText = "Code executed, but there was no output.";
-                }
-
+            } else {
+    outArea.style.color = "#fbbf24"; // Yellow alert
+    outArea.innerText = "Debug Mode - API ne yeh bheja hai:\n" + JSON.stringify(result, null, 2);
+}             
+            
             } catch(e) {
                 // Agar internet chala jaye ya server down ho
                 outArea.style.color = "#ef4444";
