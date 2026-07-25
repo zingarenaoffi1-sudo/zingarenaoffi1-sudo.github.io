@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <title>Zing Pro Name Gen</title>
     <style>
@@ -9,38 +8,87 @@
         input { width: 90%; max-width: 400px; padding: 15px; border-radius: 12px; border: 2px solid #3b82f6; background: #1e293b; color: white; font-size: 18px; margin-bottom: 20px; outline: none; }
         .grid { display: grid; gap: 8px; }
         .name-card { background: #1e293b; padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
-        button { padding: 8px 15px; border-radius: 6px; border: none; background: #3b82f6; color: white; cursor: pointer; font-weight: bold; }
+        button { padding: 8px 15px; border-radius: 6px; border: none; background: #3b82f6; color: white; cursor: pointer; font-weight: bold; transition: 0.2s; }
         button:active { transform: scale(0.95); }
+        .copied { background: #10b981 !important; color: white !important; }
     </style>
 </head>
 <body>
     <h2>🔥 Ultimate Pro Name Generator</h2>
-    <input type="text" id="userInput" placeholder="Type here for 500+ designs..." oninput="generateAll()">
+    <!-- Ab har letter par load nahi padega, type hone ke baad aayega -->
+    <input type="text" id="userInput" placeholder="Type here for 500+ designs..." onkeyup="startTyping()">
     <div id="resultArea" class="grid"></div>
     <br>
     <button onclick="window.location.href='index.html'" style="background:#ef4444; width:150px;">Back to Hub</button>
+
     <script>
-        const symbols = ["亗", "꧁", "★", "⚡", "ॐ", "KING", "MR", "VIP", "卍", "ツ", "〆", "×", "Dragon", "Devil", "God", "Pro", "Killer", "Agent", "⚔️", "💎", "🔥", "☄️", "💀", "👾", "❄️"];
-        const frames = ["『 »n« 』", "【 »n« 】", "« »n« »", "亗 »n« 亗", "꧁ »n« ꧂", "★ »n« ★", "⚡ »n« ⚡", "『 ⚔️ »n« ⚔️ 』", "💎 »n« 💎", "💀 »n« 💀"];
+       
+        const prefixes = ["亗", "꧁", "★", "⚡", "ॐ", "KING", "MR.", "VIP", "卍", "ツ", "〆", "×", "Dragon", "Devil", "God", "Pro", "Killer", "Agent", "TGC", "IND", "Ninja"];
+        const suffixes = ["亗", "꧂", "★", "⚡", "YT", "BOSS", "GAMING", "࿐", "ツ", "〆", "×", "007", "999", "OP", "FF", "Pro", "Max"];
+        const frames = ["『 {name} 』", "【 {name} 】", "« {name} »", "亗 {name} 亗", "꧁ {name} ꧂", "★ {name} ★", "⚡ {name} ⚡", "『 ⚔️ {name} ⚔️ 』", "💎 {name} 💎", "💀 {name} 💀", "° {name} °", "×͜× {name} ×͜×", "✿ {name} ✿"];
+
+        let templates = [...frames]; 
+        
+        for(let p of prefixes) {
+            templates.push(`${p} {name}`);
+            for(let s of suffixes) {
+                templates.push(`${p} {name} ${s}`);
+                if(templates.length >= 500) break;
+            }
+            if(templates.length >= 500) break;
+        }
+
+        // 🔥 NAYA FEATURE: Array ko randomly mix karne ka function (Bina hang kiye)
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        let typingTimer;
+        function startTyping() {
+            clearTimeout(typingTimer); 
+            typingTimer = setTimeout(generateAll, 400); 
+        }
+
         function generateAll() {
-            let name = document.getElementById('userInput').value;
+            let name = document.getElementById('userInput').value.trim();
             let area = document.getElementById('resultArea');
+            
             if(!name) { area.innerHTML = ""; return; }
+            
             let html = "";
-            frames.forEach(frame => {
-                symbols.forEach(s1 => {
-                    symbols.forEach(s2 => {
-                        let style = frame.replace("»n«", s1 + name + s2);
-                        html += `<div class="name-card"><span style="font-size:16px;">${style}</span><button onclick="copy('${style}')">Copy</button></div>`;
-                    });
-                });
+            
+            // 🔥 Har naye naam par list ko randomly mix kar do!
+            let mixedTemplates = shuffleArray(templates);
+
+            mixedTemplates.forEach((template, index) => {
+                let style = template.replace("{name}", name);
+                html += `<div class="name-card">
+                            <span style="font-size:16px;">${style}</span>
+                            <button id="btn-${index}" onclick="copyText('${style}', 'btn-${index}')">Copy</button>
+                         </div>`;
             });
+            
             area.innerHTML = html;
         }
-        function copy(text) {
+
+        function copyText(text, btnId) {
             navigator.clipboard.writeText(text);
-            alert("Copied: " + text);
+            
+            let btn = document.getElementById(btnId);
+            btn.innerText = "Copied!";
+            btn.classList.add("copied");
+            
+            setTimeout(() => {
+                btn.innerText = "Copy";
+                btn.classList.remove("copied");
+            }, 1200);
         }
     </script>
+
 </body>
 </html>
