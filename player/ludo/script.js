@@ -121,7 +121,7 @@ function connectToServer() {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
             document.getElementById("room-created-display").innerText = 
-                `Room Ban Gaya! ID: ${data.roomId}\n(Tera Color: Red) Waiting for players...`;
+                `Make the room successfully! ID: ${data.roomId}\n(Your Color: Red) Waiting for players join by room id...`;
         });
 
         socket.on('joined-success', (data) => {
