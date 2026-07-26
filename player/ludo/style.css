@@ -306,7 +306,9 @@ body {
     z-index: 20; 
     box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8), 0 4px 6px rgba(0,0,0,0.6); 
     border-color: #ffeb3b;
-}/* =========================================
+}
+
+/* =========================================
    ULTRA LUDO PRO - WINNING TAAJ & ANIMATIONS
 ========================================= */
 
@@ -354,5 +356,22 @@ body {
     }
     100% { 
         transform: scale(1) translateY(0); 
+    }
+}
+
+/* =========================================
+   🔥 MOBILE RESPONSIVENESS FIX 🔥
+========================================= */
+@media (max-width: 768px) {
+    /* Mobile me board ko thoda sa adjust karta hai taaki footer ko jagah mile */
+    .board-container {
+        transform: scale(0.97); 
+    }
+    
+    /* Dice aur timer ko upar shift karne ka jaadu */
+    .game-footer {
+        transform: translateY(-25px); 
+        z-index: 100;
+        position: relative;
     }
 }
