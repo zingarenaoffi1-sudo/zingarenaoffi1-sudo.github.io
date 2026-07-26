@@ -110,8 +110,8 @@ function findOnlineMatch(count) {
 // --- SOCKET.IO CONNECTION & SYNC LISTENERS ---
 function connectToServer() {
     if (!socket) {
-        // Yahan par Render/Glitch ka URL daalna padega deployment ke baad!
-        socket = io('http://localhost:3000');
+        // 🔥 YAHAN PAR RENDER KA LIVE URL ADD KAR DIYA HAI 🔥
+        socket = io('https://zingarenaoffi1-sudo-github-io.onrender.com');
 
         socket.on('connect', () => {
             console.log("🔥 Ludo Server se connection jud gaya! ID:", socket.id);
