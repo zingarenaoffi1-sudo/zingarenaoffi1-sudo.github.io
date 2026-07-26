@@ -309,7 +309,7 @@ function handleTurnTimeout(color) {
         return;
     }
 
-    alert(`⚠️ ${color.toUpperCase()}Skip the turn becuase player did not active (${missedTurns[color]}/3).`);
+    alert(`⚠️ ${color.toUpperCase()}Skip the turn becuase player are not active (${missedTurns[color]}/3).`);
     switchTurn(false);
 }
 
