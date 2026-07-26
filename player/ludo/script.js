@@ -94,6 +94,10 @@ function backToOnlineMain() {
     document.getElementById("join-room-sub").classList.add("hidden");
     document.getElementById("online-main-options").classList.remove("hidden");
     document.getElementById("room-created-display").innerText = "";
+    
+    // Badge hide karo jab back jaye
+    const badge = document.getElementById('my-identity-badge');
+    if(badge) badge.classList.add('hidden');
 }
 
 function backToModeSelect() {
@@ -101,11 +105,15 @@ function backToModeSelect() {
     document.getElementById("startup-modal").classList.add("hidden");
     document.getElementById("online-modal").classList.add("hidden");
     document.getElementById("mode-selection-modal").classList.remove("hidden");
+    
+    // Badge hide karo jab back jaye
+    const badge = document.getElementById('my-identity-badge');
+    if(badge) badge.classList.add('hidden');
 }
 
 function findOnlineMatch(count) { 
     connectToServer();
-    document.getElementById("room-created-display").innerText = "Matchmaking pls wait... ⏳";
+    document.getElementById("quick-match-display").innerText = "Matchmaking pls wait sometime... ⏳";
     socket.emit('find-match', { playersRequired: count });
 }
 
@@ -121,6 +129,7 @@ function connectToServer() {
         socket.on('room-created', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
+            showMyIdentity(data.color); // Player identity show karo
             document.getElementById("room-created-display").innerText = 
                 `Make the room successfully! ID: ${data.roomId}\n(Your Color: Red) Waiting for players join the room by room id...`;
         });
@@ -128,12 +137,14 @@ function connectToServer() {
         socket.on('joined-success', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
+            showMyIdentity(data.color); // Player identity show karo
             alert(`Successfully join the room click ok to join the room ! Room ID: ${data.roomId} | Your Color: ${data.color}`);
         });
 
         socket.on('match-found', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
+            showMyIdentity(data.color); // Player identity show karo
         });
 
         socket.on('start-online-game', (data) => {
@@ -144,6 +155,13 @@ function connectToServer() {
             document.getElementById("startup-modal").classList.add("hidden");
 
             activePlayers = data.players.map(p => p.color);
+            
+            // Local match ke liye agar myAssignedColor set nahi hai toh pehla active player maan lo
+            let me = data.players.find(p => p.id === socket.id);
+            if (me) {
+                showMyIdentity(me.color);
+            }
+
             initGameSession();
         });
 
@@ -181,13 +199,45 @@ function connectToServer() {
         });
 
         socket.on('player-finished', (data) => {
-            // Online dusre player ko jeetne ka alert
             console.log(`${data.color} won rank: ${data.rank}`);
         });
 
         socket.on('error-msg', (msg) => {
             alert("❌ " + msg);
         });
+    }
+}
+
+// 🔥 NAYA FUNCTION: Player ko batane ke liye ki wo kaun sa player hai
+function showMyIdentity(color) {
+    const badge = document.getElementById('my-identity-badge');
+    if (!badge) return;
+    
+    badge.classList.remove('hidden');
+    
+    let playerNum = "";
+    let bgColor = "";
+    if (color === 'red') { playerNum = "Player 1"; bgColor = "#ff2a2a"; }
+    else if (color === 'green') { playerNum = "Player 2"; bgColor = "#00cc00"; }
+    else if (color === 'yellow') { playerNum = "Player 3"; bgColor = "#ffcc00"; }
+    else if (color === 'blue') { playerNum = "Player 4"; bgColor = "#1a53ff"; }
+
+    badge.innerHTML = `👉 YOU ARE: ${playerNum} (${color}) 👈`;
+    badge.style.background = bgColor;
+    badge.style.color = (color === 'yellow') ? '#000' : '#fff';
+
+    // Baki profiles se glow hatao, apne wale par lagao
+    document.querySelectorAll('.player-profile').forEach(p => {
+        p.style.border = "1px solid rgba(255, 255, 255, 0.1)";
+        p.style.boxShadow = "none";
+        p.style.opacity = "0.3";
+    });
+    
+    const myProfile = document.getElementById(`profile-${color}`);
+    if (myProfile) {
+        myProfile.style.border = `2px solid ${bgColor}`;
+        myProfile.style.boxShadow = `0 0 15px ${bgColor}`;
+        myProfile.style.opacity = "1";
     }
 }
 
@@ -209,12 +259,10 @@ function joinPrivateRoom() {
 
 // --- GAME INITIALIZATION ---
 function initGameSession() {
-    winnersList = []; // Har naye game me list khaali
-    totalPlayersInGame = activePlayers.length; // Total players set karo
+    winnersList = []; 
+    totalPlayersInGame = activePlayers.length; 
 
-    ["red", "green", "yellow", "blue"].forEach(c => document.getElementById(`profile-${c}`).style.opacity = "0.3");
     activePlayers.forEach(c => document.getElementById(`profile-${c}`).style.opacity = "1");
-
     activePlayers.forEach(c => missedTurns[c] = 0);
 
     currentPlayerIndex = 0;
@@ -233,6 +281,9 @@ function startLocalGame(playerCount) {
     else if (playerCount === 3) activePlayers = ['red', 'green', 'yellow'];
     else activePlayers = ['red', 'green', 'yellow', 'blue'];
 
+    // Local offline ke liye pehle player ko user maan lo aur badge dikha do
+    showMyIdentity(activePlayers[0]);
+
     initGameSession();
 }
 
@@ -249,11 +300,10 @@ function handlePlayerWin(playerColor) {
         else if (rank === 2) rankText = "2nd 🥈";
         else if (rank === 3) rankText = "3rd 🥉";
 
-        // UI Par Rank Dikhaye
         let profileEl = document.getElementById(`profile-${playerColor}`);
         if (profileEl) {
             let rankDiv = document.createElement("div");
-            rankDiv.style.color = "#FFD700"; // Gold color
+            rankDiv.style.color = "#FFD700"; 
             rankDiv.style.fontWeight = "bold";
             rankDiv.innerText = rankText;
             profileEl.appendChild(rankDiv);
@@ -263,10 +313,8 @@ function handlePlayerWin(playerColor) {
             socket.emit("player-finished", { color: playerColor, rank: rankText });
         }
 
-        // Jeetne wale ko active list se hatao taaki turn na aaye
         activePlayers = activePlayers.filter(c => c !== playerColor);
 
-        // KYA MATCH KHATAM HO GAYA? (Total players se 1 kam reh gaya)
         if (winnersList.length >= totalPlayersInGame - 1) {
             endMatchAndGoToMenu();
         }
@@ -281,7 +329,6 @@ function endMatchAndGoToMenu() {
             winMessage += `Rank ${index + 1}: ${color.toUpperCase()} \n`;
         });
         
-        // Jo ek last player bach gaya wo automatically haar gaya
         if (activePlayers.length > 0) {
             winMessage += `Eliminated: ${activePlayers[0].toUpperCase()}\n`;
         }
@@ -290,11 +337,9 @@ function endMatchAndGoToMenu() {
         
         if (socket) socket.emit("leave-room");
         
-        // Page reload karke seedha menu par (sabse clean reset)
         window.location.reload(); 
     }, 1500);
 }
-
 
 // --- 🔥 LIVE 25-SECOND TIMER & ELIMINATION LOGIC ---
 function startTurnTimer() {
@@ -355,7 +400,6 @@ function handleTurnTimeout(color) {
 
         activePlayers = activePlayers.filter(c => c !== color);
 
-        // Agar game me ab sirf 1 hi player bacha hai
         if (activePlayers.length === 1) {
             endMatchAndGoToMenu();
             return;
