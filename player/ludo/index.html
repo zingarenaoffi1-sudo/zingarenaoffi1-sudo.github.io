@@ -14,15 +14,18 @@
             <button class="menu-btn" onclick="location.reload()">Restart</button>
         </div>
 
+        <!-- 🔥 YEH RAHA TERA IDENTITY BADGE 🔥 -->
+        <div id="my-identity-badge" class="hidden" style="text-align: center; background: #ff9900; color: #000; font-weight: 900; padding: 5px; margin: 5px 10px; border-radius: 5px; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.5);"></div>
+
         <!-- Top Players HUD -->
         <div class="player-hud">
             <div class="player-profile" id="profile-red">
-                <div class="avatar red-bg">R</div>
-                <div class="player-name">Player 1</div>
+                <div class="avatar red-bg">1</div>
+                <div class="player-name">Player 1 (Red)</div>
             </div>
             <div class="player-profile" id="profile-green">
-                <div class="avatar green-bg">G</div>
-                <div class="player-name">Player 2</div>
+                <div class="avatar green-bg">2</div>
+                <div class="player-name">Player 2 (Green)</div>
             </div>
         </div>
 
@@ -34,12 +37,12 @@
         <!-- Bottom Players HUD -->
         <div class="player-hud">
             <div class="player-profile" id="profile-blue">
-                <div class="avatar blue-bg">B</div>
-                <div class="player-name">Player 4</div>
+                <div class="avatar blue-bg">4</div>
+                <div class="player-name">Player 4 (Blue)</div>
             </div>
             <div class="player-profile" id="profile-yellow">
-                <div class="avatar yellow-bg">Y</div>
-                <div class="player-name">Player 3</div>
+                <div class="avatar yellow-bg">3</div>
+                <div class="player-name">Player 3 (Yellow)</div>
             </div>
         </div>
 
@@ -92,7 +95,7 @@
             <!-- Sub-Menu: Quick Match (2, 3, 4 Players) -->
             <div id="quick-match-sub" class="hidden">
                 <p style="color: #ddd; margin-bottom: 10px;">Select Match Size</p>
-                <!-- Yahan Matchmaking Text Show Hoga -->
+                <!-- Matchmaking Text Show Hoga -->
                 <div id="quick-match-display" style="color: #00ff00; margin: 10px 0; font-size: 14px; font-weight: bold; min-height: 20px;"></div>
                 
                 <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(2)" style="width: 100%; margin-bottom: 8px;">2 Players</button>
