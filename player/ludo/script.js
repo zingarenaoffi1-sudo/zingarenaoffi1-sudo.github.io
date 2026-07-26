@@ -187,7 +187,7 @@ function connectToServer() {
 
 function createPrivateRoom(count) {
     connectToServer();
-    document.getElementById("room-created-display").innerText = "Room ban raha hai...";
+    document.getElementById("room-created-display").innerText = "Making the room...";
     socket.emit('create-room', { maxPlayers: count });
 }
 
