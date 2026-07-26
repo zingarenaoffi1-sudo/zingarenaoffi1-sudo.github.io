@@ -44,7 +44,6 @@
         </div>
 
         <!-- Footer & Controls -->
-       <!-- Footer & Controls -->
         <div class="game-footer">
             <div style="display: flex; flex-direction: column;">
                 <div class="turn-indicator" id="turn-text">WAITING TO START...</div>
@@ -93,9 +92,12 @@
             <!-- Sub-Menu: Quick Match (2, 3, 4 Players) -->
             <div id="quick-match-sub" class="hidden">
                 <p style="color: #ddd; margin-bottom: 10px;">Select Match Size</p>
-                <button class="ultra-roll-btn" onclick="findOnlineMatch(2)" style="width: 100%; margin-bottom: 8px;">2 Players</button>
-                <button class="ultra-roll-btn" onclick="findOnlineMatch(3)" style="width: 100%; margin-bottom: 8px;">3 Players</button>
-                <button class="ultra-roll-btn" onclick="findOnlineMatch(4)" style="width: 100%; margin-bottom: 8px;">4 Players</button>
+                <!-- Yahan Matchmaking Text Show Hoga -->
+                <div id="quick-match-display" style="color: #00ff00; margin: 10px 0; font-size: 14px; font-weight: bold; min-height: 20px;"></div>
+                
+                <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(2)" style="width: 100%; margin-bottom: 8px;">2 Players</button>
+                <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(3)" style="width: 100%; margin-bottom: 8px;">3 Players</button>
+                <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(4)" style="width: 100%; margin-bottom: 8px;">4 Players</button>
                 <button class="menu-btn" onclick="backToOnlineMain()" style="width: 100%; padding: 8px; margin-top: 5px;">Back</button>
             </div>
 
@@ -112,7 +114,7 @@
             <!-- Sub-Menu: Join Room (Enter ID) -->
             <div id="join-room-sub" class="hidden">
                 <p style="color: #ddd; margin-bottom: 10px;">Enter Room ID</p>
-                <input type="text" id="room-id-input" placeholder="e.g. room_12345" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none; text-align: center; font-weight: bold;">
+                <input type="text" id="room-id-input" placeholder="e.g. LUDO_1234" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none; text-align: center; font-weight: bold;">
                 <button class="ultra-roll-btn" onclick="joinPrivateRoom()" style="width: 100%; margin-bottom: 8px; background: linear-gradient(to bottom, #4CAF50, #2E7D32);">Join Now</button>
                 <button class="menu-btn" onclick="backToOnlineMain()" style="width: 100%; padding: 8px; margin-top: 5px;">Back</button>
             </div>
