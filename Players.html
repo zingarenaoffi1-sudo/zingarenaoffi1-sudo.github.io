@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zing Arena Games</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; margin: 0; min-height: 100vh; }
+        h2 { margin-bottom: 20px; }
+        
+        #searchInput { width: 90%; max-width: 400px; padding: 15px; margin-bottom: 30px; border-radius: 30px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; font-size: 1.1rem; }
+        
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 90%; max-width: 400px; }
+        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; display: flex; align-items: center; font-size: 1.2rem; font-weight: bold; }
+        .menu-item span { font-size: 2rem; margin-right: 15px; }
+        .menu-item:hover { background: #3b82f6; transform: translateY(-5px); border-color: #60a5fa; }
+        
+        button { margin-top: 30px; padding: 10px 20px; border-radius: 10px; border: none; background: #334155; color: white; cursor: pointer; }
+        button:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <h2>🛠️ Zing Arena Games</h2>
+    
+    <input type="text" id="searchInput" placeholder="Search games..." onkeyup="filterGames()">
+
+    <div class="grid" id="Gamesgrid">
+        <div class="menu-item" onclick="window.location.href='Classic/Tic-Tac-Toe/index.html'"><span>🎲</span> Ludo </div>
+     
+    </div>
+    
+    <button onclick="window.location.href='../index.html'">Back to Dashboard</button>
+
+    <script>
+        function filterGames() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.getElementsByClassName('menu-item');
+            for (let i = 0; i < items.length; i++) {
+                let text = items[i].innerText.toLowerCase();
+                items[i].style.display = text.includes(input) ? "flex" : "none";
+            }
+        }
+    </script>
+</body>
+</html>
