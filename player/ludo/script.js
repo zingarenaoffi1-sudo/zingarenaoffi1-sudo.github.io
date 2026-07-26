@@ -121,13 +121,13 @@ function connectToServer() {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
             document.getElementById("room-created-display").innerText = 
-                `Make the room successfully! ID: ${data.roomId}\n(Your Color: Red) Waiting for players join by room id...`;
+                `Make the room successfully! ID: ${data.roomId}\n(Your Color: Red) Waiting for players join the room by room id...`;
         });
 
         socket.on('joined-success', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
-            alert(`Room join ho gaya bhai! Room ID: ${data.roomId} | Tera Color: ${data.color}`);
+            alert(`Successfully join the room click ok to join the room ! Room ID: ${data.roomId} | Your Color: ${data.color}`);
         });
 
         socket.on('match-found', (data) => {
@@ -197,7 +197,7 @@ function joinPrivateRoom() {
         connectToServer();
         socket.emit('join-room', { roomId: id });
     } else {
-        alert("Pehle valid Room ID toh daal bhai!");
+        alert("Enter the valid room id to join room!");
     }
 }
 
@@ -271,7 +271,7 @@ function handleTurnTimeout(color) {
 
     if (missedTurns[color] >= 3) {
         clearTurnTimer();
-        alert(`🚨 ${color.toUpperCase()} ne 3 baar turn miss kiya, isliye wo game se eliminate ho gaya!`);
+        alert(`🚨 ${color.toUpperCase()} miss 3 times, so eliminated from this room!`);
         
         if (allTokens[color]) {
             allTokens[color].forEach(t => {
@@ -295,7 +295,7 @@ function handleTurnTimeout(color) {
             let timerTextEl = document.getElementById("timer-text");
             if(timerTextEl) timerTextEl.innerText = "🏆 GAME OVER";
             
-            alert(`🎉 ${winnerColor.toUpperCase()} WINS THE GAME! Sabhi opponent eliminate ho gaye.`);
+            alert(`🎉 ${winnerColor.toUpperCase()} WINS THE GAME! All the opposite players are eliminated.`);
             return;
         }
 
@@ -309,7 +309,7 @@ function handleTurnTimeout(color) {
         return;
     }
 
-    alert(`⚠️ ${color.toUpperCase()} ne time par turn nahi chali! Turn skip ho gayi (${missedTurns[color]}/3).`);
+    alert(`⚠️ ${color.toUpperCase()}Skip the turn becuase player did not active (${missedTurns[color]}/3).`);
     switchTurn(false);
 }
 
@@ -390,7 +390,7 @@ function rollDice() {
     if (socket && window.currentRoomId) {
         let currentTurnColor = activePlayers[currentPlayerIndex];
         if (myAssignedColor !== currentTurnColor) {
-            alert("Ruk ja bhai! Abhi teri baari nahi hai.");
+            alert("Wait! This is not your turn.");
             return;
         }
     }
