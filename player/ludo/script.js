@@ -1,5 +1,5 @@
 /* =========================================
-   ULTRA LUDO PRO - MASTER LOGIC ENGINE + LIVE TIMER + BUG FIXES
+   ULTRA LUDO PRO - MASTER LOGIC ENGINE + LIVE TIMER + RANKING SYSTEM
 ========================================= */
 
 let activePlayers = []; 
@@ -18,6 +18,10 @@ let turnTimer = null;
 let countdownInterval = null;
 let timeLeft = 25;
 const missedTurns = {}; 
+
+// 🏆 WINNER & RANKING TRACKING
+let winnersList = [];
+let totalPlayersInGame = 0;
 
 const playersData = {
     'red': { name: "RED'S TURN", class: "red-text", startOffset: 0 },
@@ -83,10 +87,8 @@ function showJoinRoomInput() {
     document.getElementById("join-room-sub").classList.remove("hidden");
 }
 
-// 🔥 BUG FIX: Matchmaking fix by sending 'cancel-action' to server
 function backToOnlineMain() {
     if (socket) socket.emit('cancel-action'); 
-
     document.getElementById("quick-match-sub").classList.add("hidden");
     document.getElementById("create-room-sub").classList.add("hidden");
     document.getElementById("join-room-sub").classList.add("hidden");
@@ -103,14 +105,13 @@ function backToModeSelect() {
 
 function findOnlineMatch(count) { 
     connectToServer();
-    document.getElementById("room-created-display").innerText = "Quick match searching...";
+    document.getElementById("room-created-display").innerText = "Matchmaking pls wait... ⏳";
     socket.emit('find-match', { playersRequired: count });
 }
 
 // --- SOCKET.IO CONNECTION & SYNC LISTENERS ---
 function connectToServer() {
     if (!socket) {
-        // 🔥 YAHAN PAR RENDER KA LIVE URL ADD KAR DIYA HAI 🔥
         socket = io('https://zingarenaoffi1-sudo-github-io.onrender.com');
 
         socket.on('connect', () => {
@@ -179,6 +180,11 @@ function connectToServer() {
             }
         });
 
+        socket.on('player-finished', (data) => {
+            // Online dusre player ko jeetne ka alert
+            console.log(`${data.color} won rank: ${data.rank}`);
+        });
+
         socket.on('error-msg', (msg) => {
             alert("❌ " + msg);
         });
@@ -203,6 +209,9 @@ function joinPrivateRoom() {
 
 // --- GAME INITIALIZATION ---
 function initGameSession() {
+    winnersList = []; // Har naye game me list khaali
+    totalPlayersInGame = activePlayers.length; // Total players set karo
+
     ["red", "green", "yellow", "blue"].forEach(c => document.getElementById(`profile-${c}`).style.opacity = "0.3");
     activePlayers.forEach(c => document.getElementById(`profile-${c}`).style.opacity = "1");
 
@@ -226,6 +235,66 @@ function startLocalGame(playerCount) {
 
     initGameSession();
 }
+
+// ==========================================
+// 🏆 RANKING & MATCH OVER LOGIC
+// ==========================================
+function handlePlayerWin(playerColor) {
+    if (!winnersList.includes(playerColor)) {
+        winnersList.push(playerColor);
+        let rank = winnersList.length; 
+        
+        let rankText = "";
+        if (rank === 1) rankText = "1st 🥇";
+        else if (rank === 2) rankText = "2nd 🥈";
+        else if (rank === 3) rankText = "3rd 🥉";
+
+        // UI Par Rank Dikhaye
+        let profileEl = document.getElementById(`profile-${playerColor}`);
+        if (profileEl) {
+            let rankDiv = document.createElement("div");
+            rankDiv.style.color = "#FFD700"; // Gold color
+            rankDiv.style.fontWeight = "bold";
+            rankDiv.innerText = rankText;
+            profileEl.appendChild(rankDiv);
+        }
+
+        if (socket && window.currentRoomId) {
+            socket.emit("player-finished", { color: playerColor, rank: rankText });
+        }
+
+        // Jeetne wale ko active list se hatao taaki turn na aaye
+        activePlayers = activePlayers.filter(c => c !== playerColor);
+
+        // KYA MATCH KHATAM HO GAYA? (Total players se 1 kam reh gaya)
+        if (winnersList.length >= totalPlayersInGame - 1) {
+            endMatchAndGoToMenu();
+        }
+    }
+}
+
+function endMatchAndGoToMenu() {
+    clearTurnTimer();
+    setTimeout(() => {
+        let winMessage = "🏆 MATCH FINISHED! 🏆\n\n";
+        winnersList.forEach((color, index) => {
+            winMessage += `Rank ${index + 1}: ${color.toUpperCase()} \n`;
+        });
+        
+        // Jo ek last player bach gaya wo automatically haar gaya
+        if (activePlayers.length > 0) {
+            winMessage += `Eliminated: ${activePlayers[0].toUpperCase()}\n`;
+        }
+        
+        alert(winMessage);
+        
+        if (socket) socket.emit("leave-room");
+        
+        // Page reload karke seedha menu par (sabse clean reset)
+        window.location.reload(); 
+    }, 1500);
+}
+
 
 // --- 🔥 LIVE 25-SECOND TIMER & ELIMINATION LOGIC ---
 function startTurnTimer() {
@@ -271,7 +340,7 @@ function handleTurnTimeout(color) {
 
     if (missedTurns[color] >= 3) {
         clearTurnTimer();
-        alert(`🚨 ${color.toUpperCase()} miss 3 times, so eliminated from this room!`);
+        alert(`🚨 ${color.toUpperCase()} missed 3 turns, eliminated from the game!`);
         
         if (allTokens[color]) {
             allTokens[color].forEach(t => {
@@ -286,16 +355,9 @@ function handleTurnTimeout(color) {
 
         activePlayers = activePlayers.filter(c => c !== color);
 
+        // Agar game me ab sirf 1 hi player bacha hai
         if (activePlayers.length === 1) {
-            let winnerColor = activePlayers[0];
-            const turnText = document.getElementById("turn-text");
-            turnText.innerText = `${winnerColor.toUpperCase()} WINS THE GAME!`;
-            turnText.className = `${winnerColor}-text`;
-            
-            let timerTextEl = document.getElementById("timer-text");
-            if(timerTextEl) timerTextEl.innerText = "🏆 GAME OVER";
-            
-            alert(`🎉 ${winnerColor.toUpperCase()} WINS THE GAME! All the opposite players are eliminated.`);
+            endMatchAndGoToMenu();
             return;
         }
 
@@ -309,7 +371,7 @@ function handleTurnTimeout(color) {
         return;
     }
 
-    alert(`⚠️ ${color.toUpperCase()}Skip the turn becuase player are not active (${missedTurns[color]}/3).`);
+    alert(`⚠️ ${color.toUpperCase()} skips turn because player is inactive (${missedTurns[color]}/3).`);
     switchTurn(false);
 }
 
