@@ -128,7 +128,7 @@ function checkGameModeSetup() {
 
 function connectToServer() {
     if (!socket) {
-        socket = io();
+        socket = io("https://zingarenaoffi1-sudo-github-io-1.onrender.com"););
 
         // 🔥 FIX ADDED HERE: Naye page par aate hi room wapas join karo
         if (window.currentRoomId && myAssignedColor) {
