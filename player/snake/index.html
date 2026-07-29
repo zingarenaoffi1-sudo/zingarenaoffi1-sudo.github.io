@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snakes & Ladders Pro - Menu</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #2c3e50; color: white; text-align: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: #34495e; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); width: 320px; }
+        h1 { font-size: 24px; margin-bottom: 20px; color: #f1c40f; }
+        h2 { font-size: 20px; margin-bottom: 15px; color: #f1c40f; }
+        button { background-color: #e74c3c; color: white; border: none; padding: 12px 20px; margin: 8px 0; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #c0392b; transform: scale(1.02); }
+        input { padding: 10px; width: 90%; margin-bottom: 15px; border-radius: 5px; border: none; text-align: center; font-size: 16px; font-weight: bold; }
+        .hidden { display: none !important; }
+        .back-btn { background-color: #7f8c8d; }
+        .back-btn:hover { background-color: #95a5a6; }
+        .online-btn { background-color: #2196F3; }
+        .online-btn:hover { background-color: #0b7dda; }
+        .room-btn { background-color: #9C27B0; }
+        .room-btn:hover { background-color: #7B1FA2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐍 Snakes & Ladders 🪜</h1>
+        <div id="mainMenu">
+            <button onclick="showMenu('gameModeMenu')">Play Game</button>
+        </div>
+        <div id="gameModeMenu" class="hidden">
+            <h2>Select Mode</h2>
+            <button onclick="showMenu('localMenu')">Local Offline</button>
+            <button class="online-btn" onclick="showMenu('multiplayerMenu')">Online Multiplayer</button>
+            <button class="back-btn" onclick="showMenu('mainMenu')">Back</button>
+        </div>
+        <div id="localMenu" class="hidden">
+            <h2>Local Game</h2>
+            <button onclick="startLocalGame(2)">2 Players</button>
+            <button onclick="startLocalGame(3)">3 Players</button>
+            <button onclick="startLocalGame(4)">4 Players</button>
+            <button class="back-btn" onclick="showMenu('gameModeMenu')">Back</button>
+        </div>
+        <div id="multiplayerMenu" class="hidden">
+            <h2>Online Multiplayer</h2>
+            <button class="online-btn" onclick="showMenu('quickMatchMenu')">Quick Match</button>
+            <button class="room-btn" onclick="showMenu('createRoomMenu')">Create Room</button>
+            <button class="room-btn" onclick="showMenu('joinRoomMenu')">Join Room</button>
+            <button class="back-btn" onclick="showMenu('gameModeMenu')">Back</button>
+        </div>
+        <div id="quickMatchMenu" class="hidden">
+            <h2>Quick Match</h2>
+            <div id="quick-match-display" style="color: #00ff00; margin-bottom: 10px; font-size: 13px; font-weight: bold;"></div>
+            <button onclick="startMatchmaking(2)">2 Players</button>
+            <button onclick="startMatchmaking(3)">3 Players</button>
+            <button onclick="startMatchmaking(4)">4 Players</button>
+            <button class="back-btn" onclick="showMenu('multiplayerMenu')">Back</button>
+        </div>
+        <div id="createRoomMenu" class="hidden">
+            <h2>Create Room</h2>
+            <button onclick="createRoom(2)">2 Players Room</button>
+            <button onclick="createRoom(3)">3 Players Room</button>
+            <button onclick="createRoom(4)">4 Players Room</button>
+            <div id="room-created-display" style="color: #00ff00; margin: 10px 0; font-size: 13px; font-weight: bold;"></div>
+            <button class="back-btn" onclick="showMenu('multiplayerMenu')">Back</button>
+        </div>
+        <div id="joinRoomMenu" class="hidden">
+            <h2>Join Room</h2>
+            <input type="text" id="roomCodeInput" placeholder="Enter 6-Digit ID">
+            <button class="online-btn" onclick="joinRoom()">Join Game</button>
+            <button class="back-btn" onclick="showMenu('multiplayerMenu')">Back</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket;
+        window.currentRoomId = "";
+
+        function connectSocket() {
+            // 🔥 SMART FIX: Agar file direct (file:///) open hui hai, toh local server par bhej do
+            if (typeof io === 'undefined') {
+                alert("🚨 MULTIPLAYER SERVER NOT CONNECTED!\n\nBhaiya ji, aapne file direct (file://) open ki hai. Multiplayer ke liye server zaroori hai.\n\nAapko abhi sahi URL (http://localhost:3000) par bheja jaa raha hai.");
+                window.location.href = "http://localhost:3000";
+                return false;
+            }
+
+            if (!socket) {
+                socket = io();
+                
+                socket.on('room-created', (data) => {
+                    window.currentRoomId = data.roomId;
+                    sessionStorage.setItem('roomData', JSON.stringify({
+                        roomId: data.roomId,
+                        color: data.color,
+                        maxPlayers: data.maxPlayers || 2,
+                        allPlayers: [{ id: socket.id, color: data.color }],
+                        selectedBoard: data.selectedBoard || 'board1'
+                    }));
+                    document.getElementById("room-created-display").innerText = 
+                        `Room Created!\nID: ${data.roomId}\nWaiting for players...`;
+                });
+
+                socket.on('joined-success', (data) => {
+                    sessionStorage.setItem('roomData', JSON.stringify(data));
+                    redirectToGameFile(data.allPlayers.length);
+                });
+
+                socket.on('match-found', (data) => {
+                    sessionStorage.setItem('roomData', JSON.stringify(data));
+                    redirectToGameFile(data.allPlayers.length);
+                });
+
+                socket.on('start-online-game', (data) => {
+                    let me = data.players.find(p => p.id === socket.id);
+                    if (me) {
+                        sessionStorage.setItem('roomData', JSON.stringify({
+                            roomId: window.currentRoomId || data.roomId,
+                            color: me.color,
+                            maxPlayers: data.players.length,
+                            allPlayers: data.players,
+                            selectedBoard: data.selectedBoard || 'board1'
+                        }));
+                    }
+                    redirectToGameFile(data.players.length);
+                });
+
+                socket.on('error-msg', (msg) => { alert("❌ " + msg); });
+            }
+            return true;
+        }
+
+        function redirectToGameFile(playerCount) {
+            if (socket) {
+                socket.emit('page-transition'); 
+            }
+            if (playerCount === 3) {
+                window.location.href = "game3p.html";
+            } else if (playerCount === 4) {
+                window.location.href = "game4p.html";
+            } else {
+                window.location.href = "game2p.html";
+            }
+        }
+
+        function showMenu(menuId) {
+            ['mainMenu', 'gameModeMenu', 'localMenu', 'multiplayerMenu', 'quickMatchMenu', 'createRoomMenu', 'joinRoomMenu'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(menuId).classList.remove('hidden');
+            if(menuId.includes('Menu') && menuId !== 'mainMenu' && menuId !== 'gameModeMenu' && menuId !== 'localMenu') {
+                connectSocket();
+            }
+        }
+
+        function startLocalGame(players) {
+            sessionStorage.setItem('gameMode', 'local');
+            sessionStorage.setItem('playerCount', players);
+            redirectToGameFile(players);
+        }
+
+        function startMatchmaking(players) {
+            if(!connectSocket()) return;
+            sessionStorage.setItem('gameMode', 'online');
+            document.getElementById('quick-match-display').innerText = 'Searching match... ⏳';
+            socket.emit('find-match', { playersRequired: players });
+        }
+
+        function createRoom(players) {
+            if(!connectSocket()) return;
+            sessionStorage.setItem('gameMode', 'online');
+            document.getElementById("room-created-display").innerText = "Creating room...";
+            socket.emit('create-room', { maxPlayers: players });
+        }
+
+        function joinRoom() {
+            let code = document.getElementById('roomCodeInput').value.trim();
+            if(code === "") { alert("Please enter a valid 6-digit room code!"); return; }
+            if(!connectSocket()) return;
+            sessionStorage.setItem('gameMode', 'online');
+            window.currentRoomId = code;
+            socket.emit('join-room', { roomId: code });
+        }
+    </script>
+</body>
+</html>

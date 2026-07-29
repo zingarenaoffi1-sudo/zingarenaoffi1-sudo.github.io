@@ -1,0 +1,16 @@
+{
+  "name": "snakes-and-ladders-pro",
+  "version": "1.0.0",
+  "description": "Multiplayer Snakes & Ladders Game with real-time sync using Node.js and Socket.io",
+  "main": "server1.js",
+  "scripts": {
+    "start": "node server1.js",
+    "dev": "nodemon server1.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "author": "Bhaiya Ji",
+  "license": "ISC"
+}
