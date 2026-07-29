@@ -15,13 +15,13 @@ const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// 🔥 TERA EXACT FOLDER PATH
+// 🔥 Dynamic Folder Path (Ab yeh hamesha sahi path lega chahe Render ho ya Local)
 const frontendPath = __dirname;
 
 // Server ko bata diya ki static files yahan se uthani hain
 app.use(express.static(frontendPath));
 
-// Jab koi localhost:3000 kholega, toh usko direct D:/snakes-and-ladders/public/index.html dikhega
+// Default route par index.html bhejega
 app.get('/', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
 });
@@ -31,7 +31,7 @@ let queue2P = [];
 let queue3P = [];
 let queue4P = [];
 
-// 🔥 FIX ADDED: Game ke hisaab se colors (Ab 2 player me sirf Red aur Blue aayenge)
+// 🔥 FIX ADDED: Game ke hisaab se colors
 const colorPresets = {
     2: ['red', 'blue'],
     3: ['red', 'green', 'blue'],
