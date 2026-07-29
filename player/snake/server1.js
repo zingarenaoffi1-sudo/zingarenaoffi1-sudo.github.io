@@ -16,7 +16,7 @@ const io = new Server(server, {
 });
 
 // 🔥 TERA EXACT FOLDER PATH
-const frontendPath = 'D:/snakes-and-ladders/public';
+const frontendPath = __dirname;
 
 // Server ko bata diya ki static files yahan se uthani hain
 app.use(express.static(frontendPath));
