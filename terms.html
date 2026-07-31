@@ -20,36 +20,33 @@
         .container { max-width: 1000px; margin: auto; background: var(--bg-card); padding: 50px 60px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 15px 50px rgba(0,0,0,0.8); }
         
         .header-section { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--border-color); padding-bottom: 30px; }
-        h1 { color: var(--accent-blue); font-size: 36px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; }
+        h1 { color: var(--accent-blue); font-size: 34px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; }
         .last-updated { color: var(--text-muted); font-size: 14px; font-style: italic; }
         
-        h2 { color: #f8fafc; font-size: 24px; margin-top: 50px; border-left: 5px solid var(--accent-blue); padding-left: 15px; background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%); padding-top: 5px; padding-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        h2 { color: #f8fafc; font-size: 22px; margin-top: 50px; border-left: 5px solid var(--accent-blue); padding-left: 15px; background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%); padding-top: 6px; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         h3 { color: #e2e8f0; font-size: 18px; margin-top: 30px; }
         
         p, li { color: var(--text-muted); font-size: 16px; margin-bottom: 15px; text-align: justify; }
         strong { color: #f1f5f9; font-weight: 600; }
         
-        /* Table of Contents */
         .toc { background: #111827; border: 1px solid var(--border-color); padding: 25px; border-radius: 12px; margin-bottom: 40px; }
         .toc h3 { margin-top: 0; color: var(--accent-blue); border-bottom: 1px solid #334155; padding-bottom: 10px; text-transform: uppercase; }
         .toc ul { list-style-type: none; padding-left: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .toc a { color: var(--text-muted); text-decoration: none; transition: 0.2s; font-size: 15px; display: block; padding: 5px 10px; border-radius: 5px; }
         .toc a:hover { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
 
-        /* Status Boxes */
         .danger-box { background: rgba(239, 68, 68, 0.05); border: 1px solid #7f1d1d; padding: 30px; border-radius: 12px; margin: 35px 0; border-left: 5px solid var(--accent-red); position: relative; }
         .danger-box::before { content: "⚠ LEGAL WAIVER & INDEMNIFICATION"; position: absolute; top: -12px; left: 20px; background: var(--bg-card); color: var(--accent-red); font-size: 12px; font-weight: bold; padding: 0 10px; border: 1px solid #7f1d1d; border-radius: 4px; }
         
         .info-box { background: rgba(59, 130, 246, 0.05); border: 1px solid #1e40af; padding: 25px; border-radius: 12px; margin: 30px 0; border-left: 5px solid var(--accent-blue); }
         
-        /* Feature Grid Upgrade */
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-top: 25px; }
         .feature-item { background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .feature-item:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.4); border-color: #475569; }
         .feature-item strong { display: block; color: var(--accent-blue); margin-bottom: 10px; font-size: 17px; border-bottom: 1px solid #334155; padding-bottom: 5px; }
 
-        .back-btn { display: flex; align-items: center; justify-content: center; margin-top: 60px; color: var(--accent-blue); text-decoration: none; font-weight: bold; font-size: 18px; border: 2px solid var(--accent-blue); padding: 15px 30px; border-radius: 12px; transition: all 0.3s ease; width: fit-content; margin-left: auto; margin-right: auto; text-transform: uppercase; letter-spacing: 1px; }
-        .back-btn:hover { background: var(--accent-blue); color: white; box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); transform: scale(1.02); }
+        .back-btn { display: flex; align-items: center; justify-content: center; margin-top: 60px; color: var(--accent-blue); text-decoration: none; font-weight: bold; font-size: 16px; border: 2px solid var(--accent-blue); padding: 15px 30px; border-radius: 12px; transition: all 0.3s ease; width: fit-content; margin: auto; text-transform: uppercase; letter-spacing: 1px; }
+        .back-btn:hover { background: var(--accent-blue); color: white; box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
         
         @media (max-width: 768px) {
             .container { padding: 30px 20px; }
@@ -62,77 +59,73 @@
     <div class="container">
         <div class="header-section">
             <h1>End-User License Agreement (EULA)</h1>
-            <div class="last-updated">Master Service Agreement | Build Classification: Enterprise Standard</div>
+            <div class="last-updated">Master Service Agreement | Build Classification: Standard Production</div>
         </div>
 
         <div class="info-box">
-            <p><strong>System Parameters:</strong> Execution of the Zing Arena ecosystem mandates a stable, unmetered TCP/IP connection. The core operational matrix is deployed at a highly optimized footprint of ~1.95MB. The End-User is solely responsible for maintaining compatible local hardware and network routing to facilitate platform functionality.</p>
+            <p><strong>System Parameters:</strong> Execution of Zing Arena requires a stable TCP/IP internet connection for real-time multiplayer features and cloud authentication. Core operational utilities are packaged at an optimized footprint of ~1.95MB to ensure compatibility across diverse mobile devices.</p>
         </div>
 
         <div class="toc">
             <h3>Document Index</h3>
             <ul>
-                <li><a href="#binding">1. Binding Acknowledgment</a></li>
-                <li><a href="#ecosystem">2. Functional Ecosystem & Constraints</a></li>
-                <li><a href="#monetization">3. Advertising & Monetization Protocols</a></li>
-                <li><a href="#privacy">4. Client-Side Processing & Sovereignty</a></li>
-                <li><a href="#aup">5. Acceptable Use Policy (AUP)</a></li>
+                <li><a href="#binding">1. Binding Acknowledgement</a></li>
+                <li><a href="#ecosystem">2. Functional Ecosystem Rules</a></li>
+                <li><a href="#monetization">3. Advertising & Monetization</a></li>
+                <li><a href="#privacy">4. Client-Side Processing</a></li>
+                <li><a href="#aup">5. Acceptable Use Policy</a></li>
                 <li><a href="#indemnification">6. Content Liability Waiver</a></li>
                 <li><a href="#warranties">7. Limitation of Warranties</a></li>
-                <li><a href="#jurisdiction">8. Jurisdiction & Severability</a></li>
+                <li><a href="#jurisdiction">8. Jurisdiction & Contact</a></li>
             </ul>
         </div>
 
-        <h2 id="binding">1. Binding Acknowledgment</h2>
-        <p>This document governs the relationship strictly between the End-User ("User") and the Zing Arena architecture ("The Platform"). By rendering, executing, or transmitting any data through The Platform, the User explicitly and irrevocably consents to this Master Service Agreement. Any utilization of The Platform constitutes an electronic signature and total submission to the operational rules defined herein. If these terms are deemed unacceptable, the User is mandated to terminate all sessions immediately.</p>
+        <h2 id="binding">1. Binding Acknowledgement</h2>
+        <p>This End-User License Agreement ("Agreement") defines the operational conditions between the End-User ("User") and Zing Arena ("The Platform"). By rendering, executing, or accessing any utility within The Platform, the User explicitly consents to these binding terms. If these conditions are unacceptable, the User must immediately terminate their session and uninstall the application.</p>
 
-        <h2 id="ecosystem">2. Functional Ecosystem & Constraints</h2>
-        <p>The Platform provides a composite utility environment. Access is granted subject to strict systemic thresholds:</p>
+        <h2 id="ecosystem">2. Functional Ecosystem Rules</h2>
+        <p>The Platform provides a multi-utility environment governed by the following operational constraints:</p>
         
         <div class="feature-grid">
             <div class="feature-item">
-                <strong>I. Authenticated Media Indexing</strong>
-                Access requires valid Google OAuth 2.0 authorization. The system imposes a strict upper limit of 50 indexed video URLs per authenticated instance. The Platform functions exclusively as a URL pointer and cryptographic index; it hosts, caches, and transcodes zero media files. Execution of media relies entirely on public source availability. Encrypted destinations will inherently trigger a native execution block.
+                <strong>I. Media Bookmarking & Playback</strong>
+                The Media Engine operates strictly as a personal URL bookmarking tool permitting up to 50 indexed links per authenticated profile. The Platform does not host, transcode, or distribute copyrighted media files. Users are prohibited from using this tool to bypass digital rights management (DRM) or access restricted third-party content.
             </div>
             <div class="feature-item">
-                <strong>II. Cryptographic & Generative Algorithms</strong>
-                Encompasses localized execution of randomized Password Generation, Unit Conversion arrays, Chronological Age Calculation, Hexadecimal Color Extraction, and an alphanumeric Name Generation matrix programmed to output comprehensive stylized datasets per query.
+                <strong>II. Local Algorithmic Utilities</strong>
+                Generative utilities (including Password Generation, Name Generation, and Chronological Age Calculation) and file optimization tools (Image Compression and PDF Merging) compute directly on the User's local hardware.
             </div>
             <div class="feature-item">
-                <strong>III. Native DOM Media Processing</strong>
-                Facilitates localized client-side media manipulation, including JPG-to-PDF conversion, multi-array PDF merging, and algorithmic Image Compression capable of extreme byte-size reduction. This processing engine leverages indigenous browser libraries, ensuring the User's files remain entirely within their local hardware parameters.
+                <strong>III. Sandboxed Developer & Gaming Modes</strong>
+                Our embedded code execution interface and recreational game modules execute within isolated browser containers designed to maintain local system stability and prevent external data leakage.
             </div>
             <div class="feature-item">
-                <strong>IV. Integrated Web Environments</strong>
-                Features a dedicated indexing interface routed via third-party Bing infrastructure and an embedded Code Runner designed for localized, sandboxed execution of HTML/JS frameworks.
-            </div>
-            <div class="feature-item">
-                <strong>V. Entertainment & Diagnostic Modules</strong>
-                Contains an isolated suite of recreational web applications executing entirely within the browser cache, alongside network diagnostic routing capable of querying independent bandwidth assessors (Fast.com, Ookla, Cloudflare) without retaining persistent diagnostic logs.
+                <strong>IV. Diagnostic & Search Modules</strong>
+                Integrated web search and network bandwidth assessors utilize standard third-party routing infrastructure to return real-time operational results without storing persistent user search logs.
             </div>
         </div>
 
-        <h2 id="monetization">3. Advertising & Monetization Protocols</h2>
-        <p>The Platform sustains its operational infrastructure through integration with third-party advertising syndication networks (including, but not limited to, Adsterra and Monetag). By utilizing The Platform, the User acknowledges and consents to the deployment of dynamic banner advertisements and push-notification protocols embedded within the User Interface. The Platform exercises absolutely no editorial control over the content, tracking methodologies, or redirection protocols of these third-party advertisements. The User assumes all risk associated with engaging, clicking, or transacting with any external commercial entities displayed via these monetization modules.</p>
+        <h2 id="monetization">3. Advertising & Programmatic Monetization</h2>
+        <p>To support continuous development and server infrastructure without charging mandatory subscription fees, The Platform integrates with industry-standard programmatic monetization partners. Advertisements displayed within the application are served in compliance with standard mobile content ratings. Users acknowledge that external links or commercial promotions displayed via ad banners are governed independently by their respective third-party sponsors.</p>
 
-        <h2 id="privacy">4. Client-Side Processing & Data Sovereignty</h2>
-        <p>The core computational matrix of The Platform is engineered strictly upon a Zero-Knowledge (ZK) Protocol. Processes involving document generation, file compression, and script execution are designed to compute directly within the ephemeral memory of the User's local machine. The Platform deploys no telemetry to siphon or archive local file data. Where cloud integration is required (OAuth synchronization), the data remains the sovereign intellectual property of the authenticated User. The Platform operates as a blind computational layer.</p>
+        <h2 id="privacy">4. Client-Side Processing & Sovereignty</h2>
+        <p>Zing Arena adheres to strict Data Sovereignty principles. Local file processing modules (such as image compression and document merging) do not upload your personal files to external cloud storage. Where cloud synchronization is utilized for personal bookmarking, the User retains complete ownership of their indexed data.</p>
 
         <h2 id="aup">5. Acceptable Use Policy (AUP)</h2>
-        <p>The User is strictly prohibited from deploying The Platform for unauthorized penetration testing, malicious payload distribution (XSS, SQLi), bypassing digital rights management (DRM), or indexing URLs that direct to illegal, restricted, or globally sanctioned content. Anomalous or malicious interaction with The Platform's APIs will result in immediate, automated IP suspension and permanent revocation of access tokens.</p>
+        <p>The User is strictly prohibited from utilizing The Platform for unauthorized network penetration testing, distributing malicious payloads, attempting to scrape third-party server infrastructure, or indexing URLs that direct to illegal or globally restricted material. Abusive interaction with our server endpoints will result in immediate automated session revocation.</p>
 
         <div class="danger-box" id="indemnification">
-            <h3>6. Absolute Content Liability Waiver</h3>
-            <p><strong>Database Blindness:</strong> The Platform utilizes a decentralized, blind database structure for indexed URLs. Zero manual moderation, automated scraping, or editorial oversight is applied to the User's private directories.</p>
-            <p><strong>Total Indemnification:</strong> The User bears 100% legal, civil, and financial responsibility for the digital assets they index, process, or render utilizing this architecture. In the event of copyright infringement, DMCA violations, or distribution of illicit material via User-provided inputs, <strong>The Platform disclaims all liability in its entirety.</strong> By interacting with this service, the User agrees to fully indemnify, defend, and hold The Platform harmless against any institutional claims, financial penalties, or civil actions. Liability assumed by The Platform for User-generated actions is strictly defined as $0.00.</p>
+            <h3>6. Content Liability Waiver</h3>
+            <p><strong>Decentralized Indexing:</strong> The Platform utilizes an automated, blind URL ledger for personal bookmarking and applies no manual editorial control over User-saved links.</p>
+            <p><strong>Full Indemnification:</strong> The User bears 100% legal and civil responsibility for any digital assets, URLs, or inputs they process utilizing this application. The Platform expressly disclaims all liability for copyright infringements, DMCA violations, or misuse of third-party intellectual property executed by the User. By utilizing this service, the User agrees to indemnify and hold harmless The Platform against any civil claims or financial liability.</p>
         </div>
 
         <h2 id="warranties">7. Limitation of Warranties</h2>
-        <p>THE PLATFORM AND ALL ASSOCIATED MODULES ARE PROVIDED ON A STRICT "AS IS" AND "AS AVAILABLE" BASIS. ALL IMPLIED WARRANTIES—INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR ALGORITHMIC PURPOSE, AND NON-INFRINGEMENT—ARE EXPRESSLY AND CATEGORICALLY DISCLAIMED. UNDER NO CIRCUMSTANCES SHALL THE PLATFORM BE HELD LIABLE FOR DIRECT, INDIRECT, INCIDENTAL, OR CATASTROPHIC DAMAGES RESULTING FROM DATA LOSS, SERVER INSTABILITY, OR COMPROMISED LOCAL HARDWARE SUBSEQUENT TO THE EXECUTION OF THIS ENVIRONMENT.</p>
+        <p>THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT EXPRESS OR IMPLIED WARRANTIES OF ANY KIND. WE EXPRESSLY DISCLAIM WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT REAL-TIME MULTIPLAYER SERVERS OR LOCAL OPTIMIZATION TOOLS WILL OPERATE UNINTERRUPTED OR ERROR-FREE UNDER ALL NETWORK CONDITIONS.</p>
 
-        <h2 id="jurisdiction">8. Jurisdiction, Severability & Administration</h2>
-        <p>This Agreement is subject to universal principles of cyberspace law. Should any specific provision of this document be deemed legally unenforceable by a competent jurisdiction, that isolated provision shall be severed, while the remainder of the EULA retains full binding authority.</p>
-        <p>All institutional correspondence, official DMCA takedown requests, or legal inquiries must be routed directly to the administrative node at: <strong><a href="mailto:zingarenaoffi1@gmail.com">zingarenaoffi1@gmail.com</a></strong></p>
+        <h2 id="jurisdiction">8. Jurisdiction & Administration</h2>
+        <p>This Agreement is governed by general principles of digital commerce law. Should any provision be deemed legally unenforceable, that clause shall be severed while the remaining provisions retain full force.</p>
+        <p>For administrative inquiries, compliance correspondence, or DMCA notices, contact our core team at: <strong><a href="mailto:zingarenaoffi1@gmail.com">zingarenaoffi1@gmail.com</a></strong></p>
 
         <a href="index.html" class="back-btn">← Accept EULA & Return</a>
     </div>
