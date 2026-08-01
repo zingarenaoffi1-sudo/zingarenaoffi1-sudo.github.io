@@ -1,5 +1,5 @@
 <!-- ==========================================================================
-     FEATURE 2: TEXT TO SPEECH AUDIO READER (AUDIOREADER)
+     FEATURE 2: TEXT TO SPEECH AUDIO READER (AUDIOREADER) - 100% FIXED CODE
      All-in-One: HTML + CSS + JS Merged
      ========================================================================== -->
 
@@ -13,12 +13,12 @@
     <label for="ttsLang">Select Voice Language:</label>
     <select id="ttsLang" class="lang-select">
       <option value="en-IN">English (India)</option>
-      <option value="hi-IN">Hindi (भारत)</option>
       <option value="en-US">English (US)</option>
+      <option value="hi-IN">Hindi (भारत)</option>
     </select>
   </div>
 
-  <textarea id="ttsInput" class="text-box" placeholder="Paste or type your text here to listen as audio..." rows="5"></textarea>
+  <textarea id="ttsInput" class="text-box" placeholder="Paste or type your text here to listen as audio..." rows="5">Hello my name is sunny</textarea>
 
   <div class="button-group">
     <button id="playTtsBtn" class="btn btn-primary" onclick="startTextToSpeech()">🔊 Listen Now</button>
@@ -107,6 +107,9 @@
 
 <!-- ================= SCRIPT (JS) ================= -->
 <script>
+  // Global variable taaki Chrome Garbage Collection ka bug na aaye
+  let activeUtterance = null;
+
   function startTextToSpeech() {
     const textInput = document.getElementById("ttsInput").value.trim();
     const langSelect = document.getElementById("ttsLang").value;
@@ -122,25 +125,34 @@
       return;
     }
 
-    window.speechSynthesis.cancel();
+    // Agar pehle se kuch bol raha hai toh use stop karo
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
 
-    const utterance = new SpeechSynthesisUtterance(textInput);
-    utterance.lang = langSelect;
-    utterance.rate = 1.0;
+    // 50ms ka safe delay taaki browser pura cancel process kar sake
+    setTimeout(() => {
+      activeUtterance = new SpeechSynthesisUtterance(textInput);
+      activeUtterance.lang = langSelect;
+      activeUtterance.rate = 1.0;
 
-    utterance.onstart = () => {
-      statusText.innerText = "Status: Playing audio...";
-    };
+      activeUtterance.onstart = () => {
+        statusText.innerText = "Status: Playing audio...";
+      };
 
-    utterance.onend = () => {
-      statusText.innerText = "Status: Audio finished.";
-    };
+      activeUtterance.onend = () => {
+        statusText.innerText = "Status: Audio finished.";
+      };
 
-    utterance.onerror = () => {
-      statusText.innerText = "Status: Error playing audio.";
-    };
+      activeUtterance.onerror = (event) => {
+        console.error("TTS Error:", event);
+        // Ab exact error reason screen par dikhega
+        const reason = event.error ? " (" + event.error + ")" : "";
+        statusText.innerText = "Status: Error playing audio" + reason + ". Try switching language to English (US).";
+      };
 
-    window.speechSynthesis.speak(utterance);
+      window.speechSynthesis.speak(activeUtterance);
+    }, 50);
   }
 
   function stopTextToSpeech() {
@@ -152,5 +164,6 @@
 
   function clearTtsText() {
     document.getElementById("ttsInput").value = "";
+    document.getElementById("ttsStatus").innerText = "Status: Ready to Play";
   }
 </script>
