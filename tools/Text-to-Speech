@@ -1,0 +1,156 @@
+<!-- ==========================================================================
+     FEATURE 2: TEXT TO SPEECH AUDIO READER (AUDIOREADER)
+     All-in-One: HTML + CSS + JS Merged
+     ========================================================================== -->
+
+<div class="audioreader-tool-container">
+  <div class="tool-header">
+    <span class="tool-badge">[ 🔊 AudioReader ]</span>
+    <h3>Text to Speech Reader</h3>
+  </div>
+
+  <div class="control-row">
+    <label for="ttsLang">Select Voice Language:</label>
+    <select id="ttsLang" class="lang-select">
+      <option value="en-IN">English (India)</option>
+      <option value="hi-IN">Hindi (भारत)</option>
+      <option value="en-US">English (US)</option>
+    </select>
+  </div>
+
+  <textarea id="ttsInput" class="text-box" placeholder="Paste or type your text here to listen as audio..." rows="5"></textarea>
+
+  <div class="button-group">
+    <button id="playTtsBtn" class="btn btn-primary" onclick="startTextToSpeech()">🔊 Listen Now</button>
+    <button id="stopTtsBtn" class="btn btn-danger" onclick="stopTextToSpeech()">⏹️ Stop Audio</button>
+    <button class="btn btn-outline" onclick="clearTtsText()">🗑️ Clear</button>
+  </div>
+
+  <p id="ttsStatus" class="status-text">Status: Ready to Play</p>
+</div>
+
+<!-- ================= STYLE (CSS) ================= -->
+<style>
+  .audioreader-tool-container {
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+  .audioreader-tool-container .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  .audioreader-tool-container .tool-badge {
+    background: #f0f4f8;
+    color: #0066cc;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .audioreader-tool-container h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  .audioreader-tool-container .control-row {
+    margin-bottom: 12px;
+    color: #444;
+  }
+  .audioreader-tool-container .lang-select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 8px;
+  }
+  .audioreader-tool-container .text-box {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  .audioreader-tool-container .button-group {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .audioreader-tool-container .btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .audioreader-tool-container .btn-primary { background: #0066cc; color: #fff; }
+  .audioreader-tool-container .btn-danger { background: #dc3545; color: #fff; }
+  .audioreader-tool-container .btn-outline { background: transparent; border: 1px solid #ccc; color: #333; }
+  .audioreader-tool-container .status-text {
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+</style>
+
+<!-- ================= SCRIPT (JS) ================= -->
+<script>
+  function startTextToSpeech() {
+    const textInput = document.getElementById("ttsInput").value.trim();
+    const langSelect = document.getElementById("ttsLang").value;
+    const statusText = document.getElementById("ttsStatus");
+
+    if (!textInput) {
+      alert("Please enter or paste some text to listen.");
+      return;
+    }
+
+    if (!("speechSynthesis" in window)) {
+      alert("Text-to-speech is not supported in this browser.");
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(textInput);
+    utterance.lang = langSelect;
+    utterance.rate = 1.0;
+
+    utterance.onstart = () => {
+      statusText.innerText = "Status: Playing audio...";
+    };
+
+    utterance.onend = () => {
+      statusText.innerText = "Status: Audio finished.";
+    };
+
+    utterance.onerror = () => {
+      statusText.innerText = "Status: Error playing audio.";
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function stopTextToSpeech() {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      document.getElementById("ttsStatus").innerText = "Status: Audio stopped.";
+    }
+  }
+
+  function clearTtsText() {
+    document.getElementById("ttsInput").value = "";
+  }
+</script>
