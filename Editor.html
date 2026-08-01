@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+       <meta charset="UTF-8">
+    <title>Zing Editor</title>
+    <style>
+        body { background: #0f172a; color: white; text-align: center; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        
+        /* Search Bar Style */
+        #searchInput { width: 100%; max-width: 400px; padding: 12px; margin-top: 20px; border-radius: 20px; border: 1px solid #334155; background: #1e293b; color: white; outline: none; text-align: center; box-sizing: border-box; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: auto; margin-top: 30px; }
+        .item { background: #1e293b; padding: 25px; border-radius: 20px; cursor: pointer; border: 1px solid #334155; transition: 0.3s; }
+        .item:hover { background: #3b82f6; transform: translateY(-5px); }
+        button { margin-top: 30px; padding: 12px 25px; border-radius: 8px; border: none; background: #64748b; color: white; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🛠️ Zing Arena Tools</h2>
+    
+    <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
+    <div class="grid" id="toolsGrid">
+            <div class="item" onclick="window.location.href='tools/jpg_to_pdf.html'">🖼️ JPG to PDF</div>
+        <div class="item" onclick="window.location.href='tools/pdf_to_jpg.html'">📄 PDF to JPG</div> 
+        <div class="item" onclick="window.location.href='tools/qr_tool.html'">📸 QR Tool</div>
+        <div class="item" onclick="window.location.href='tools/pdf_merger.html'">🔗 PDF Merger</div>
+        <div class="item" onclick="window.location.href='tools/image_compressor.html'">🖼️ Image Compressor</div>
+        <div class="item" onclick="window.location.href='tools/color_picker.html'">🎨 Color Picker</div>
+       <div class="item" onclick="window.location.href='tools/emoji_maker.html'">😎 Emoji Text Maker</div>
+     </div>
+   
+    <br>
+    <button onclick="window.location.href='index.html'">Back to Dashboard</button>
+
+    <script>
+        // Filter Logic
+        function filterTools() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.getElementsByClassName('item');
+            for (let i = 0; i < items.length; i++) {
+                let text = items[i].innerText.toLowerCase();
+                if (text.includes(input)) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
