@@ -1,0 +1,349 @@
+<!-- ==========================================================================
+     FEATURE: IN-BROWSER SCREEN & AUDIO RECORDER (WEB STUDIO PRO)
+     All-in-One: HTML + CSS + JS Merged (100% Professional Standard English)
+     ========================================================================== -->
+
+<div class="webstudio-container">
+  <div class="tool-header">
+    <span class="tool-badge">[ 🎥 Web Studio Pro ]</span>
+    <h3>Screen & Audio Recorder</h3>
+  </div>
+
+  <div class="control-row">
+    <label for="recordingMode">Select Recording Mode:</label>
+    <select id="recordingMode" class="mode-select" onchange="resetStudio()">
+      <option value="screen">Screen Capture + Audio (Video `.webm`)</option>
+      <option value="audio">Microphone Only (Audio `.webm`)</option>
+    </select>
+  </div>
+
+  <!-- Live Preview & Playback Screen -->
+  <div class="media-preview-box">
+    <video id="previewPlayer" autoplay muted playsinline controls style="display: none;"></video>
+    <div id="placeholderText" class="placeholder-text">
+      <span>🖥️ Media Preview Window</span>
+      <p>Click "Start Recording" to capture your screen or microphone.</p>
+    </div>
+  </div>
+
+  <!-- Recording Timer & Status Bar -->
+  <div class="status-bar">
+    <span id="recordingTimer" class="timer-display">00:00</span>
+    <span id="studioStatus" class="status-text">Status: Ready to Record</span>
+  </div>
+
+  <div class="button-group">
+    <button id="startRecBtn" class="btn btn-primary" onclick="startRecording()">🔴 Start Recording</button>
+    <button id="stopRecBtn" class="btn btn-danger" onclick="stopRecording()" disabled>⏹️ Stop Recording</button>
+    <button id="downloadRecBtn" class="btn btn-success" onclick="downloadRecording()" disabled>⬇️ Download File</button>
+    <button class="btn btn-outline" onclick="resetStudio()">🗑️ Reset</button>
+  </div>
+</div>
+
+<!-- ================= STYLE (CSS) ================= -->
+<style>
+  .webstudio-container {
+    max-width: 650px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    color: #333;
+  }
+  .webstudio-container .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .webstudio-container .tool-badge {
+    background: #eef6ff;
+    color: #0066cc;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  .webstudio-container h3 {
+    margin: 0;
+    font-size: 19px;
+    color: #222;
+  }
+  .webstudio-container .control-row {
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #444;
+  }
+  .webstudio-container .mode-select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-left: 8px;
+    width: 65%;
+    background: #fff;
+  }
+  .webstudio-container .media-preview-box {
+    width: 100%;
+    height: 280px;
+    background: #0f172a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border: 1px solid #334155;
+    position: relative;
+  }
+  .webstudio-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+  .webstudio-container .placeholder-text {
+    text-align: center;
+    color: #94a3b8;
+    padding: 20px;
+  }
+  .webstudio-container .placeholder-text span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #cbd5e1;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .webstudio-container .placeholder-text p {
+    font-size: 13px;
+    margin: 0;
+  }
+  .webstudio-container .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 16px;
+  }
+  .webstudio-container .timer-display {
+    font-size: 18px;
+    font-weight: 700;
+    color: #dc3545;
+    font-family: monospace;
+  }
+  .webstudio-container .status-text {
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+  }
+  .webstudio-container .button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .webstudio-container .btn {
+    padding: 10px 18px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .webstudio-container .btn-primary { background: #0066cc; color: #fff; }
+  .webstudio-container .btn-primary:hover { background: #0052a3; }
+  
+  .webstudio-container .btn-danger { background: #dc3545; color: #fff; }
+  .webstudio-container .btn-danger:hover { background: #c82333; }
+  
+  .webstudio-container .btn-success { background: #28a745; color: #fff; }
+  .webstudio-container .btn-success:hover { background: #218838; }
+  
+  .webstudio-container .btn-outline { background: transparent; border: 1px solid #ccc; color: #333; }
+  .webstudio-container .btn-outline:hover { background: #f8f9fa; }
+  
+  .webstudio-container .btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+</style>
+
+<!-- ================= SCRIPT (JS) ================= -->
+<script>
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let mediaStream = null;
+  let timerInterval = null;
+  let secondsElapsed = 0;
+
+  const previewPlayer = document.getElementById("previewPlayer");
+  const placeholderText = document.getElementById("placeholderText");
+  const timerDisplay = document.getElementById("recordingTimer");
+  const statusText = document.getElementById("studioStatus");
+  const startBtn = document.getElementById("startRecBtn");
+  const stopBtn = document.getElementById("stopRecBtn");
+  const downloadBtn = document.getElementById("downloadRecBtn");
+
+  async function startRecording() {
+    const mode = document.getElementById("recordingMode").value;
+    recordedChunks = [];
+    secondsElapsed = 0;
+
+    if (!navigator.mediaDevices) {
+      alert("Media recording is not supported in this browser. Please use Google Chrome or Microsoft Edge.");
+      return;
+    }
+
+    try {
+      if (mode === "screen") {
+        // Capture Screen + System/Mic Audio
+        mediaStream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: true
+        });
+      } else {
+        // Capture Microphone Audio Only
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false
+        });
+      }
+
+      // Show live stream in preview player
+      previewPlayer.srcObject = mediaStream;
+      previewPlayer.muted = true; // Mute locally to prevent feedback loop
+      previewPlayer.style.display = "block";
+      placeholderText.style.display = "none";
+
+      mediaRecorder = new MediaRecorder(mediaStream);
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        handleRecordingStop();
+      };
+
+      // Handle user clicking "Stop sharing" directly from browser bar
+      mediaStream.getTracks().forEach(track => {
+        track.onended = () => {
+          if (mediaRecorder && mediaRecorder.state === "recording") {
+            stopRecording();
+          }
+        };
+      });
+
+      mediaRecorder.start();
+      startTimer();
+
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      downloadBtn.disabled = true;
+      statusText.innerText = "Status: Recording in progress...";
+
+    } catch (error) {
+      console.warn("Recording permission canceled or denied:", error);
+      statusText.innerText = "Status: Permission canceled by user.";
+    }
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.stop();
+    }
+    if (mediaStream) {
+      mediaStream.getTracks().forEach(track => track.stop());
+    }
+    stopTimer();
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+  }
+
+  function handleRecordingStop() {
+    const mode = document.getElementById("recordingMode").value;
+    const fileType = mode === "screen" ? "video/webm" : "audio/webm";
+    const recordedBlob = new Blob(recordedChunks, { type: fileType });
+    const recordingUrl = URL.createObjectURL(recordedBlob);
+
+    // Show recorded result in player for immediate replay
+    previewPlayer.srcObject = null;
+    previewPlayer.src = recordingUrl;
+    previewPlayer.muted = false;
+    previewPlayer.controls = true;
+
+    downloadBtn.disabled = false;
+    statusText.innerText = "Status: Recording complete. Ready to download.";
+  }
+
+  function downloadRecording() {
+    if (recordedChunks.length === 0) {
+      alert("No recording available to download.");
+      return;
+    }
+
+    const mode = document.getElementById("recordingMode").value;
+    const fileExtension = mode === "screen" ? ".webm" : ".webm";
+    const fileName = (mode === "screen" ? "Screen_Capture_" : "Audio_Recording_") + 
+                     new Date().toISOString().slice(0, 10) + fileExtension;
+
+    const fileType = mode === "screen" ? "video/webm" : "audio/webm";
+    const blob = new Blob(recordedChunks, { type: fileType });
+    const downloadUrl = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    anchor.download = fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+
+    statusText.innerText = "Status: File downloaded successfully.";
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      secondsElapsed++;
+      const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
+      const secs = String(secondsElapsed % 60).padStart(2, "0");
+      timerDisplay.innerText = `${mins}:${secs}`;
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+  }
+
+  function resetStudio() {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.stop();
+    }
+    if (mediaStream) {
+      mediaStream.getTracks().forEach(track => track.stop());
+    }
+    stopTimer();
+    secondsElapsed = 0;
+    timerDisplay.innerText = "00:00";
+    recordedChunks = [];
+
+    previewPlayer.srcObject = null;
+    previewPlayer.src = "";
+    previewPlayer.style.display = "none";
+    placeholderText.style.display = "block";
+
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    downloadBtn.disabled = true;
+    statusText.innerText = "Status: Ready to Record";
+  }
+</script>
