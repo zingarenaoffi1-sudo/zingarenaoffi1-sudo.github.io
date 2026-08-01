@@ -2,114 +2,405 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>QR Tools - Zing Arena</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Studio Pro - Zing Arena</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
-        .box { background: #1e293b; padding: 20px; border-radius: 15px; margin: 10px auto; max-width: 400px; }
-        input[type="text"] { padding: 10px; width: 80%; border-radius: 5px; border: none; margin-bottom: 10px; }
-        
-        /* File upload button styling */
-        input[type="file"] { background: #334155; padding: 10px; width: 80%; border-radius: 5px; color: white; cursor: pointer; margin-bottom: 15px; font-size: 14px; }
-        
-        button { padding: 10px 20px; background: #3b82f6; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 5px; font-weight: bold; }
-        #reader { width: 100%; max-width: 350px; margin: auto; border-radius: 8px; overflow: hidden; }
-        #qrcode { margin: 20px auto; display: flex; justify-content: center; background: white; padding: 10px; width: fit-content; border-radius: 5px; }
-        #downloadBtn { background: #22c55e; display: none; margin-top: 15px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 24px;
+            text-align: center;
+        }
+        .header-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+        .studio-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .box {
+            background: #1e293b;
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .box h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #e2e8f0;
+            width: 100%;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            width: 100%;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: #38bdf8;
+        }
+        input[type="file"] {
+            background: #334155;
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+            color: #f8fafc;
+            cursor: pointer;
+            margin-bottom: 14px;
+            font-size: 13px;
+            border: 1px dashed #64748b;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 18px;
+            background: #0284c7;
+            border: none;
+            color: #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0369a1;
+        }
+        .btn-success {
+            background: #16a34a;
+        }
+        .btn-success:hover {
+            background: #15803d;
+        }
+        .btn-danger {
+            background: #dc2626;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-secondary {
+            background: #475569;
+        }
+        .btn-secondary:hover {
+            background: #334155;
+        }
+        #qrcode {
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 8px;
+            display: none;
+        }
+        #reader {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #0f172a;
+            border: 1px solid #334155;
+            min-height: 200px;
+        }
+        .scan-result-card {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 14px;
+            text-align: left;
+            display: none;
+        }
+        .scan-result-card span {
+            font-size: 12px;
+            color: #38bdf8;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .scan-result-card p {
+            font-size: 14px;
+            color: #f8fafc;
+            margin: 6px 0 10px 0;
+            word-break: break-all;
+        }
+        .back-btn-container {
+            margin-top: 24px;
+        }
     </style>
 </head>
 <body>
-    <h2>⚡ QR Code Tool</h2>
+    <div class="header-title">⚡ QR Code Studio Pro</div>
     
-    <!-- Generate QR Section -->
-    <div class="box">
-        <h3>Generate QR</h3>
-        <input type="text" id="text" placeholder="Enter link or text">
-        <br>
-        <button onclick="generate()">Create QR</button>
-        <div id="qrcode"></div>
-        <button id="downloadBtn" onclick="downloadQR()">Download PNG</button>
+    <div class="studio-container">
+        <!-- ================= GENERATE QR SECTION ================= -->
+        <div class="box">
+            <h3>Generate QR Code</h3>
+            
+            <div class="form-group">
+                <label for="qrType">QR Content Type:</label>
+                <select id="qrType" onchange="toggleQrInputs()">
+                    <option value="text">URL / Standard Text</option>
+                    <option value="wifi">Wi-Fi Network Access</option>
+                </select>
+            </div>
+
+            <!-- Standard URL/Text Input -->
+            <div id="textInputGroup" class="form-group">
+                <label for="textInput">Enter URL Link or Message:</label>
+                <input type="text" id="textInput" placeholder="https://example.com or any text">
+            </div>
+
+            <!-- Wi-Fi Inputs (Hidden by default) -->
+            <div id="wifiInputGroup" style="display: none; width: 100%;">
+                <div class="form-group">
+                    <label for="wifiSsid">Wi-Fi Network Name (SSID):</label>
+                    <input type="text" id="wifiSsid" placeholder="Home_WiFi_5G">
+                </div>
+                <div class="form-group">
+                    <label for="wifiPass">Wi-Fi Password:</label>
+                    <input type="password" id="wifiPass" placeholder="Network Password">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button onclick="generateQRCode()">Create QR</button>
+                <button id="downloadBtn" class="btn-success" onclick="downloadQRCode()" style="display: none;">Download PNG</button>
+            </div>
+
+            <div id="qrcode"></div>
+        </div>
+
+        <!-- ================= SCAN QR SECTION ================= -->
+        <div class="box">
+            <h3>Scan & Decode QR</h3>
+            
+            <div class="form-group">
+                <label>Upload QR Image File:</label>
+                <input type="file" id="qr-input-file" accept="image/*" title="Upload QR Image">
+            </div>
+
+            <div id="reader"></div>
+
+            <div class="btn-group">
+                <button id="startCamBtn" onclick="startCameraScanner()">Start Camera</button>
+                <button id="stopCamBtn" class="btn-danger" onclick="stopCameraScanner()" style="display: none;">Stop Camera</button>
+            </div>
+
+            <!-- Result Card Display -->
+            <div id="scanResultCard" class="scan-result-card">
+                <span>Decoded Output:</span>
+                <p id="decodedTextDisplay"></p>
+                <div class="btn-group" style="justify-content: flex-start; margin-top: 5px;">
+                    <button id="openLinkBtn" class="btn-success" onclick="openScannedLink()" style="display: none;">Open Link</button>
+                    <button class="btn-secondary" onclick="copyScannedText()">Copy Text</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Scan QR Section -->
-    <div class="box">
-        <h3>Scan QR</h3>
-        
-        <!-- Naya Option: Gallery se photo upload karke scan karne ke liye -->
-        <input type="file" id="qr-input-file" accept="image/*" title="Upload QR Image">
-        
-        <div id="reader"></div>
+    <div class="back-btn-container">
+        <button class="btn-danger" onclick="window.history.back()">Back to Dashboard</button>
     </div>
-
-    <button onclick="window.history.back()" style="background: #ef4444;">Back to Dashboard</button>
 
     <script>
-        // --- GENERATE LOGIC ---
-        function generate() {
-            const container = document.getElementById("qrcode");
-            container.innerHTML = "";
-            const text = document.getElementById("text").value.trim();
-            if(!text) { alert("Bhai, pehle koi link ya text toh likho!"); return; }
-            
-            new QRCode(container, {
-                text: text,
-                width: 256,
-                height: 256,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-            document.getElementById("downloadBtn").style.display = "inline-block";
+        /* ==========================================================================
+           1. QR CODE GENERATION LOGIC
+           ========================================================================== */
+        
+        function toggleQrInputs() {
+            const qrType = document.getElementById("qrType").value;
+            const textGroup = document.getElementById("textInputGroup");
+            const wifiGroup = document.getElementById("wifiInputGroup");
+
+            if (qrType === "wifi") {
+                textGroup.style.display = "none";
+                wifiGroup.style.display = "block";
+            } else {
+                textGroup.style.display = "block";
+                wifiGroup.style.display = "none";
+            }
         }
 
-        function downloadQR() {
+        function generateQRCode() {
+            const container = document.getElementById("qrcode");
+            const downloadBtn = document.getElementById("downloadBtn");
+            const qrType = document.getElementById("qrType").value;
+            let payload = "";
+
+            if (qrType === "wifi") {
+                const ssid = document.getElementById("wifiSsid").value.trim();
+                const pass = document.getElementById("wifiPass").value.trim();
+                if (!ssid) {
+                    alert("Please enter the Wi-Fi Network Name (SSID).");
+                    return;
+                }
+                // Standard Wi-Fi QR formatting
+                payload = `WIFI:T:WPA;S:${ssid};P:${pass};;`;
+            } else {
+                payload = document.getElementById("textInput").value.trim();
+                if (!payload) {
+                    alert("Please enter a valid URL link or text message to generate a QR code.");
+                    return;
+                }
+            }
+
+            container.innerHTML = "";
+            container.style.display = "flex";
+            
+            new QRCode(container, {
+                text: payload,
+                width: 220,
+                height: 220,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            downloadBtn.style.display = "inline-block";
+        }
+
+        function downloadQRCode() {
             const canvas = document.querySelector("#qrcode canvas");
+            if (!canvas) {
+                alert("Please generate a QR code first before downloading.");
+                return;
+            }
             const image = canvas.toDataURL("image/png", 1.0);
-            const link = document.createElement('a');
+            const link = document.createElement("a");
             link.href = image;
-            link.download = 'ZingArena_QR.png';
+            link.download = "ZingArena_QR_Code.png";
             link.click();
         }
 
-        // --- SCANNER LOGIC ---
+        /* ==========================================================================
+           2. QR CODE SCANNING & DECODING LOGIC
+           ========================================================================== */
+        
         const html5QrCode = new Html5Qrcode("reader");
+        let activeScannedResult = "";
 
-        // Scan hone ke baad kya karna hai uska function
-        function handleSuccessfulScan(decodedText) {
-            let result = decodedText.trim();
-            
-            // Camera stop kar dena taaki multiple times redirect na ho
-            html5QrCode.stop().then(() => {
-                // Check if result is a URL
-                if (result.startsWith("http://") || result.startsWith("https://")) {
-                    window.location.href = result; // Auto-redirect
-                } else if (result.toLowerCase().startsWith("www.")) {
-                    window.location.href = "https://" + result; // Auto-redirect for www. links
-                } else {
-                    alert("Scanned Text: " + result); // Agar link nahi hai, toh normal text show karega
-                }
-            }).catch(err => console.error("Scanner stop error", err));
+        function displayScanResult(decodedText) {
+            activeScannedResult = decodedText.trim();
+            const resultCard = document.getElementById("scanResultCard");
+            const textDisplay = document.getElementById("decodedTextDisplay");
+            const openLinkBtn = document.getElementById("openLinkBtn");
+
+            textDisplay.innerText = activeScannedResult;
+            resultCard.style.display = "block";
+
+            // Show 'Open Link' button only if it is a valid web URL
+            if (activeScannedResult.startsWith("http://") || 
+                activeScannedResult.startsWith("https://") || 
+                activeScannedResult.toLowerCase().startsWith("www.")) {
+                openLinkBtn.style.display = "inline-block";
+            } else {
+                openLinkBtn.style.display = "none";
+            }
         }
 
-        // 1. Camera se scan karne ka setup
-        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, 
-            (decodedText) => { handleSuccessfulScan(decodedText); },
-            (errorMessage) => { /* Ignore background errors */ }
-        ).catch(err => { console.log("Camera access denied ya camera nahi hai."); });
+        function openScannedLink() {
+            if (!activeScannedResult) return;
+            let url = activeScannedResult;
+            if (url.toLowerCase().startsWith("www.")) {
+                url = "https://" + url;
+            }
+            window.open(url, "_blank");
+        }
 
-        // 2. Photo upload karke scan karne ka setup
-        const fileInput = document.getElementById('qr-input-file');
-        fileInput.addEventListener('change', e => {
-            if (e.target.files.length == 0) return;
+        function copyScannedText() {
+            if (!activeScannedResult) {
+                alert("No scanned text available to copy.");
+                return;
+            }
+            navigator.clipboard.writeText(activeScannedResult)
+                .then(() => alert("Scanned content copied to clipboard successfully."))
+                .catch(() => alert("Failed to copy text. Please copy manually."));
+        }
+
+        function startCameraScanner() {
+            document.getElementById("startCamBtn").style.display = "none";
+            document.getElementById("stopCamBtn").style.display = "inline-block";
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 220 },
+                (decodedText) => {
+                    displayScanResult(decodedText);
+                    stopCameraScanner();
+                },
+                (error) => { /* Ignore background scanning stream errors */ }
+            ).catch((err) => {
+                console.warn("Camera error:", err);
+                alert("Unable to access the device camera. Please verify camera permissions or use the file upload option.");
+                stopCameraScanner();
+            });
+        }
+
+        function stopCameraScanner() {
+            if (html5QrCode.isScanning) {
+                html5QrCode.stop().catch((err) => console.error("Scanner stop error:", err));
+            }
+            document.getElementById("startCamBtn").style.display = "inline-block";
+            document.getElementById("stopCamBtn").style.display = "none";
+        }
+
+        // File upload event listener
+        document.getElementById("qr-input-file").addEventListener("change", (e) => {
+            if (e.target.files.length === 0) return;
             
             const imageFile = e.target.files[0];
             html5QrCode.scanFile(imageFile, true)
-                .then(decodedText => {
-                    handleSuccessfulScan(decodedText);
+                .then((decodedText) => {
+                    displayScanResult(decodedText);
                 })
-                .catch(err => {
-                    alert("Is photo mein koi valid QR code nahi mila!");
+                .catch((err) => {
+                    alert("No valid QR code detected in the uploaded image. Please ensure the image is clear and try again.");
                 });
         });
     </script>
