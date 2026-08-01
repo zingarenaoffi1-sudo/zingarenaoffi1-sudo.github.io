@@ -1,5 +1,5 @@
 <!-- ==========================================================================
-     FEATURE: LIVE MARKDOWN & README FORMATTER (DOC MAKER PRO)
+     FEATURE: LIVE MARKDOWN & README FORMATTER (DOC MAKER PRO - FIXED EDITION)
      All-in-One: HTML + CSS + JS Merged (100% Professional Standard English)
      ========================================================================== -->
 
@@ -11,24 +11,27 @@
 
   <!-- Quick Formatting Toolbar -->
   <div class="toolbar">
-    <button type="button" onclick="insertSyntax('bold')" title="Bold"><b>B</b></button>
-    <button type="button" onclick="insertSyntax('italic')" title="Italic"><i>I</i></button>
-    <button type="button" onclick="insertSyntax('heading')" title="Heading"><b>H1</b></button>
+    <button type="button" onclick="insertSyntax('bold')" title="Bold (Ctrl+B)"><b>B</b></button>
+    <button type="button" onclick="insertSyntax('italic')" title="Italic (Ctrl+I)"><i>I</i></button>
+    <button type="button" onclick="insertSyntax('heading')" title="Heading 1"><b>H1</b></button>
     <button type="button" onclick="insertSyntax('code')" title="Code Block">&lt;/&gt;</button>
     <button type="button" onclick="insertSyntax('list')" title="Bullet List">• List</button>
     <button type="button" onclick="insertSyntax('link')" title="Insert Link">🔗 Link</button>
+    <button type="button" class="btn-sample" onclick="loadSampleTemplate()" title="Load demo markdown">💡 Load Sample</button>
   </div>
 
   <!-- Split Workspace: Input on Left, Live Preview on Right -->
   <div class="workspace-grid">
     <div class="editor-pane">
       <label class="pane-label">Markdown Input:</label>
-      <textarea id="markdownInput" class="markdown-editor" placeholder="Type your Markdown here (e.g., # Project Title)..." oninput="renderMarkdown()"></textarea>
+      <textarea id="markdownInput" class="markdown-editor" placeholder="Start typing your Markdown here (e.g., # Project Title)..." oninput="renderMarkdown()"></textarea>
     </div>
 
     <div class="preview-pane">
       <label class="pane-label">Live Document Preview:</label>
-      <div id="markdownPreview" class="markdown-preview"></div>
+      <div id="markdownPreview" class="markdown-preview">
+        <div class="empty-state-text">📄 Live document preview will appear here as you type...</div>
+      </div>
     </div>
   </div>
 
@@ -52,6 +55,9 @@
 
 <!-- ================= STYLE (CSS) ================= -->
 <style>
+  * {
+    box-sizing: border-box;
+  }
   .docmaker-container {
     max-width: 950px;
     margin: 20px auto;
@@ -91,9 +97,10 @@
     border: 1px solid #e9ecef;
     border-radius: 6px;
     margin-bottom: 14px;
+    align-items: center;
   }
   .docmaker-container .toolbar button {
-    padding: 6px 12px;
+    padding: 6px 14px;
     font-size: 13px;
     background: #ffffff;
     border: 1px solid #ccc;
@@ -107,6 +114,17 @@
     background: #0066cc;
     color: #ffffff;
     border-color: #0066cc;
+  }
+  .docmaker-container .toolbar .btn-sample {
+    margin-left: auto;
+    background: #fffef0;
+    border-color: #f59e0b;
+    color: #b45309;
+  }
+  .docmaker-container .toolbar .btn-sample:hover {
+    background: #f59e0b;
+    color: #ffffff;
+    border-color: #f59e0b;
   }
   .docmaker-container .workspace-grid {
     display: flex;
@@ -135,11 +153,15 @@
     line-height: 1.5;
     border: 1px solid #ccc;
     border-radius: 6px;
-    box-sizing: border-box;
     font-family: 'Consolas', 'Courier New', monospace;
     resize: vertical;
     background: #0f172a;
     color: #f8fafc;
+    outline: none;
+  }
+  .docmaker-container .markdown-editor:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
   }
   .docmaker-container .markdown-preview {
     width: 100%;
@@ -149,12 +171,16 @@
     line-height: 1.6;
     border: 1px solid #ccc;
     border-radius: 6px;
-    box-sizing: border-box;
     overflow-y: auto;
     background: #ffffff;
     color: #222;
   }
-  /* --- Professional Markdown Preview Rendering --- */
+  .docmaker-container .empty-state-text {
+    color: #94a3b8;
+    font-style: italic;
+    text-align: center;
+    margin-top: 130px;
+  }
   .docmaker-container .markdown-preview h1,
   .docmaker-container .markdown-preview h2,
   .docmaker-container .markdown-preview h3 {
@@ -219,8 +245,87 @@
 
 <!-- ================= SCRIPT (JS) ================= -->
 <script>
-  // Default Sample Content on load
-  const defaultSample = `# Welcome to DocMaker Pro 🚀
+  function renderMarkdown() {
+    const rawText = document.getElementById("markdownInput").value;
+    const previewBox = document.getElementById("markdownPreview");
+    
+    if (!rawText.trim()) {
+      previewBox.innerHTML = '<div class="empty-state-text">📄 Live document preview will appear here as you type...</div>';
+    } else if (typeof marked !== "undefined") {
+      previewBox.innerHTML = marked.parse(rawText);
+    } else {
+      previewBox.innerHTML = "<p>Error: Unable to load Markdown parser library.</p>";
+    }
+
+    updateStats(rawText);
+  }
+
+  function insertSyntax(type) {
+    const textarea = document.getElementById("markdownInput");
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    let replacement = "";
+    let cursorOffset = 0;
+
+    // Smart syntax insertion without dummy words
+    switch (type) {
+      case "bold":
+        if (selectedText) {
+          replacement = `**${selectedText}**`;
+          cursorOffset = replacement.length;
+        } else {
+          replacement = `****`;
+          cursorOffset = 2; // Places blinking cursor inside **|**
+        }
+        break;
+      case "italic":
+        if (selectedText) {
+          replacement = `*${selectedText}*`;
+          cursorOffset = replacement.length;
+        } else {
+          replacement = `**`;
+          cursorOffset = 1; // Places blinking cursor inside *|*
+        }
+        break;
+      case "heading":
+        replacement = `# ${selectedText}`;
+        cursorOffset = replacement.length;
+        break;
+      case "code":
+        if (selectedText) {
+          replacement = `\n\`\`\`\n${selectedText}\n\`\`\`\n`;
+          cursorOffset = replacement.length;
+        } else {
+          replacement = `\n\`\`\`\n\n\`\`\`\n`;
+          cursorOffset = 5; // Places cursor inside code block
+        }
+        break;
+      case "list":
+        replacement = `\n* ${selectedText}`;
+        cursorOffset = replacement.length;
+        break;
+      case "link":
+        if (selectedText) {
+          replacement = `[${selectedText}](https://example.com)`;
+          cursorOffset = replacement.length;
+        } else {
+          replacement = `[](https://example.com)`;
+          cursorOffset = 1; // Places cursor inside []
+        }
+        break;
+    }
+
+    // Insert text and move cursor to exact correct typing position
+    textarea.setRangeText(replacement, start, end, "end");
+    textarea.selectionStart = start + cursorOffset;
+    textarea.selectionEnd = start + cursorOffset;
+    textarea.focus();
+    renderMarkdown();
+  }
+
+  function loadSampleTemplate() {
+    const sample = `# Welcome to DocMaker Pro 🚀
 
 An executive **Markdown & Readme Formatter** built for high-performance workflow.
 
@@ -236,54 +341,9 @@ function launchApp() {
 
 > *Type on the left to start formatting your document.*`;
 
-  // Initialize Default Text
-  document.getElementById("markdownInput").value = defaultSample;
-  renderMarkdown();
-
-  function renderMarkdown() {
-    const rawText = document.getElementById("markdownInput").value;
-    const previewBox = document.getElementById("markdownPreview");
-    
-    if (typeof marked !== "undefined") {
-      previewBox.innerHTML = marked.parse(rawText);
-    } else {
-      previewBox.innerHTML = "<p>Error loading Markdown parser library.</p>";
-    }
-
-    updateStats(rawText);
-  }
-
-  function insertSyntax(type) {
-    const textarea = document.getElementById("markdownInput");
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
-    let replacement = "";
-
-    switch (type) {
-      case "bold":
-        replacement = `**${selectedText || "bold text"}**`;
-        break;
-      case "italic":
-        replacement = `*${selectedText || "italic text"}*`;
-        break;
-      case "heading":
-        replacement = `\n# ${selectedText || "Heading Title"}\n`;
-        break;
-      case "code":
-        replacement = `\n\`\`\`\n${selectedText || "code block here"}\n\`\`\`\n`;
-        break;
-      case "list":
-        replacement = `\n* ${selectedText || "List item"}\n`;
-        break;
-      case "link":
-        replacement = `[${selectedText || "Link Title"}](https://example.com)`;
-        break;
-    }
-
-    textarea.setRangeText(replacement, start, end, "select");
-    textarea.focus();
+    document.getElementById("markdownInput").value = sample;
     renderMarkdown();
+    document.getElementById("docStatus").innerText = "Status: Sample template loaded.";
   }
 
   function copyRawMarkdown() {
@@ -293,18 +353,19 @@ function launchApp() {
       return;
     }
     navigator.clipboard.writeText(rawText)
-      .then(() => alert("Raw Markdown text copied to clipboard."))
+      .then(() => alert("Raw Markdown text copied to clipboard successfully."))
       .catch(() => alert("Unable to copy text automatically."));
   }
 
   function copyFormattedHTML() {
     const formattedHTML = document.getElementById("markdownPreview").innerHTML;
-    if (!formattedHTML) {
+    const rawText = document.getElementById("markdownInput").value.trim();
+    if (!rawText) {
       alert("No formatted content available to copy.");
       return;
     }
     navigator.clipboard.writeText(formattedHTML)
-      .then(() => alert("Formatted HTML code copied to clipboard."))
+      .then(() => alert("Formatted HTML code copied to clipboard successfully."))
       .catch(() => alert("Unable to copy HTML automatically."));
   }
 
