@@ -1,19 +1,19 @@
 <!-- ==========================================================================
-     FEATURE: IN-BROWSER SCREEN & AUDIO RECORDER (WEB STUDIO PRO)
+     FEATURE: IN-BROWSER SCREEN & AUDIO RECORDER (WITH DRAGGABLE FLOATING BADGE)
      All-in-One: HTML + CSS + JS Merged (100% Professional Standard English)
      ========================================================================== -->
 
 <div class="webstudio-container">
   <div class="tool-header">
     <span class="tool-badge">[ 🎥 Web Studio Pro ]</span>
-    <h3>Screen & Audio Recorder</h3>
+    <h3>Screen & Audio Recorder (Full Device Support)</h3>
   </div>
 
   <div class="control-row">
     <label for="recordingMode">Select Recording Mode:</label>
     <select id="recordingMode" class="mode-select" onchange="resetStudio()">
-      <option value="screen">Screen Capture + Audio (Video `.webm`)</option>
-      <option value="audio">Microphone Only (Audio `.webm`)</option>
+      <option value="screen">Entire Device Screen + Audio (`.webm`)</option>
+      <option value="audio">Microphone Voice Only (`.webm`)</option>
     </select>
   </div>
 
@@ -22,7 +22,7 @@
     <video id="previewPlayer" autoplay muted playsinline controls style="display: none;"></video>
     <div id="placeholderText" class="placeholder-text">
       <span>🖥️ Media Preview Window</span>
-      <p>Click "Start Recording" to capture your screen or microphone.</p>
+      <p>Click "Start Recording" and select "Entire Screen" to capture your whole device.</p>
     </div>
   </div>
 
@@ -40,6 +40,14 @@
   </div>
 </div>
 
+<!-- ================= DRAGGABLE FLOATING CONTROL BADGE ================= -->
+<div id="floatingBadge" class="floating-badge" style="display: none;">
+  <div class="drag-handle" title="Drag to reposition">⠿</div>
+  <span class="pulse-icon">🔴</span>
+  <span id="floatTimer" class="float-timer">00:00</span>
+  <button onclick="stopRecording()" class="float-stop-btn">⏹️ Stop</button>
+</div>
+
 <!-- ================= STYLE (CSS) ================= -->
 <style>
   .webstudio-container {
@@ -52,6 +60,7 @@
     padding: 22px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
     color: #333;
+    position: relative;
   }
   .webstudio-container .tool-header {
     display: flex;
@@ -97,7 +106,6 @@
     overflow: hidden;
     margin-bottom: 14px;
     border: 1px solid #334155;
-    position: relative;
   }
   .webstudio-container video {
     width: 100%;
@@ -157,21 +165,66 @@
     transition: all 0.2s;
   }
   .webstudio-container .btn-primary { background: #0066cc; color: #fff; }
-  .webstudio-container .btn-primary:hover { background: #0052a3; }
-  
   .webstudio-container .btn-danger { background: #dc3545; color: #fff; }
-  .webstudio-container .btn-danger:hover { background: #c82333; }
-  
   .webstudio-container .btn-success { background: #28a745; color: #fff; }
-  .webstudio-container .btn-success:hover { background: #218838; }
-  
   .webstudio-container .btn-outline { background: transparent; border: 1px solid #ccc; color: #333; }
-  .webstudio-container .btn-outline:hover { background: #f8f9fa; }
-  
   .webstudio-container .btn:disabled {
     background: #cccccc;
     cursor: not-allowed;
     opacity: 0.7;
+  }
+
+  /* --- FLOATING CONTROL BADGE STYLING --- */
+  .floating-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999999;
+    background: #0f172a;
+    color: #ffffff;
+    border: 2px solid #38bdf8;
+    border-radius: 50px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+  }
+  .floating-badge .drag-handle {
+    color: #94a3b8;
+    cursor: grab;
+    font-size: 16px;
+    padding-right: 4px;
+  }
+  .floating-badge .pulse-icon {
+    font-size: 12px;
+    animation: pulse 1s infinite alternate;
+  }
+  .floating-badge .float-timer {
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+  .floating-badge .float-stop-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .floating-badge .float-stop-btn:hover {
+    background: #b91c1c;
+  }
+  @keyframes pulse {
+    0% { opacity: 1; }
+    100% { opacity: 0.3; }
   }
 </style>
 
@@ -186,10 +239,12 @@
   const previewPlayer = document.getElementById("previewPlayer");
   const placeholderText = document.getElementById("placeholderText");
   const timerDisplay = document.getElementById("recordingTimer");
+  const floatTimer = document.getElementById("floatTimer");
   const statusText = document.getElementById("studioStatus");
   const startBtn = document.getElementById("startRecBtn");
   const stopBtn = document.getElementById("stopRecBtn");
   const downloadBtn = document.getElementById("downloadRecBtn");
+  const floatingBadge = document.getElementById("floatingBadge");
 
   async function startRecording() {
     const mode = document.getElementById("recordingMode").value;
@@ -203,22 +258,20 @@
 
     try {
       if (mode === "screen") {
-        // Capture Screen + System/Mic Audio
+        // Prompts user -> select 'Entire Screen' to record all apps
         mediaStream = await navigator.mediaDevices.getDisplayMedia({
-          video: true,
+          video: { cursor: "always" },
           audio: true
         });
       } else {
-        // Capture Microphone Audio Only
         mediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
           video: false
         });
       }
 
-      // Show live stream in preview player
       previewPlayer.srcObject = mediaStream;
-      previewPlayer.muted = true; // Mute locally to prevent feedback loop
+      previewPlayer.muted = true;
       previewPlayer.style.display = "block";
       placeholderText.style.display = "none";
 
@@ -234,7 +287,6 @@
         handleRecordingStop();
       };
 
-      // Handle user clicking "Stop sharing" directly from browser bar
       mediaStream.getTracks().forEach(track => {
         track.onended = () => {
           if (mediaRecorder && mediaRecorder.state === "recording") {
@@ -246,10 +298,13 @@
       mediaRecorder.start();
       startTimer();
 
+      // Show Floating Draggable Control Badge
+      floatingBadge.style.display = "flex";
+
       startBtn.disabled = true;
       stopBtn.disabled = false;
       downloadBtn.disabled = true;
-      statusText.innerText = "Status: Recording in progress...";
+      statusText.innerText = "Status: Recording active. Use floating badge to stop.";
 
     } catch (error) {
       console.warn("Recording permission canceled or denied:", error);
@@ -265,17 +320,17 @@
       mediaStream.getTracks().forEach(track => track.stop());
     }
     stopTimer();
+    floatingBadge.style.display = "none";
     startBtn.disabled = false;
     stopBtn.disabled = true;
   }
 
   function handleRecordingStop() {
     const mode = document.getElementById("recordingMode").value;
-    const fileType = mode === "screen" ? "video/webm" : "audio/webm";
+    const fileType = "video/webm";
     const recordedBlob = new Blob(recordedChunks, { type: fileType });
     const recordingUrl = URL.createObjectURL(recordedBlob);
 
-    // Show recorded result in player for immediate replay
     previewPlayer.srcObject = null;
     previewPlayer.src = recordingUrl;
     previewPlayer.muted = false;
@@ -291,13 +346,8 @@
       return;
     }
 
-    const mode = document.getElementById("recordingMode").value;
-    const fileExtension = mode === "screen" ? ".webm" : ".webm";
-    const fileName = (mode === "screen" ? "Screen_Capture_" : "Audio_Recording_") + 
-                     new Date().toISOString().slice(0, 10) + fileExtension;
-
-    const fileType = mode === "screen" ? "video/webm" : "audio/webm";
-    const blob = new Blob(recordedChunks, { type: fileType });
+    const fileName = "ZingArena_Recording_" + new Date().toISOString().slice(0, 10) + ".webm";
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
     const downloadUrl = URL.createObjectURL(blob);
 
     const anchor = document.createElement("a");
@@ -317,6 +367,7 @@
       const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
       const secs = String(secondsElapsed % 60).padStart(2, "0");
       timerDisplay.innerText = `${mins}:${secs}`;
+      floatTimer.innerText = `${mins}:${secs}`;
     }, 1000);
   }
 
@@ -325,15 +376,10 @@
   }
 
   function resetStudio() {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-    }
-    if (mediaStream) {
-      mediaStream.getTracks().forEach(track => track.stop());
-    }
-    stopTimer();
+    stopRecording();
     secondsElapsed = 0;
     timerDisplay.innerText = "00:00";
+    floatTimer.innerText = "00:00";
     recordedChunks = [];
 
     previewPlayer.srcObject = null;
@@ -345,5 +391,54 @@
     stopBtn.disabled = true;
     downloadBtn.disabled = true;
     statusText.innerText = "Status: Ready to Record";
+  }
+
+  /* ==========================================================================
+     DRAGGABLE FLOATING BADGE LOGIC (SUPPORTS BOTH MOUSE & TOUCH/MOBILE)
+     ========================================================================== */
+  let isDragging = false;
+  let startX, startY, initialLeft, initialTop;
+
+  floatingBadge.addEventListener("mousedown", startDrag);
+  floatingBadge.addEventListener("touchstart", startDrag, { passive: false });
+
+  document.addEventListener("mousemove", drag);
+  document.addEventListener("touchmove", drag, { passive: false });
+
+  document.addEventListener("mouseup", stopDrag);
+  document.addEventListener("touchend", stopDrag);
+
+  function startDrag(e) {
+    // Only drag if not clicking the stop button directly
+    if (e.target.tagName.toLowerCase() === "button") return;
+    
+    isDragging = true;
+    const event = e.type === "touchstart" ? e.touches[0] : e;
+    startX = event.clientX;
+    startY = event.clientY;
+    
+    const rect = floatingBadge.getBoundingClientRect();
+    initialLeft = rect.left;
+    initialTop = rect.top;
+
+    floatingBadge.style.right = "auto";
+    floatingBadge.style.bottom = "auto";
+    floatingBadge.style.left = initialLeft + "px";
+    floatingBadge.style.top = initialTop + "px";
+  }
+
+  function drag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const event = e.type === "touchmove" ? e.touches[0] : e;
+    const dx = event.clientX - startX;
+    const dy = event.clientY - startY;
+
+    floatingBadge.style.left = (initialLeft + dx) + "px";
+    floatingBadge.style.top = (initialTop + dy) + "px";
+  }
+
+  function stopDrag() {
+    isDragging = false;
   }
 </script>
