@@ -1,173 +1,285 @@
 <!-- ==========================================================================
-     FEATURE 1: SPEECH TO TEXT CONVERTER (VOICEPAD)
-     All-in-One: HTML + CSS + JS Merged
+     FEATURE 1: SPEECH TO TEXT NOTE MAKER (VOICEPAD PRO - MAX UPGRADE)
+     All-in-One: HTML + CSS + JS Merged (18+ Languages, .TXT Export & Stats)
      ========================================================================== -->
 
-<div class="voicepad-tool-container">
+<div class="voicepad-pro-container">
   <div class="tool-header">
-    <span class="tool-badge">[ 🎙️ VoicePad ]</span>
-    <h3>Speech to Text Converter</h3>
+    <span class="tool-badge">[ 🎙️ VoicePad Pro ]</span>
+    <h3>Speech to Text Note Maker</h3>
   </div>
   
   <div class="control-row">
-    <label for="sttLang">Select Language:</label>
-    <select id="sttLang" class="lang-select">
-      <option value="en-IN">English (India)</option>
-      <option value="hi-IN">Hindi (भारत)</option>
+    <label for="sttLangSelect">Select Spoken Language:</label>
+    <select id="sttLangSelect" class="lang-select">
+      <!-- Indian Languages -->
+      <option value="en-IN" selected>English (India)</option>
+      <option value="hi-IN">Hindi - भारत (हिंदी)</option>
+      <option value="bn-IN">Bengali (বাংলা)</option>
+      <option value="ta-IN">Tamil (தமிழ்)</option>
+      <option value="te-IN">Telugu (తెలుగు)</option>
+      <option value="mr-IN">Marathi (मराठी)</option>
+      <option value="gu-IN">Gujarati (ગુજરાતી)</option>
+      <option value="ur-IN">Urdu (اردو)</option>
+      <!-- International Languages -->
       <option value="en-US">English (US)</option>
+      <option value="en-GB">English (UK)</option>
+      <option value="es-ES">Spanish (Español)</option>
+      <option value="fr-FR">French (Français)</option>
+      <option value="de-DE">German (Deutsch)</option>
+      <option value="ja-JP">Japanese (日本語)</option>
+      <option value="ko-KR">Korean (한국어)</option>
+      <option value="ru-RU">Russian (Русский)</option>
+      <option value="ar-SA">Arabic (العربية)</option>
+      <option value="it-IT">Italian (Italiano)</option>
+      <option value="pt-BR">Portuguese (Português)</option>
     </select>
   </div>
 
-  <textarea id="sttOutput" class="text-box" placeholder="Click 'Start Microphone' and begin speaking..." rows="5"></textarea>
+  <textarea id="sttOutputBox" class="text-box" placeholder="Click 'Start Microphone' and speak clearly into your device..." rows="6" oninput="updateTextStats()"></textarea>
 
-  <div class="button-group">
-    <button id="startSttBtn" class="btn btn-primary" onclick="startSpeechToText()">🎤 Start Microphone</button>
-    <button id="stopSttBtn" class="btn btn-danger" onclick="stopSpeechToText()" disabled>🛑 Stop</button>
-    <button class="btn btn-secondary" onclick="copySttText()">📋 Copy Text</button>
-    <button class="btn btn-outline" onclick="clearSttText()">🗑️ Clear</button>
+  <!-- Live Word & Character Counter Bar -->
+  <div class="stats-bar">
+    <span>Words: <strong id="wordCount">0</strong></span>
+    <span>Characters: <strong id="charCount">0</strong></span>
   </div>
 
-  <p id="sttStatus" class="status-text">Status: Ready</p>
+  <div class="button-group">
+    <button id="startSttBtn" class="btn btn-primary" onclick="startSpeechRecognition()">🎤 Start Microphone</button>
+    <button id="stopSttBtn" class="btn btn-danger" onclick="stopSpeechRecognition()" disabled>⏹️ Stop</button>
+    <button class="btn btn-secondary" onclick="copyRecognizedText()">📋 Copy Text</button>
+    <button class="btn btn-success" onclick="downloadTextFile()">💾 Save as .TXT</button>
+    <button class="btn btn-outline" onclick="clearRecognizedText()">🗑️ Clear</button>
+  </div>
+
+  <p id="sttStatusText" class="status-text">Status: Ready</p>
 </div>
 
 <!-- ================= STYLE (CSS) ================= -->
 <style>
-  .voicepad-tool-container {
-    max-width: 600px;
+  .voicepad-pro-container {
+    max-width: 650px;
     margin: 20px auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 22px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    color: #333;
   }
-  .voicepad-tool-container .tool-header {
+  .voicepad-pro-container .tool-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
   }
-  .voicepad-tool-container .tool-badge {
-    background: #f0f4f8;
+  .voicepad-pro-container .tool-badge {
+    background: #eef6ff;
     color: #0066cc;
     font-size: 13px;
-    font-weight: bold;
-    padding: 4px 8px;
+    font-weight: 700;
+    padding: 5px 10px;
     border-radius: 4px;
   }
-  .voicepad-tool-container h3 {
+  .voicepad-pro-container h3 {
     margin: 0;
-    font-size: 18px;
-    color: #333;
+    font-size: 19px;
+    color: #222;
   }
-  .voicepad-tool-container .control-row {
-    margin-bottom: 12px;
+  .voicepad-pro-container .control-row {
+    margin-bottom: 14px;
+    font-size: 14px;
     color: #444;
   }
-  .voicepad-tool-container .lang-select {
-    padding: 6px 10px;
+  .voicepad-pro-container .lang-select {
+    padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 14px;
     margin-left: 8px;
+    width: 60%;
+    background: #fff;
   }
-  .voicepad-tool-container .text-box {
+  .voicepad-pro-container .text-box {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     font-size: 15px;
+    line-height: 1.5;
     border: 1px solid #ccc;
     border-radius: 6px;
     box-sizing: border-box;
     resize: vertical;
+    font-family: inherit;
   }
-  .voicepad-tool-container .button-group {
-    margin-top: 12px;
+  .voicepad-pro-container .text-box:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.15);
+  }
+  .voicepad-pro-container .stats-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    padding-right: 4px;
+  }
+  .voicepad-pro-container .button-group {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
   }
-  .voicepad-tool-container .btn {
-    padding: 8px 16px;
+  .voicepad-pro-container .btn {
+    padding: 9px 16px;
     font-size: 14px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 500;
+    transition: all 0.2s;
   }
-  .voicepad-tool-container .btn-primary { background: #0066cc; color: #fff; }
-  .voicepad-tool-container .btn-danger { background: #dc3545; color: #fff; }
-  .voicepad-tool-container .btn-secondary { background: #6c757d; color: #fff; }
-  .voicepad-tool-container .btn-outline { background: transparent; border: 1px solid #ccc; color: #333; }
-  .voicepad-tool-container .btn:disabled { background: #cccccc; cursor: not-allowed; }
-  .voicepad-tool-container .status-text {
+  .voicepad-pro-container .btn-primary { background: #0066cc; color: #fff; }
+  .voicepad-pro-container .btn-primary:hover { background: #0052a3; }
+  
+  .voicepad-pro-container .btn-danger { background: #dc3545; color: #fff; }
+  .voicepad-pro-container .btn-danger:hover { background: #c82333; }
+  
+  .voicepad-pro-container .btn-secondary { background: #6c757d; color: #fff; }
+  .voicepad-pro-container .btn-secondary:hover { background: #5a6268; }
+  
+  .voicepad-pro-container .btn-success { background: #28a745; color: #fff; }
+  .voicepad-pro-container .btn-success:hover { background: #218838; }
+  
+  .voicepad-pro-container .btn-outline { background: transparent; border: 1px solid #ccc; color: #333; }
+  .voicepad-pro-container .btn-outline:hover { background: #f8f9fa; }
+  
+  .voicepad-pro-container .btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .voicepad-pro-container .status-text {
     font-size: 13px;
-    color: #666;
-    margin-top: 10px;
+    color: #555;
+    margin-top: 14px;
     margin-bottom: 0;
+    font-weight: 500;
   }
 </style>
 
 <!-- ================= SCRIPT (JS) ================= -->
 <script>
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let sttRecognition = null;
+  const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognitionEngine = null;
+  let isListening = false;
 
-  if (SpeechRecognition) {
-    sttRecognition = new SpeechRecognition();
-    sttRecognition.continuous = true;
-    sttRecognition.interimResults = true;
+  if (SpeechRecognitionAPI) {
+    recognitionEngine = new SpeechRecognitionAPI();
+    recognitionEngine.continuous = true;
+    recognitionEngine.interimResults = true;
   }
 
-  function startSpeechToText() {
-    if (!sttRecognition) {
+  function startSpeechRecognition() {
+    if (!recognitionEngine) {
       alert("Speech recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge.");
       return;
     }
 
-    const langSelect = document.getElementById("sttLang").value;
-    sttRecognition.lang = langSelect;
+    const selectedLang = document.getElementById("sttLangSelect").value;
+    recognitionEngine.lang = selectedLang;
 
-    sttRecognition.start();
-    document.getElementById("startSttBtn").disabled = true;
-    document.getElementById("stopSttBtn").disabled = false;
-    document.getElementById("sttStatus").innerText = "Status: Listening... Please speak now.";
+    try {
+      recognitionEngine.start();
+      isListening = true;
+      document.getElementById("startSttBtn").disabled = true;
+      document.getElementById("stopSttBtn").disabled = false;
+      document.getElementById("sttStatusText").innerText = "Status: Microphone active. Listening for speech...";
+    } catch (e) {
+      console.warn("Recognition already running:", e);
+    }
 
-    sttRecognition.onresult = (event) => {
-      let transcript = "";
+    recognitionEngine.onresult = (event) => {
+      let finalTranscript = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
+        finalTranscript += event.results[i][0].transcript;
       }
-      document.getElementById("sttOutput").value = transcript;
+      
+      const textBox = document.getElementById("sttOutputBox");
+      // Append new text to existing text if needed, or update dynamically
+      textBox.value = finalTranscript;
+      updateTextStats();
     };
 
-    sttRecognition.onerror = (event) => {
-      document.getElementById("sttStatus").innerText = "Error occurred: " + event.error;
-      stopSpeechToText();
+    recognitionEngine.onerror = (event) => {
+      console.error("Speech Recognition Error:", event.error);
+      document.getElementById("sttStatusText").innerText = "Status: Recognition error (" + event.error + "). Please check microphone permissions.";
+      resetSpeechButtons();
+    };
+
+    recognitionEngine.onend = () => {
+      if (isListening) {
+        // Auto-restart if browser stops recognition silently
+        try { recognitionEngine.start(); } catch(e) {}
+      } else {
+        resetSpeechButtons();
+      }
     };
   }
 
-  function stopSpeechToText() {
-    if (sttRecognition) {
-      sttRecognition.stop();
+  function stopSpeechRecognition() {
+    isListening = false;
+    if (recognitionEngine) {
+      recognitionEngine.stop();
     }
+    resetSpeechButtons();
+    document.getElementById("sttStatusText").innerText = "Status: Microphone paused.";
+  }
+
+  function resetSpeechButtons() {
     document.getElementById("startSttBtn").disabled = false;
     document.getElementById("stopSttBtn").disabled = true;
-    document.getElementById("sttStatus").innerText = "Status: Stopped.";
   }
 
-  function copySttText() {
-    const textBox = document.getElementById("sttOutput");
+  function copyRecognizedText() {
+    const textBox = document.getElementById("sttOutputBox");
     if (!textBox.value.trim()) {
       alert("No text available to copy.");
       return;
     }
     textBox.select();
     document.execCommand("copy");
-    alert("Text copied to clipboard.");
+    alert("Text successfully copied to clipboard.");
   }
 
-  function clearSttText() {
-    document.getElementById("sttOutput").value = "";
+  function downloadTextFile() {
+    const textContent = document.getElementById("sttOutputBox").value.trim();
+    if (!textContent) {
+      alert("No text available to save. Please speak or type some notes first.");
+      return;
+    }
+    const blob = new Blob([textContent], { type: "text/plain;charset=utf-8" });
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = "VoicePad_Notes_" + new Date().toISOString().slice(0, 10) + ".txt";
+    downloadLink.click();
+    document.getElementById("sttStatusText").innerText = "Status: Note saved as TXT file successfully.";
+  }
+
+  function clearRecognizedText() {
+    document.getElementById("sttOutputBox").value = "";
+    updateTextStats();
+    document.getElementById("sttStatusText").innerText = "Status: Text cleared. Ready.";
+  }
+
+  function updateTextStats() {
+    const text = document.getElementById("sttOutputBox").value.trim();
+    const charCount = text.length;
+    const wordCount = text === "" ? 0 : text.split(/\s+/).length;
+    
+    document.getElementById("charCount").innerText = charCount;
+    document.getElementById("wordCount").innerText = wordCount;
   }
 </script>
