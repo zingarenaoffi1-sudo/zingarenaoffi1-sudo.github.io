@@ -1,0 +1,461 @@
+<!-- ==========================================================================
+     FEATURE: PHOTOSTUDIO PRO (IMAGE RESIZER, ROTATOR & WATERMARK SUITE)
+     All-in-One: HTML + CSS + JS Merged (100% Professional Standard English)
+     ========================================================================== -->
+
+<div class="photostudio-container">
+  <div class="tool-header">
+    <span class="tool-badge">[ 🖼️ PhotoStudio Pro ]</span>
+    <h3>Image Resizer, Rotator & Watermark Suite</h3>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="upload-section">
+    <label for="imageLoader" class="upload-label">📁 Choose or Drop Image File:</label>
+    <input type="file" id="imageLoader" accept="image/*" class="file-input">
+  </div>
+
+  <!-- Editing Control Panel (Hidden until image is loaded) -->
+  <div id="controlPanel" class="control-panel" style="display: none;">
+    <!-- Resize Controls -->
+    <div class="control-group">
+      <h4>1. Resize Dimensions (Pixels)</h4>
+      <div class="dimension-row">
+        <div>
+          <label for="imgWidth">Width (px):</label>
+          <input type="number" id="imgWidth" min="10" max="8000" oninput="applyEdits()">
+        </div>
+        <div>
+          <label for="imgHeight">Height (px):</label>
+          <input type="number" id="imgHeight" min="10" max="8000" oninput="applyEdits()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Rotate Controls -->
+    <div class="control-group">
+      <h4>2. Rotate Image</h4>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" onclick="rotateImage(-90)">↺ Rotate Left (-90°)</button>
+        <button type="button" class="btn btn-outline" onclick="rotateImage(90)">↻ Rotate Right (+90°)</button>
+      </div>
+    </div>
+
+    <!-- Watermark Controls -->
+    <div class="control-group">
+      <h4>3. Custom Text Watermark</h4>
+      <div class="watermark-row">
+        <input type="text" id="watermarkText" placeholder="Enter watermark text (e.g., © Zing Arena)" oninput="applyEdits()">
+        <select id="watermarkColor" onchange="applyEdits()">
+          <option value="#ffffff">White</option>
+          <option value="#000000">Black</option>
+          <option value="#ffcc00">Yellow</option>
+          <option value="#ff3333">Red</option>
+        </select>
+        <select id="watermarkPos" onchange="applyEdits()">
+          <option value="bottom-right">Bottom Right</option>
+          <option value="center">Center</option>
+          <option value="top-left">Top Left</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas Preview Section -->
+  <div class="preview-box">
+    <div id="placeholderText" class="placeholder-text">
+      <span>🖼️ Preview Canvas Empty</span>
+      <p>Please upload an image file above to begin editing.</p>
+    </div>
+    <canvas id="photoCanvas" style="display: none;"></canvas>
+  </div>
+
+  <!-- Stats & Status Bar -->
+  <div class="status-bar">
+    <span id="dimensionStats" class="stats-text">Dimensions: 0 x 0 px</span>
+    <span id="studioStatus" class="status-text">Status: Waiting for Image</span>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="button-group">
+    <button id="downloadBtn" class="btn btn-success" onclick="downloadEditedImage()" disabled>💾 Download Edited PNG</button>
+    <button id="resetBtn" class="btn btn-secondary" onclick="resetToOriginal()" disabled>↺ Reset Edits</button>
+    <button class="btn btn-outline" onclick="clearStudio()">🗑️ Clear Studio</button>
+  </div>
+</div>
+
+<!-- ================= STYLE (CSS) ================= -->
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  .photostudio-container {
+    max-width: 850px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    color: #333;
+  }
+  .photostudio-container .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .photostudio-container .tool-badge {
+    background: #eef6ff;
+    color: #0066cc;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  .photostudio-container h3 {
+    margin: 0;
+    font-size: 19px;
+    color: #222;
+  }
+  .photostudio-container .upload-section {
+    background: #f8f9fa;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .photostudio-container .upload-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 8px;
+  }
+  .photostudio-container .file-input {
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+  }
+  .photostudio-container .control-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    background: #f8fafc;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+  .photostudio-container .control-group {
+    flex: 1 1 240px;
+  }
+  .photostudio-container .control-group h4 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #0f172a;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 4px;
+  }
+  .photostudio-container .dimension-row {
+    display: flex;
+    gap: 10px;
+  }
+  .photostudio-container .dimension-row div {
+    flex: 1;
+  }
+  .photostudio-container label {
+    font-size: 12px;
+    color: #64748b;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .photostudio-container input[type="number"],
+  .photostudio-container input[type="text"],
+  .photostudio-container select {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    outline: none;
+  }
+  .photostudio-container input:focus,
+  .photostudio-container select:focus {
+    border-color: #0066cc;
+  }
+  .photostudio-container .btn-row {
+    display: flex;
+    gap: 8px;
+  }
+  .photostudio-container .watermark-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .photostudio-container .watermark-row input {
+    flex: 2 1 150px;
+  }
+  .photostudio-container .watermark-row select {
+    flex: 1 1 80px;
+  }
+  .photostudio-container .preview-box {
+    width: 100%;
+    min-height: 280px;
+    max-height: 480px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    margin-bottom: 14px;
+    padding: 10px;
+  }
+  .photostudio-container canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  .photostudio-container .placeholder-text {
+    text-align: center;
+    color: #94a3b8;
+    padding: 20px;
+  }
+  .photostudio-container .placeholder-text span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #cbd5e1;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .photostudio-container .placeholder-text p {
+    font-size: 13px;
+    margin: 0;
+  }
+  .photostudio-container .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 16px;
+  }
+  .photostudio-container .stats-text,
+  .photostudio-container .status-text {
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+  }
+  .photostudio-container .button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .photostudio-container .btn {
+    padding: 10px 18px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .photostudio-container .btn-success { background: #28a745; color: #fff; }
+  .photostudio-container .btn-success:hover { background: #218838; }
+  
+  .photostudio-container .btn-secondary { background: #475569; color: #fff; }
+  .photostudio-container .btn-secondary:hover { background: #334155; }
+
+  .photostudio-container .btn-outline { background: transparent; border: 1px solid #ccc; color: #333; }
+  .photostudio-container .btn-outline:hover { background: #f8f9fa; }
+
+  .photostudio-container .btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+</style>
+
+<!-- ================= SCRIPT (JS) ================= -->
+<script>
+  let loadedImage = null;
+  let currentRotation = 0; // 0, 90, 180, 270 degrees
+  let originalWidth = 0;
+  let originalHeight = 0;
+
+  const fileInput = document.getElementById("imageLoader");
+  const controlPanel = document.getElementById("controlPanel");
+  const placeholderText = document.getElementById("placeholderText");
+  const canvas = document.getElementById("photoCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const widthInput = document.getElementById("imgWidth");
+  const heightInput = document.getElementById("imgHeight");
+  const dimStats = document.getElementById("dimensionStats");
+  const statusText = document.getElementById("studioStatus");
+
+  const downloadBtn = document.getElementById("downloadBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  fileInput.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      loadedImage = new Image();
+      loadedImage.onload = function() {
+        originalWidth = loadedImage.width;
+        originalHeight = loadedImage.height;
+        currentRotation = 0;
+
+        // Set default values in input boxes
+        widthInput.value = originalWidth;
+        heightInput.value = originalHeight;
+
+        // Reveal controls & preview
+        controlPanel.style.display = "flex";
+        placeholderText.style.display = "none";
+        canvas.style.display = "block";
+
+        downloadBtn.disabled = false;
+        resetBtn.disabled = false;
+
+        applyEdits();
+        statusText.innerText = "Status: Image loaded successfully.";
+      };
+      loadedImage.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function rotateImage(deg) {
+    if (!loadedImage) return;
+    currentRotation = (currentRotation + deg + 360) % 360;
+
+    // Swap width and height inputs if rotated 90 or 270 degrees
+    const currentWidth = parseInt(widthInput.value);
+    const currentHeight = parseInt(heightInput.value);
+    widthInput.value = currentHeight;
+    heightInput.value = currentWidth;
+
+    applyEdits();
+    statusText.innerText = `Status: Rotated to ${currentRotation}°`;
+  }
+
+  function applyEdits() {
+    if (!loadedImage) return;
+
+    const targetWidth = Math.max(10, parseInt(widthInput.value) || originalWidth);
+    const targetHeight = Math.max(10, parseInt(heightInput.value) || originalHeight);
+
+    // Set Canvas size based on active dimensions
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+
+    ctx.save();
+
+    // Handle rotation coordinates
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate((currentRotation * Math.PI) / 180);
+
+    // If rotated by 90 or 270, swap drawing boundaries
+    if (currentRotation === 90 || currentRotation === 270) {
+      ctx.drawImage(loadedImage, -targetHeight / 2, -targetWidth / 2, targetHeight, targetWidth);
+    } else {
+      ctx.drawImage(loadedImage, -targetWidth / 2, -targetHeight / 2, targetWidth, targetHeight);
+    }
+    ctx.restore();
+
+    // Draw Watermark if text is provided
+    const wmText = document.getElementById("watermarkText").value.trim();
+    if (wmText) {
+      const wmColor = document.getElementById("watermarkColor").value;
+      const wmPos = document.getElementById("watermarkPos").value;
+
+      // Responsive font sizing based on photo width
+      const fontSize = Math.max(16, Math.floor(targetWidth / 25));
+      ctx.font = `bold ${fontSize}px 'Segoe UI', sans-serif`;
+      ctx.fillStyle = wmColor;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+      ctx.shadowBlur = 4;
+
+      const padding = Math.max(10, Math.floor(targetWidth / 40));
+      let x = padding;
+      let y = padding + fontSize;
+
+      const textMetrics = ctx.measureText(wmText);
+
+      if (wmPos === "bottom-right") {
+        x = canvas.width - textMetrics.width - padding;
+        y = canvas.height - padding;
+      } else if (wmPos === "center") {
+        x = (canvas.width - textMetrics.width) / 2;
+        y = canvas.height / 2;
+      } else if (wmPos === "top-left") {
+        x = padding;
+        y = padding + fontSize;
+      }
+
+      ctx.fillText(wmText, x, y);
+    }
+
+    dimStats.innerText = `Dimensions: ${canvas.width} x ${canvas.height} px`;
+  }
+
+  function downloadEditedImage() {
+    if (!loadedImage) {
+      alert("No image available to download.");
+      return;
+    }
+
+    const downloadLink = document.createElement("a");
+    downloadLink.download = "ZingArena_Edited_Photo.png";
+    downloadLink.href = canvas.toDataURL("image/png");
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
+    statusText.innerText = "Status: Image file downloaded successfully.";
+  }
+
+  function resetToOriginal() {
+    if (!loadedImage) return;
+    currentRotation = 0;
+    widthInput.value = originalWidth;
+    heightInput.value = originalHeight;
+    document.getElementById("watermarkText").value = "";
+    document.getElementById("watermarkColor").value = "#ffffff";
+    document.getElementById("watermarkPos").value = "bottom-right";
+
+    applyEdits();
+    statusText.innerText = "Status: Reset to original dimensions and orientation.";
+  }
+
+  function clearStudio() {
+    loadedImage = null;
+    currentRotation = 0;
+    fileInput.value = "";
+    widthInput.value = "";
+    heightInput.value = "";
+    document.getElementById("watermarkText").value = "";
+
+    controlPanel.style.display = "none";
+    placeholderText.style.display = "block";
+    canvas.style.display = "none";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    downloadBtn.disabled = true;
+    resetBtn.disabled = true;
+
+    dimStats.innerText = "Dimensions: 0 x 0 px";
+    statusText.innerText = "Status: Studio cleared. Waiting for image.";
+  }
+</script>
