@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Privacy & Data Sovereignty | Zing Arena</title>
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --text-primary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-red: #ef4444;
+            --border-glow: rgba(59, 130, 246, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            background-color: var(--bg-deep); 
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.4) 0%, transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+            color: var(--text-primary); 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            padding: 50px 20px; 
+            line-height: 1.8; 
+            margin: 0; 
+        }
+        
+        .container { 
+            max-width: 1050px; 
+            margin: auto; 
+            background: var(--bg-card); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 60px 70px; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-glow); 
+            box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(59, 130, 246, 0.05); 
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-blue), transparent);
+        }
+        
+        .header-section { text-align: center; margin-bottom: 50px; border-bottom: 1px solid var(--glass-border); padding-bottom: 30px; }
+        
+        h1 { 
+            color: #ffffff; 
+            font-size: 38px; 
+            margin: 0 0 10px 0; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            text-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+        }
+        
+        .last-updated { 
+            color: var(--accent-cyan); 
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 13px; 
+            letter-spacing: 1px;
+            text-transform: uppercase; 
+        }
+        
+        h2 { 
+            color: #ffffff; 
+            font-size: 24px; 
+            margin-top: 60px; 
+            border-left: 4px solid var(--accent-cyan); 
+            padding-left: 20px; 
+            background: linear-gradient(90deg, rgba(6,182,212,0.15) 0%, transparent 100%); 
+            padding-top: 8px; 
+            padding-bottom: 8px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        
+        p, li { color: var(--text-muted); font-size: 16px; margin-bottom: 18px; text-align: justify; }
+        strong { color: var(--accent-cyan); font-weight: 700; }
+        
+        .toc { 
+            background: #0f172a; 
+            border: 1px solid var(--border-glow); 
+            padding: 30px; 
+            border-radius: 12px; 
+            margin-bottom: 50px; 
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .toc::before {
+            content: "SYSTEM_INDEX_ROUTING";
+            position: absolute;
+            top: -10px; left: 25px;
+            background: #0f172a;
+            color: var(--accent-blue);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            padding: 0 10px;
+            border: 1px solid var(--border-glow);
+            border-radius: 4px;
+        }
+        .toc ul { list-style-type: none; padding-left: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;}
+        .toc a { 
+            color: var(--text-primary); 
+            text-decoration: none; 
+            transition: all 0.3s ease; 
+            font-size: 15px; 
+            display: flex; 
+            align-items: center;
+            padding: 10px 15px; 
+            background: rgba(255,255,255,0.02);
+            border: 1px solid transparent;
+            border-radius: 6px; 
+        }
+        .toc a::before { content: "►"; color: var(--accent-cyan); margin-right: 10px; font-size: 12px; }
+        .toc a:hover { 
+            background: rgba(59, 130, 246, 0.1); 
+            border-color: var(--border-glow);
+            color: var(--accent-cyan); 
+            transform: translateX(5px);
+        }
+
+        .danger-box { 
+            background: rgba(239, 68, 68, 0.05); 
+            border: 1px solid #7f1d1d; 
+            padding: 35px; 
+            border-radius: 12px; 
+            margin: 50px 0; 
+            border-left: 5px solid var(--accent-red); 
+            position: relative; 
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+        }
+        .danger-box::before { 
+            content: "⚠ CRITICAL: DATA REVOCATION & DELETION PROTOCOL"; 
+            position: absolute; 
+            top: -14px; left: 25px; 
+            background: #450a0a; 
+            color: #fca5a5; 
+            font-size: 12px; 
+            font-weight: bold; 
+            padding: 4px 12px; 
+            border: 1px solid #991b1b; 
+            border-radius: 4px; 
+            letter-spacing: 1px;
+        }
+        
+        .info-box { 
+            background: rgba(6, 182, 212, 0.05); 
+            border: 1px solid rgba(6, 182, 212, 0.3); 
+            padding: 25px; 
+            border-radius: 12px; 
+            margin: 30px 0 40px 0; 
+            border-left: 5px solid var(--accent-cyan); 
+        }
+        
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin-top: 30px; }
+        .feature-item { 
+            background: rgba(15, 23, 42, 0.6); 
+            padding: 30px; 
+            border-radius: 14px; 
+            border: 1px solid var(--glass-border); 
+            transition: all 0.4s ease; 
+        }
+        .feature-item:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            border-color: var(--accent-cyan); 
+        }
+        .feature-item strong { 
+            display: block; 
+            color: #ffffff; 
+            margin-bottom: 15px; 
+            font-size: 18px; 
+            border-bottom: 1px solid var(--glass-border); 
+            padding-bottom: 10px; 
+        }
+
+        .back-btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-top: 60px; 
+            color: #ffffff; 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 16px; 
+            border: 2px solid var(--accent-blue); 
+            padding: 16px 40px; 
+            border-radius: 8px; 
+            transition: all 0.3s ease; 
+            width: fit-content; 
+            margin: auto; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+        }
+        .back-btn:hover { 
+            background: var(--accent-blue); 
+            color: white; 
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); 
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 40px 25px; }
+            h1 { font-size: 26px; }
+            .toc ul { grid-template-columns: 1fr; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <h1>Global Privacy & Data Sovereignty</h1>
+            <div class="last-updated">Master Privacy Agreement // Zing Arena Architecture</div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>Security Parameters:</strong> Zing Arena is engineered upon a localized, minimal-telemetry computational framework. We prioritize digital sovereignty by executing algorithmic requests primarily within your localized device memory (RAM) and browser cache, eradicating unnecessary server-side data retention.</p>
+        </div>
+
+        <div class="toc">
+            <ul>
+                <li><a href="#authentication">01. Identity & Account Management</a></li>
+                <li><a href="#cloud-storage">02. URL Indexing & Media Ledger</a></li>
+                <li><a href="#client-processing">03. Localized Client-Side Computation</a></li>
+                <li><a href="#third-party">04. External API & Service Routing</a></li>
+                <li><a href="#telemetry">05. System Telemetry & Advertising</a></li>
+                <li><a href="#deletion">06. Data Deletion & Revocation Rights</a></li>
+            </ul>
+        </div>
+
+        <h2 id="authentication">1. Identity & Account Management Protocols</h2>
+        <p>To enable personal feature customization and cloud-synchronized URL bookmarking within the Media Engine, The Platform utilizes secure industry-standard OAuth authentication. During authorization, strictly necessary identification tokens (such as your basic profile identifier and email vector) are processed to establish a unique session environment. This processing aligns strictly with our declared <strong>App Functionality and Account Management</strong> parameters. We do not inspect, intercept, or archive any master account passwords.</p>
+
+        <h2 id="cloud-storage">2. URL Indexing & Media Ledger</h2>
+        <p>For authenticated users utilizing our personal Media Bookmarking utility, The Platform allocates a secure database vector permitting the storage of up to <strong>50 personal web video URLs</strong> per profile. The Platform functions strictly as a URL bookmarking ledger and routing pointer:</p>
+        <ul>
+            <li><strong>No Media Hosting:</strong> Zero native video or audio files are uploaded, mirrored, transcoded, or hosted on our cloud servers.</li>
+            <li><strong>Public Access Rules:</strong> All stored links must point to publicly accessible destinations. Embedded content restricted by copyright protections or third-party domain policies will automatically trigger a native playback block.</li>
+        </ul>
+
+        <h2 id="client-processing">3. Localized Client-Side Computation</h2>
+        <p>The core analytical, conversion, and creative utilities embedded within Zing Arena operate entirely on your localized hardware using standard Web DOM APIs. Data processed through these utilities is never siphoned to external cloud infrastructure:</p>
+        
+        <div class="feature-grid">
+            <div class="feature-item">
+                <strong>I. Media & Document Optimization</strong>
+                Image compression, JPG-to-PDF generation, PDF multi-file merging, and color extraction process strictly within your local device memory. Zero visual copies or temporary documents are transmitted to our servers.
+            </div>
+            <div class="feature-item">
+                <strong>II. Generative Utilities</strong>
+                Locally executed algorithms power the Password Generator, Alphanumeric Name Generator (outputting up to 500 algorithmic variants), Age Calculator, and Emoji modules without external server calls.
+            </div>
+            <div class="feature-item">
+                <strong>III. Sandboxed Web & Gaming Modules</strong>
+                Our native browser games and frontend code testing environment execute within isolated, sandboxed DOM containers, ensuring zero gameplay telemetry or code data is transmitted externally.
+            </div>
+        </div>
+
+        <h2 id="third-party">4. External API & Service Routing</h2>
+        <p>To provide advanced computational features, specific non-identifying operational requests may be securely tunneled to authorized external cloud services:</p>
+        <ul>
+            <li><strong>Remote Code Compilation:</strong> Back-end programming syntax submitted via our optional multi-language developer module is securely routed to cloud compilation servers for ephemeral execution.</li>
+            <li><strong>Global Web Search:</strong> Queries executed within our integrated web utility are processed via standard tier-one search engine end-nodes.</li>
+            <li><strong>Network Diagnostics:</strong> Bandwidth and latency testing modules route temporary diagnostic packet requests to independent global diagnostic networks without retaining persistent IP logs.</li>
+        </ul>
+
+        <h2 id="telemetry">5. System Telemetry & Advertising Partnerships</h2>
+        <p>Zing Arena does not deploy invasive background trackers or keystroke loggers. To sustain free global access, our application integrates with standard programmatic monetization partners. These networks may utilize non-personal, standard ad-serving tokens to deliver appropriate banner and interstitial advertisements in compliance with global app store safety guidelines.</p>
+
+        <div class="danger-box" id="deletion">
+            <h3>6. Data Deletion & Revocation Rights</h3>
+            <p><strong>Immediate Account Disconnection:</strong> Users retain absolute sovereign control over their authenticated connection and may revoke OAuth access permissions instantly through their Google Account security dashboard.</p>
+            <p><strong>Complete Data Eradication:</strong> If a user wishes to execute a permanent wipe of their indexed Video URLs and account footprint from our secure ledger, they maintain the unconditional right to mandate immediate erasure.</p>
+            <p>To request permanent data deletion, compliance documentation, or support, dispatch correspondence to our central administrative team at: <strong><a href="mailto:zingarenaoffi1@gmail.com" style="color: #60a5fa;">zingarenaoffi1@gmail.com</a></strong></p>
+        </div>
+
+        <a href="index.html" class="back-btn">Authorize & Return</a>
+    </div>
+</body>
+</html>
