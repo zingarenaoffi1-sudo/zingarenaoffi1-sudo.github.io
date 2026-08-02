@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <meta name='admaven-placement' content=BqTUHqTa9>
+    <meta name='admaven-placement' content=BqTUHqTa9>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -20,9 +20,12 @@
 
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; transition: 0.5s; }
         .blurred { opacity: 0.3; pointer-events: none; filter: blur(3px); }
-        .menu-item { background: #1e293b; padding: 40px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.5rem; font-weight: bold; }
-        .menu-item span { display: block; font-size: 3rem; margin-bottom: 10px; }
+        .menu-item { background: #1e293b; padding: 35px 15px; border-radius: 30px; cursor: pointer; transition: 0.3s; border: 2px solid #334155; font-size: 1.3rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .menu-item span { display: block; font-size: 2.8rem; margin-bottom: 10px; }
         .menu-item:hover { background: #3b82f6; transform: translateY(-10px); border-color: #60a5fa; }
+        
+        /* 7th item (Games Hub) spans both columns for clean symmetry */
+        .menu-item.full-width { grid-column: span 2; }
 
         /* TERMS BOX - BOTTOM LEFT */
         .terms-box { position: fixed; bottom: 20px; left: 20px; padding: 15px; background: #1e293b; border-radius: 15px; border: 1px solid #334155; font-size: 14px; z-index: 9998; }
@@ -73,7 +76,6 @@
     <script src="https://falconhoe.com/df176ca27ccf8de677e3458336f4e5ec/invoke.js"></script>
 </div>
 
-
 <!-- ADSTERRA 3: TOP LEFT -->
 <div class="adsterra-wrapper adsterra-tl">
     <script>atOptions={'key':'df176ca27ccf8de677e3458336f4e5ec','format':'iframe','height':50,'width':320,'params':{}};</script>
@@ -108,15 +110,15 @@
     <h2>Zing.Arena Hub</h2>
     <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
 
+    <!-- 7 Smart Gateways (Direct Root Paths as per your GitHub structure) -->
     <div class="menu-grid" id="mainMenu">
-        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
-        <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
-        <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
-        <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
-        <div class="menu-item" onclick="window.location.href='translator.html'"><span>🌍</span> Translator</div>
-        <div class="menu-item" onclick="window.location.href='speedtest.html'"><span>⚡</span> Speed Test</div>
-        <div class="menu-item" onclick="window.location.href='coderunner.html'"><span>💻</span> Code Runner</div>
-        <div class="menu-item" onclick="window.location.href='Games.html'"><span>🎮</span> Games</div>
+        <div class="menu-item" onclick="window.location.href='doc-pdf-studio.html'"><span>📄</span> Doc & PDF Studio</div>
+        <div class="menu-item" onclick="window.location.href='media-design-lab.html'"><span>🎨</span> Media & Design Lab</div>
+        <div class="menu-item" onclick="window.location.href='voice-text-hub.html'"><span>🎙️</span> Voice & Text Hub</div>
+        <div class="menu-item" onclick="window.location.href='quick-utilities.html'"><span>⚡</span> Quick Utilities</div>
+        <div class="menu-item" onclick="window.location.href='dev-tech-corner.html'"><span>💻</span> Dev & Tech Corner</div>
+        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Video Player</div>
+        <div class="menu-item full-width" onclick="window.location.href='Games.html'"><span>🎮</span> Games Hub</div>
     </div>
 </div>
 
