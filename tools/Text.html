@@ -1,11 +1,10 @@
 <!-- ==========================================================================
-     FEATURE 2: TEXT TO SPEECH AUDIO READER (WITH AUTO-TRANSLATE & 18+ LANGUAGES)
-     All-in-One: HTML + CSS + JS Merged (100% Fixed for Chrome / Win 7)
+     FEATURE 2: TEXT TO SPEECH AUDIO READER (FIXED & ERROR-FREE)
      ========================================================================== -->
 
 <div class="audioreader-tool-container">
   <div class="tool-header">
-    <span class="tool-badge">[ 🔊 AudioReader Pro ]</span>
+    <span class="tool-badge">[ 🔊 AudioReader Pro v2 ]</span>
     <h3>Text to Speech Reader (Auto-Translate)</h3>
   </div>
 
@@ -36,9 +35,8 @@
     </select>
   </div>
 
-  <textarea id="ttsInput" class="text-box" placeholder="Type in any language (e.g. 'what are you doing'). It will auto-translate & speak!" rows="4">what are you doing</textarea>
+  <textarea id="ttsInput" class="text-box" placeholder="Type text here. Long paragraphs are now fully supported!" rows="4">what are you doing</textarea>
 
-  <!-- Translated Preview Box (Taaki user ko pata chale kya translate hua) -->
   <div id="previewBox" class="preview-box" style="display: none;">
     <span class="preview-label">Translated Voice Text:</span>
     <p id="translatedTextDisplay"></p>
@@ -151,14 +149,23 @@
 
 <!-- ================= SCRIPT (JS) ================= -->
 <script>
-  // Global variable to prevent Chrome Garbage Collection Bug
-  let activeUtterance = null;
+  // Pre-load voices to fix empty array bug across browsers
+  let cachedVoices = [];
+  function loadVoices() {
+    if ("speechSynthesis" in window) {
+      cachedVoices = window.speechSynthesis.getVoices();
+    }
+  }
+  loadVoices();
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
 
   async function startTextToSpeech() {
     const textInput = document.getElementById("ttsInput").value.trim();
     const selectElem = document.getElementById("ttsLang");
-    const fullLangCode = selectElem.value; // e.g., 'hi-IN'
-    const shortLangCode = selectElem.options[selectElem.selectedIndex].getAttribute("data-code"); // e.g., 'hi'
+    const fullLangCode = selectElem.value;
+    const shortLangCode = selectElem.options[selectElem.selectedIndex].getAttribute("data-code");
     const statusText = document.getElementById("ttsStatus");
     const previewBox = document.getElementById("previewBox");
     const translatedTextDisplay = document.getElementById("translatedTextDisplay");
@@ -173,7 +180,7 @@
       return;
     }
 
-    // Stop any existing speech
+    // Stop ongoing speech
     if (window.speechSynthesis.speaking) {
       window.speechSynthesis.cancel();
     }
@@ -181,58 +188,78 @@
     statusText.innerText = "Status: Translating text...";
     previewBox.style.display = "none";
 
+    let textToSpeak = textInput;
+
     try {
-      // Step 1: Free Auto-Translate API call (zero API key required)
+      // Step 1: Translate API Request with safety timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 sec timeout
+
       const translateUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${shortLangCode}&dt=t&q=${encodeURIComponent(textInput)}`;
-      const response = await fetch(translateUrl);
+      const response = await fetch(translateUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       const data = await response.json();
-      
       let translatedText = "";
-      for (let i = 0; i < data[0].length; i++) {
-        translatedText += data[0][i][0];
+      if (data && data[0]) {
+        for (let i = 0; i < data[0].length; i++) {
+          if (data[0][i][0]) translatedText += data[0][i][0];
+        }
       }
 
-      // Step 2: Show translated text on UI
-      translatedTextDisplay.innerText = translatedText;
-      previewBox.style.display = "block";
-      statusText.innerText = "Status: Playing audio...";
-
-      // Step 3: Speak the Translated Text (with 50ms safety timeout)
-      setTimeout(() => {
-        activeUtterance = new SpeechSynthesisUtterance(translatedText);
-        activeUtterance.lang = fullLangCode;
-        activeUtterance.rate = 1.0;
-
-        // Try to match the best available browser voice
-        const voices = window.speechSynthesis.getVoices();
-        const matchedVoice = voices.find(v => v.lang.replace("_", "-").toLowerCase() === fullLangCode.toLowerCase()) || 
-                             voices.find(v => v.lang.toLowerCase().startsWith(shortLangCode.toLowerCase()));
-        if (matchedVoice) {
-          activeUtterance.voice = matchedVoice;
-        }
-
-        activeUtterance.onend = () => {
-          statusText.innerText = "Status: Audio finished.";
-        };
-
-        activeUtterance.onerror = (event) => {
-          console.error("TTS Error:", event);
-          statusText.innerText = "Status: Error playing audio. Voice may not be installed on this PC.";
-        };
-
-        window.speechSynthesis.speak(activeUtterance);
-      }, 50);
-
+      if (translatedText) {
+        textToSpeak = translatedText;
+        translatedTextDisplay.innerText = textToSpeak;
+        previewBox.style.display = "block";
+      }
     } catch (error) {
-      console.error("Translation Error:", error);
-      statusText.innerText = "Status: Translation failed. Playing original text...";
-      // Fallback: Agar internet slow ho toh original text bolega
-      setTimeout(() => {
-        activeUtterance = new SpeechSynthesisUtterance(textInput);
-        activeUtterance.lang = fullLangCode;
-        window.speechSynthesis.speak(activeUtterance);
-      }, 50);
+      console.warn("Translation skipped or timed out, using original text.", error);
     }
+
+    statusText.innerText = "Status: Playing audio...";
+
+    // Step 2: Chunking long text to prevent browser speech cutoff errors
+    speakTextInChunks(textToSpeak, fullLangCode, shortLangCode, statusText);
+  }
+
+  function speakTextInChunks(text, fullLangCode, shortLangCode, statusText) {
+    // Split text into sentences using punctuation marks to avoid buffer overload
+    const sentences = text.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [text];
+    
+    let index = 0;
+
+    function speakNext() {
+      if (index >= sentences.length) {
+        statusText.innerText = "Status: Audio finished.";
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(sentences[index].trim());
+      utterance.lang = fullLangCode;
+      utterance.rate = 1.0;
+
+      // Match best available voice
+      if (cachedVoices.length === 0) loadVoices();
+      const matchedVoice = cachedVoices.find(v => v.lang.replace("_", "-").toLowerCase() === fullLangCode.toLowerCase()) || 
+                           cachedVoices.find(v => v.lang.toLowerCase().startsWith(shortLangCode.toLowerCase()));
+      if (matchedVoice) {
+        utterance.voice = matchedVoice;
+      }
+
+      utterance.onend = () => {
+        index++;
+        speakNext();
+      };
+
+      utterance.onerror = (event) => {
+        console.error("TTS Chunk Error:", event);
+        statusText.innerText = "Status: Error playing audio segment.";
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    speakNext();
   }
 
   function stopTextToSpeech() {
@@ -246,12 +273,5 @@
     document.getElementById("ttsInput").value = "";
     document.getElementById("previewBox").style.display = "none";
     document.getElementById("ttsStatus").innerText = "Status: Ready to Play";
-  }
-
-  // Load browser voices automatically in background
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
-    };
   }
 </script>
