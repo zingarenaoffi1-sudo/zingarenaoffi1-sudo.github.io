@@ -3,155 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultra Ludo Pro - Multiplayer & Offline</title>
+    <title>Ultra Ludo Pro - Main Menu</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- 🔥 HILLTOPADS ANTI-ADBLOCK INTERSTITIAL CODE 🔥 -->
-    <script>
-    (function(pnig){
-    var d = document,
-        s = d.createElement('script'),
-        l = d.scripts[d.scripts.length - 1];
-    s.settings = pnig || {};
-    s.src = "\/\/-zANTDbkGtINez-I\/3UNBTDMt1zMgwc";
-    s.async = true;
-    s.referrerPolicy = 'no-referrer-when-downgrade';
-    l.parentNode.insertBefore(s, l);
-    })({})
-    </script>
 </head>
 <body>
     <div id="game-wrapper">
-        <!-- Header -->
         <div class="game-header">
             <div class="logo-text">ULTRA LUDO</div>
-            <button class="menu-btn" onclick="location.reload()">Restart</button>
         </div>
 
-        <!-- 🔥 YEH RAHA TERA IDENTITY BADGE 🔥 -->
-        <div id="my-identity-badge" class="hidden" style="text-align: center; background: #ff9900; color: #000; font-weight: 900; padding: 5px; margin: 5px 10px; border-radius: 5px; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.5);"></div>
-
-        <!-- Top Players HUD -->
-        <div class="player-hud">
-            <div class="player-profile" id="profile-red">
-                <div class="avatar red-bg">1</div>
-                <div class="player-name">Player 1 (Red)</div>
+        <div id="mode-selection-modal" class="modal">
+            <div class="modal-content">
+                <h2 style="color: #ff9900; margin-bottom: 20px;">ULTRA LUDO</h2>
+                <p style="color: #ddd; margin-bottom: 20px;">Select Game Mode</p>
+                <button class="ultra-roll-btn" onclick="window.location.href='local.html'" style="width: 100%; margin-bottom: 10px; background: linear-gradient(to bottom, #4CAF50, #2E7D32);">Local Offline</button>
+                <button class="ultra-roll-btn" onclick="window.location.href='online.html'" style="width: 100%;">Online Multiplayer</button>
             </div>
-            <div class="player-profile" id="profile-green">
-                <div class="avatar green-bg">2</div>
-                <div class="player-name">Player 2 (Green)</div>
-            </div>
-        </div>
-
-        <!-- Main Game Board -->
-        <div class="board-container">
-            <div id="ludo-board"></div>
-        </div>
-
-        <!-- Bottom Players HUD -->
-        <div class="player-hud">
-            <div class="player-profile" id="profile-blue">
-                <div class="avatar blue-bg">4</div>
-                <div class="player-name">Player 4 (Blue)</div>
-            </div>
-            <div class="player-profile" id="profile-yellow">
-                <div class="avatar yellow-bg">3</div>
-                <div class="player-name">Player 3 (Yellow)</div>
-            </div>
-        </div>
-
-        <!-- Footer & Controls -->
-        <div class="game-footer">
-            <div style="display: flex; flex-direction: column;">
-                <div class="turn-indicator" id="turn-text">WAITING TO START...</div>
-                <div id="timer-text" style="font-size: 13px; color: #ffeb3b; font-weight: bold; margin-top: 3px;">⏳ Time left: 25s</div>
-            </div>
-            <div class="dice-wrapper">
-                <div id="dice-container">🎲</div>
-            </div>
-        </div>
-
-    <!-- 1. MODE SELECTION MODAL (Local vs Online) -->
-    <div id="mode-selection-modal" class="modal">
-        <div class="modal-content">
-            <h2 style="color: #ff9900; margin-bottom: 20px;">ULTRA LUDO</h2>
-            <p style="color: #ddd; margin-bottom: 20px;">Select Game Mode</p>
-            <button class="ultra-roll-btn" onclick="showLocalPlayerModal()" style="width: 100%; margin-bottom: 10px; background: linear-gradient(to bottom, #4CAF50, #2E7D32);">Local Offline</button>
-            <button class="ultra-roll-btn" onclick="showOnlineMenu()" style="width: 100%;">Online Multiplayer</button>
         </div>
     </div>
-
-    <!-- 2. LOCAL PLAYER COUNT MODAL -->
-    <div id="startup-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 style="color: #ff9900; margin-bottom: 20px;">LOCAL OFFLINE</h2>
-            <p style="color: #ddd; margin-bottom: 20px;">Select Players</p>
-            <button class="ultra-roll-btn" onclick="startLocalGame(2)" style="width: 100%; margin-bottom: 10px;">2 Players</button>
-            <button class="ultra-roll-btn" onclick="startLocalGame(3)" style="width: 100%; margin-bottom: 10px;">3 Players</button>
-            <button class="ultra-roll-btn" onclick="startLocalGame(4)" style="width: 100%; margin-bottom: 10px;">4 Players</button>
-            <button class="menu-btn" onclick="backToModeSelect()" style="width: 100%; padding: 8px;">Back</button>
-        </div>
-    </div>
-
-    <!-- 3. ONLINE MULTIPLAYER MAIN MENU (Create / Join / Quick Match) -->
-    <div id="online-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 style="color: #ff9900; margin-bottom: 15px;">ONLINE MULTIPLAYER</h2>
-            
-            <!-- Main Online Options -->
-            <div id="online-main-options">
-                <button class="ultra-roll-btn" onclick="showQuickMatch()" style="width: 100%; margin-bottom: 10px;">Quick Match</button>
-                <button class="ultra-roll-btn" onclick="showCreateRoomOptions()" style="width: 100%; margin-bottom: 10px; background: linear-gradient(to bottom, #2196F3, #0D47A1);">Create Room</button>
-                <button class="ultra-roll-btn" onclick="showJoinRoomInput()" style="width: 100%; margin-bottom: 15px; background: linear-gradient(to bottom, #9C27B0, #4A148C);">Join Room</button>
-                <button class="menu-btn" onclick="backToModeSelect()" style="width: 100%; padding: 8px;">Back</button>
-            </div>
-
-            <!-- Sub-Menu: Quick Match (2, 3, 4 Players) -->
-            <div id="quick-match-sub" class="hidden">
-                <p style="color: #ddd; margin-bottom: 10px;">Select Match Size</p>
-                <!-- Matchmaking Text Show Hoga -->
-                <div id="quick-match-display" style="color: #00ff00; margin: 10px 0; font-size: 14px; font-weight: bold; min-height: 20px;"></div>
-                
-                <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(2)" style="width: 100%; margin-bottom: 8px;">2 Players</button>
-                <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(3)" style="width: 100%; margin-bottom: 8px;">3 Players</button>
-                <button class="ultra-roll-btn" onclick="document.getElementById('quick-match-display').innerText = 'Matchmaking pls wait sometime... ⏳'; findOnlineMatch(4)" style="width: 100%; margin-bottom: 8px;">4 Players</button>
-                <button class="menu-btn" onclick="backToOnlineMain()" style="width: 100%; padding: 8px; margin-top: 5px;">Back</button>
-            </div>
-
-            <!-- Sub-Menu: Create Room (Select capacity -> Get Room ID) -->
-            <div id="create-room-sub" class="hidden">
-                <p style="color: #ddd; margin-bottom: 10px;">Select Room Capacity</p>
-                <button class="ultra-roll-btn" onclick="createPrivateRoom(2)" style="width: 100%; margin-bottom: 8px;">2 Player Room</button>
-                <button class="ultra-roll-btn" onclick="createPrivateRoom(3)" style="width: 100%; margin-bottom: 8px;">3 Player Room</button>
-                <button class="ultra-roll-btn" onclick="createPrivateRoom(4)" style="width: 100%; margin-bottom: 8px;">4 Player Room</button>
-                <div id="room-created-display" style="color: #00ff00; margin: 10px 0; font-size: 14px; font-weight: bold;"></div>
-                <button class="menu-btn" onclick="backToOnlineMain()" style="width: 100%; padding: 8px; margin-top: 5px;">Back</button>
-            </div>
-
-            <!-- Sub-Menu: Join Room (Enter ID) -->
-            <div id="join-room-sub" class="hidden">
-                <p style="color: #ddd; margin-bottom: 10px;">Enter Room ID</p>
-                <input type="text" id="room-id-input" placeholder="e.g. LUDO_1234" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none; text-align: center; font-weight: bold;">
-                <button class="ultra-roll-btn" onclick="joinPrivateRoom()" style="width: 100%; margin-bottom: 8px; background: linear-gradient(to bottom, #4CAF50, #2E7D32);">Join Now</button>
-                <button class="menu-btn" onclick="backToOnlineMain()" style="width: 100%; padding: 8px; margin-top: 5px;">Back</button>
-            </div>
-
-        </div>
-    </div>
-    <script src="https://zingarenaoffi1-sudo-github-io.onrender.com/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
- <!-- FLUID PLAYER LIBRARIES -->
-<script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
-
-<!-- 🔥 CUSTOM VIDEO AD OVERLAY 🔥 -->
-<div id="videoAdOverlay" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-    <p style="color: #ff9900; margin-bottom: 15px; font-weight: bold;">Game is starting... Please watch this short video</p>
-    
-    <!-- Video Player -->
-    <video id="vast-video-player" style="width: 100%; max-width: 600px;"></video>
-    
-    <!-- Skip Button (5 second baad aayega) -->
-    <button id="skipAdBtn" onclick="closeVideoAd()" style="display:none; margin-top: 20px; background: #ef4444; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Skip Ad ⏭️</button>
-</div>
 </body>
 </html>
