@@ -140,5 +140,18 @@
     </div>
     <script src="https://zingarenaoffi1-sudo-github-io.onrender.com/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
+ <!-- FLUID PLAYER LIBRARIES -->
+<script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
+
+<!-- 🔥 CUSTOM VIDEO AD OVERLAY 🔥 -->
+<div id="videoAdOverlay" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <p style="color: #ff9900; margin-bottom: 15px; font-weight: bold;">Game is starting... Please watch this short video</p>
+    
+    <!-- Video Player -->
+    <video id="vast-video-player" style="width: 100%; max-width: 600px;"></video>
+    
+    <!-- Skip Button (5 second baad aayega) -->
+    <button id="skipAdBtn" onclick="closeVideoAd()" style="display:none; margin-top: 20px; background: #ef4444; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Skip Ad ⏭️</button>
+</div>
 </body>
 </html>
