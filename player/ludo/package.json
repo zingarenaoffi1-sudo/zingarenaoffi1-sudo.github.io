@@ -1,14 +1,14 @@
 {
-  "name": "ultra-ludo-server",
+  "name": "ultra-ludo-multiplayer",
   "version": "1.0.0",
-  "description": "Ludo Multiplayer Server",
+  "description": "Socket.io Multiplayer Server for Ludo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "socket.io": "^4.7.2",
-    "cors": "^2.8.5"
+    "socket.io": "^4.7.2"
   }
 }
