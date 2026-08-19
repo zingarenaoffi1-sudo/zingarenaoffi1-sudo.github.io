@@ -1,5 +1,6 @@
 /* =========================================
    ULTRA LUDO PRO - MASTER LOGIC ENGINE + LIVE TIMER + RANKING SYSTEM
+   + INTERSTITIAL AD TRIGGER SYSTEM
 ========================================= */
 
 let activePlayers = []; 
@@ -48,6 +49,26 @@ const safeZones = [
 
 const diceFaces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
+// ==========================================
+// 🔥 INTERSTITIAL AD CONTROLLER
+// ==========================================
+let lastAdTime = 0;
+function triggerInterstitialAd(reason) {
+    console.log("🎬 Interstitial Ad Triggered for:", reason);
+    let now = Date.now();
+    // 15-second safety lock so fast clicking doesn't cause spam flag
+    if (now - lastAdTime < 15000) {
+        console.log("⏳ Ad skipped due to quick click safety.");
+        return;
+    }
+    lastAdTime = now;
+
+    // Trigger HilltopAds full-screen ad
+    if (typeof window.showAd === 'function') {
+        window.showAd();
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     createBoard();
     document.getElementById("dice-container").addEventListener("click", rollDice);
@@ -95,7 +116,6 @@ function backToOnlineMain() {
     document.getElementById("online-main-options").classList.remove("hidden");
     document.getElementById("room-created-display").innerText = "";
     
-    // Badge hide karo jab back jaye
     const badge = document.getElementById('my-identity-badge');
     if(badge) badge.classList.add('hidden');
 }
@@ -106,7 +126,6 @@ function backToModeSelect() {
     document.getElementById("online-modal").classList.add("hidden");
     document.getElementById("mode-selection-modal").classList.remove("hidden");
     
-    // Badge hide karo jab back jaye
     const badge = document.getElementById('my-identity-badge');
     if(badge) badge.classList.add('hidden');
 }
@@ -115,6 +134,8 @@ function findOnlineMatch(count) {
     connectToServer();
     document.getElementById("quick-match-display").innerText = "Matchmaking pls wait sometime... ⏳";
     socket.emit('find-match', { playersRequired: count });
+    // 🔥 TRIGGER AD ON MATCHMAKING
+    triggerInterstitialAd("Matchmaking Started");
 }
 
 // --- SOCKET.IO CONNECTION & SYNC LISTENERS ---
@@ -129,7 +150,7 @@ function connectToServer() {
         socket.on('room-created', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
-            showMyIdentity(data.color); // Player identity show karo
+            showMyIdentity(data.color);
             document.getElementById("room-created-display").innerText = 
                 `Make the room successfully! ID: ${data.roomId}\n(Your Color: Red) Waiting for players join the room by room id...`;
         });
@@ -137,14 +158,14 @@ function connectToServer() {
         socket.on('joined-success', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
-            showMyIdentity(data.color); // Player identity show karo
+            showMyIdentity(data.color);
             alert(`Successfully join the room click ok to join the room ! Room ID: ${data.roomId} | Your Color: ${data.color}`);
         });
 
         socket.on('match-found', (data) => {
             window.currentRoomId = data.roomId;
             myAssignedColor = data.color;
-            showMyIdentity(data.color); // Player identity show karo
+            showMyIdentity(data.color);
         });
 
         socket.on('start-online-game', (data) => {
@@ -156,7 +177,6 @@ function connectToServer() {
 
             activePlayers = data.players.map(p => p.color);
             
-            // Local match ke liye agar myAssignedColor set nahi hai toh pehla active player maan lo
             let me = data.players.find(p => p.id === socket.id);
             if (me) {
                 showMyIdentity(me.color);
@@ -208,7 +228,6 @@ function connectToServer() {
     }
 }
 
-// 🔥 NAYA FUNCTION: Player ko batane ke liye ki wo kaun sa player hai
 function showMyIdentity(color) {
     const badge = document.getElementById('my-identity-badge');
     if (!badge) return;
@@ -226,7 +245,6 @@ function showMyIdentity(color) {
     badge.style.background = bgColor;
     badge.style.color = (color === 'yellow') ? '#000' : '#fff';
 
-    // Baki profiles se glow hatao, apne wale par lagao
     document.querySelectorAll('.player-profile').forEach(p => {
         p.style.border = "1px solid rgba(255, 255, 255, 0.1)";
         p.style.boxShadow = "none";
@@ -245,6 +263,8 @@ function createPrivateRoom(count) {
     connectToServer();
     document.getElementById("room-created-display").innerText = "Making the room...";
     socket.emit('create-room', { maxPlayers: count });
+    // 🔥 TRIGGER AD ON ROOM CREATE
+    triggerInterstitialAd("Room Created");
 }
 
 function joinPrivateRoom() {
@@ -252,6 +272,8 @@ function joinPrivateRoom() {
     if (id) {
         connectToServer();
         socket.emit('join-room', { roomId: id });
+        // 🔥 TRIGGER AD ON ROOM JOIN
+        triggerInterstitialAd("Joining Room");
     } else {
         alert("Enter the valid room id to join room!");
     }
@@ -281,10 +303,10 @@ function startLocalGame(playerCount) {
     else if (playerCount === 3) activePlayers = ['red', 'green', 'yellow'];
     else activePlayers = ['red', 'green', 'yellow', 'blue'];
 
-    // Local offline ke liye pehle player ko user maan lo aur badge dikha do
     showMyIdentity(activePlayers[0]);
-
     initGameSession();
+    // 🔥 TRIGGER AD ON LOCAL GAME START
+    triggerInterstitialAd("Local Game Started");
 }
 
 // ==========================================
@@ -323,6 +345,9 @@ function handlePlayerWin(playerColor) {
 
 function endMatchAndGoToMenu() {
     clearTurnTimer();
+    // 🔥 TRIGGER AD EVERY TIME A MATCH ENDS
+    triggerInterstitialAd("Match Finished");
+
     setTimeout(() => {
         let winMessage = "🏆 MATCH FINISHED! 🏆\n\n";
         winnersList.forEach((color, index) => {
